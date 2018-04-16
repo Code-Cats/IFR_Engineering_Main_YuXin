@@ -116,7 +116,7 @@ u8 BulletLift_Cali(void)
 }
 
 #define BULLETLIFT_CALI_OUTPUT_UPMAX 3200
-#define BULLETLIFT_CALI_OUTPUT_DOWNMAX	2000
+#define BULLETLIFT_CALI_OUTPUT_DOWNMAX	1800
 void BulletLift_Cali_Output_Limit(float cm_out,float * cali_out)
 {
 	if(cm_out>BULLETLIFT_CALI_OUTPUT_UPMAX)

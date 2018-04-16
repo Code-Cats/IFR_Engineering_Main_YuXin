@@ -15,6 +15,7 @@
 ".\objects\gpioctrl.o"
 ".\objects\protect.o"
 ".\objects\bullet_lift.o"
+".\objects\take_bullet.o"
 ".\objects\delay.o"
 ".\objects\filter.o"
 ".\objects\pid.o"

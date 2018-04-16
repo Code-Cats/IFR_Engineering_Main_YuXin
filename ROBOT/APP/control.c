@@ -46,7 +46,7 @@ void Control_Task(void)	//2ms
 	{
 		Debug_Send_OSC();
 	}
-
+Take_Bullet_Task();
 	Vw_tem=Chassis_Attitude_Correct(Chassis_GYRO[2],Gyro_Data.angvel[2]+2);
   Chassis_Vw+=Vw_tem;
 	Work_State_Change();
@@ -86,6 +86,7 @@ void Control_Task(void)	//2ms
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降
 			BulletLift_Task();
+			Take_Bullet_Task();
 			break;
 		}
 		case ASCEND_STATE:	//自动上岛模式
@@ -573,8 +574,6 @@ void Motor_Send(void)
 		}
 		case CALI_STATE:	//标定模式
 		{
-			SetFrictionWheelSpeed(FRICTION_INIT);
-			
 			Lift_Cali_Output_Limit(lift_Data.lf_lift_output,&lift_calisend[LF]);
 			Lift_Cali_Output_Limit(lift_Data.rf_lift_output,&lift_calisend[RF]);
 			Lift_Cali_Output_Limit(lift_Data.lb_lift_output,&lift_calisend[LB]);

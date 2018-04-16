@@ -503,6 +503,11 @@
               <FileType>1</FileType>
               <FilePath>..\ROBOT\APP\bullet_lift.c</FilePath>
             </File>
+            <File>
+              <FileName>take_bullet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\APP\take_bullet.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
