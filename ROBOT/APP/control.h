@@ -79,37 +79,6 @@
 
 typedef struct
 {
-	 int32_t lf_wheel_fdbV; //201 
-	 int32_t rf_wheel_fdbV; //202
-	 int32_t lb_wheel_fdbV; //203
-	 int32_t rb_wheel_fdbV;	//204	  
-	
-   int32_t lf_wheel_tarV;
-	 int32_t rf_wheel_tarV;
-	 int32_t lb_wheel_tarV;
-	 int32_t rb_wheel_tarV;
-	  
-   int32_t lf_wheel_fdbP;
-	 int32_t rf_wheel_fdbP;
-	 int32_t lb_wheel_fdbP;
-	 int32_t rb_wheel_fdbP;
-	 
-	 int32_t lf_wheel_tarP;
-	 int32_t rf_wheel_tarP;
-	 int32_t lb_wheel_tarP;
-	 int32_t rb_wheel_tarP;
-	 
-	 int32_t lf_wheel_output;
-	 int32_t rf_wheel_output;	
-	 int32_t lb_wheel_output;
-	 int32_t rb_wheel_output;
-	
-}CHASSIS_DATA;	//CAN2
-
-
-
-typedef struct
-{
 	 int32_t lf_lift_fdbV; //201 
 	 int32_t rf_lift_fdbV; //202
 	 int32_t lb_lift_fdbV; //203

@@ -34,7 +34,7 @@ u8 LostCountCheck(u16 lostcount,u8* statu,const u16 cycle)
 	return *statu;
 }
 
-
+u8 t_error_i_record=0;
 void Check_Task(void)
 {
 	for(int i=0;i<LOST_TYPE_NUM;i++)
@@ -51,7 +51,10 @@ void Check_Task(void)
 	for(int i=4;i<LOST_TYPE_NUM-1;i++)	//控在一切正常后检测
 	{
 		if(Error_Check.statu[i]==1)
+		{
+			t_error_i_record=i;
 			SetWorkState(ERROR_STATE);
+		}	
 	}
 	
 	if(Error_Check.statu[LOST_DBUS]==1)

@@ -384,8 +384,8 @@ void Lift_Task(void)
 	
 	lift_Data.lf_lift_tarV=(int32_t)PID_General(lift_Data.lf_lift_tarP,lift_Data.lf_lift_fdbP,&PID_Lift_Position[LF]);	//位置环PID计算
 	lift_Data.rf_lift_tarV=(int32_t)PID_General(lift_Data.rf_lift_tarP,lift_Data.rf_lift_fdbP,&PID_Lift_Position[RF]);
-	lift_Data.lb_lift_tarV=(int32_t)PID_General((lift_Data.lb_lift_tarP+13),lift_Data.lb_lift_fdbP,&PID_Lift_Position[LB]);
-	lift_Data.rb_lift_tarV=(int32_t)PID_General((lift_Data.rb_lift_tarP-5),lift_Data.rb_lift_fdbP,&PID_Lift_Position[RB]);
+	lift_Data.lb_lift_tarV=(int32_t)PID_General((lift_Data.lb_lift_tarP),lift_Data.lb_lift_fdbP,&PID_Lift_Position[LB]);	//+13该补偿下向右正常
+	lift_Data.rb_lift_tarV=(int32_t)PID_General((lift_Data.rb_lift_tarP),lift_Data.rb_lift_fdbP,&PID_Lift_Position[RB]);	//-5
 	
 	lift_Data.lf_lift_output=PID_General(lift_Data.lf_lift_tarV,lift_Data.lf_lift_fdbV,&PID_Lift_Speed[LF]);	//速度环PID计算
 	lift_Data.rf_lift_output=PID_General(lift_Data.rf_lift_tarV,lift_Data.rf_lift_fdbV,&PID_Lift_Speed[RF]);
