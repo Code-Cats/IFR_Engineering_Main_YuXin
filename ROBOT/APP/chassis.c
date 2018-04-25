@@ -36,7 +36,7 @@ void Remote_Task(void)
 	chassis_Data.rb_wheel_tarV=(-Chassis_Vx-Chassis_Vy+Chassis_Vw)*K_SPEED;
 	
 
-	
+	Overall_Motion_Ratio_Protect(&chassis_Data);	//整体速度保护
 ///////////////////////////////////////////////////////////////// 
 //	chassis_Data.lf_wheel_tarV=remote_tem;
 //	chassis_Data.rf_wheel_tarV=remote_tem;
@@ -56,6 +56,30 @@ void Remote_Task(void)
 }
 
 
+#define CHASSIS_SPEEDMAX 8500.0f
+void Overall_Motion_Ratio_Protect(CHASSIS_DATA* chassis_data)	//整体轮速比例保护,一定要放在整体轮速解算出来后
+{
+	s32 chassis_tarV_max=0;
+	float chassis_protect_k=1;
+	
+	chassis_tarV_max=chassis_data->lf_wheel_tarV>chassis_data->rf_wheel_tarV?chassis_data->lf_wheel_tarV:chassis_data->rf_wheel_tarV;
+	chassis_tarV_max=chassis_tarV_max>chassis_data->lb_wheel_tarV?chassis_tarV_max:chassis_data->lb_wheel_tarV;
+	chassis_tarV_max=chassis_tarV_max>chassis_data->rb_wheel_tarV?chassis_tarV_max:chassis_data->rb_wheel_tarV;
+	
+	if(chassis_tarV_max>CHASSIS_SPEEDMAX)	//计算出保护系数为了减少计算量将缩小计算放在IF内
+	{
+		chassis_protect_k=CHASSIS_SPEEDMAX/chassis_tarV_max;
+		
+		chassis_data->lf_wheel_tarV*=chassis_protect_k;
+		chassis_data->rf_wheel_tarV*=chassis_protect_k;
+		chassis_data->lb_wheel_tarV*=chassis_protect_k;
+		chassis_data->rb_wheel_tarV*=chassis_protect_k;
+	}
+	
+}
+
+
+
 #define CHASSIS_INTEGRAL_PID_KP 3
 #define CHASSIS_INTEGRAL_PID_KI 0.01
 #define CHASSIS_INTEGRAL_PID_I_SUM_LIM 1000
@@ -66,10 +90,23 @@ void Extended_Integral_PID(CHASSIS_DATA* chassis_data)	//扩展型整体PID，适用于任
 	float expect[4]={0};
 	float error[4]={0};
 	static float inte[4];
-	expect[LF]=fdbv_sum*chassis_data->lf_wheel_tarV/tarv_sum;
-	expect[RF]=fdbv_sum*chassis_data->rf_wheel_tarV/tarv_sum;
-	expect[LB]=fdbv_sum*chassis_data->lb_wheel_tarV/tarv_sum;
-	expect[RB]=fdbv_sum*chassis_data->rb_wheel_tarV/tarv_sum;
+	s32 output_compensation[4];
+	
+	if(abs(tarv_sum)<0.1)	//相当于被除数为0
+	{
+		expect[LF]=0;
+		expect[RF]=0;
+		expect[LB]=0;
+		expect[RB]=0;
+	}
+	else
+	{
+		expect[LF]=fdbv_sum*chassis_data->lf_wheel_tarV/tarv_sum;
+		expect[RF]=fdbv_sum*chassis_data->rf_wheel_tarV/tarv_sum;
+		expect[LB]=fdbv_sum*chassis_data->lb_wheel_tarV/tarv_sum;
+		expect[RB]=fdbv_sum*chassis_data->rb_wheel_tarV/tarv_sum;
+	}
+	
 	error[LF]=expect[LF]-chassis_data->lf_wheel_fdbV;
 	error[RF]=expect[RF]-chassis_data->rf_wheel_fdbV;
 	error[LB]=expect[LB]-chassis_data->lb_wheel_fdbV;
@@ -86,10 +123,21 @@ void Extended_Integral_PID(CHASSIS_DATA* chassis_data)	//扩展型整体PID，适用于任
 		inte[id]=inte[id]<-CHASSIS_INTEGRAL_PID_I_SUM_LIM?-CHASSIS_INTEGRAL_PID_I_SUM_LIM:inte[id];
 	}
 	
-	chassis_data->lf_wheel_output+=(s32)(error[LF]*CHASSIS_INTEGRAL_PID_KP+inte[LF]);
-	chassis_data->rf_wheel_output+=(s32)(error[RF]*CHASSIS_INTEGRAL_PID_KP+inte[RF]);
-	chassis_data->lb_wheel_output+=(s32)(error[LB]*CHASSIS_INTEGRAL_PID_KP+inte[LB]);
-	chassis_data->rb_wheel_output+=(s32)(error[RB]*CHASSIS_INTEGRAL_PID_KP+inte[RB]);
+	output_compensation[LF]=(s32)(error[LF]*CHASSIS_INTEGRAL_PID_KP+inte[LF]);
+	output_compensation[RF]=(s32)(error[RF]*CHASSIS_INTEGRAL_PID_KP+inte[RF]);
+	output_compensation[LB]=(s32)(error[LB]*CHASSIS_INTEGRAL_PID_KP+inte[LB]);
+	output_compensation[RB]=(s32)(error[RB]*CHASSIS_INTEGRAL_PID_KP+inte[RB]);
+	
+	for(int id=0;id<4;id++)
+	{
+		output_compensation[id]=output_compensation[id]>4000?4000:output_compensation[id];
+		output_compensation[id]=output_compensation[id]<-4000?-4000:output_compensation[id];
+	}
+	
+	chassis_data->lf_wheel_output+=output_compensation[LF];
+	chassis_data->rf_wheel_output+=output_compensation[RF];
+	chassis_data->lb_wheel_output+=output_compensation[LB];
+	chassis_data->rb_wheel_output+=output_compensation[RB];
 }
 
 

@@ -48,7 +48,7 @@ void Check_Task(void)
 //		SetWorkState(ERROR_STATE);
 //	}
 	
-	for(int i=4;i<LOST_TYPE_NUM-1;i++)	//控在一切正常后检测
+	for(int i=4;i<LOST_TYPE_NUM;i++)	//控在一切正常后检测
 	{
 		if(Error_Check.statu[i]==1)
 		{

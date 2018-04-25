@@ -101,6 +101,7 @@ typedef struct
 
 void Remote_Task(void);
 void Extended_Integral_PID(CHASSIS_DATA* chassis_data);	//扩展型整体PID，适用于任意动作场景	2018.4.19
+void Overall_Motion_Ratio_Protect(CHASSIS_DATA* chassis_data);	//整体轮速比例保护,一定要放在整体轮速解算出来后
 
 #endif
 
