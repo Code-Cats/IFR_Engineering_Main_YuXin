@@ -15,8 +15,10 @@
 
 #define DELAY_CNT  200000    //闪烁时间间隔
 
-void LED_Red_Blink(void);
-void LED_Green_Blink(void);
+#define BLINK_CYCLE 150
+#define BLINK_INTERVAL (BLINK_CYCLE*2*8)
+void LED_Blink_Run(void);
+void LED_Blink_Set(u8 frequency_green,u8 frequency_red);	//2s内闪烁次数//LED闪烁运行函数10h处理频率
 
 #endif
 

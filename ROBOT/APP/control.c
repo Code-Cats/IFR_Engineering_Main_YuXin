@@ -229,94 +229,93 @@ void Work_State_Change(void)
 
 
 
+extern s16 t_error_record;
 void LED_Indicate(void)
 {
-	switch (GetWorkState())	//2018.3.15
+	if(time_1ms_count%BLINK_CYCLE==0)
 	{
-		case CHECK_STATE:	//自检模式
-		{	//板载外设初始化后便进入自检模式 
-			RED_LED_ON();
-			GREEN_LED_OFF();
-			break;
-		}
-		case PREPARE_STATE:	//预备模式
-		{	
-			RED_LED_ON();
-			GREEN_LED_OFF();
-			break;
-		}
-		case CALI_STATE:	//标定模式	红开绿闪
+		switch (GetWorkState())	//2018.3.15
 		{
-			RED_LED_ON();
-			if(time_1ms_count%200==0)
-			{
-				GREEN_LED_TOGGLE();
+			case CHECK_STATE:	//自检模式
+			{	//板载外设初始化后便进入自检模式 
+				LED_Blink_Set(10,10);
+				break;
 			}
-			break;
-		}
-		case NORMAL_STATE:	//正常操作模式	红关绿闪
-		{
-			RED_LED_OFF();
-			if(time_1ms_count%500==0)
-			{
-				GREEN_LED_TOGGLE();
+			case PREPARE_STATE:	//预备模式
+			{	
+				LED_Blink_Set(9,9);
+				break;
 			}
-			break;
-		}
-		case ASCEND_STATE:	//自动上岛模式	绿闪
-		{
-			RED_LED_OFF();
-			if(time_1ms_count%500==0)
+			case CALI_STATE:	//标定模式	红开绿闪
 			{
-				GREEN_LED_TOGGLE();
+				LED_Blink_Set(9,9);
+				break;
 			}
-			break;
-		}
-		case DESCEND_STATE:	//自动下岛模式	绿闪
-		{
-			RED_LED_OFF();
-			if(time_1ms_count%500==0)
+			case NORMAL_STATE:	//正常操作模式	红关绿闪
 			{
-				GREEN_LED_TOGGLE();
+				LED_Blink_Set(1,0);
+				break;
 			}
-			break;
-		}
-		case ERROR_STATE:	//错误模式
-		{
-			if(time_1ms_count%100==0)
+			case ASCEND_STATE:	//自动上岛模式	绿闪
 			{
-				RED_LED_TOGGLE();
-				GREEN_LED_TOGGLE();
+				LED_Blink_Set(1,0);
+				break;
 			}
-			break;
-		}
-		case LOST_STATE:	//错误模式
-		{
-			if(time_1ms_count%800==0)
+			case DESCEND_STATE:	//自动下岛模式	绿闪
 			{
-				RED_LED_TOGGLE();
-				GREEN_LED_TOGGLE();
+				LED_Blink_Set(1,0);
+				break;
 			}
-			break;
-		}
-		case STOP_STATE:	//停止状态	红闪
-		{
-			if(time_1ms_count%500==0)
+			case ERROR_STATE:	//错误模式
 			{
-				RED_LED_TOGGLE();
+				if(t_error_record==LOST_BULLETLIFT1)	//前取弹升降
+				{
+					LED_Blink_Set(3,10);
+				}
+				else if(t_error_record==LOST_BULLETLIFT2)	//后取弹升降
+				{
+					LED_Blink_Set(4,10);
+				}
+				else if(t_error_record==LOST_CM1||t_error_record==LOST_CM2||t_error_record==LOST_CM3||t_error_record==LOST_CM4)	//底盘电机
+				{
+					LED_Blink_Set(2,10);
+				}
+				else if(t_error_record==LOST_LIFT1||t_error_record==LOST_LIFT2||t_error_record==LOST_LIFT3||t_error_record==LOST_LIFT4)	//升降
+				{
+					LED_Blink_Set(1,10);
+				}
+				else
+				{
+					LED_Blink_Set(6,10);
+				}
+				
+				break;
 			}
-			GREEN_LED_OFF();
-			break;
-		}
-		case PROTECT_STATE:	//自我保护模式	双闪
-		{
-			if(time_1ms_count%800==0)
+			case LOST_STATE:	//错误模式
 			{
-				RED_LED_TOGGLE();
-				GREEN_LED_TOGGLE();
+				LED_Blink_Set(1,1);
+				break;
 			}
-			break;
+			case STOP_STATE:	//停止状态	红闪
+			{
+				if(time_1ms_count%BLINK_INTERVAL==0)
+				{
+					LED_Blink_Set(0,10);
+				}
+				else if((time_1ms_count+BLINK_INTERVAL/2)%BLINK_INTERVAL==0)
+				{
+					LED_Blink_Set(10,0);
+				}
+				
+				break;
+			}
+			case PROTECT_STATE:	//自我保护模式	双闪
+			{
+				LED_Blink_Set(1,1);
+				break;
+			}
 		}
+LED_Blink_Run();
 	}
 }
 
