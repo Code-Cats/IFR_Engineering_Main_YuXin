@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-#define     PI                     3.1415926
+#define     PI                     3.1415926f
 
 typedef __packed struct
 {

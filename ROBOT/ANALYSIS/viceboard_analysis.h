@@ -15,6 +15,14 @@ typedef struct
 	u8 count;
 }ViceBoardSendTypeDef;
 
+
+typedef struct
+{
+	u8 valve[6];
+	u8 servo[2];
+}ViceControlDataTypeDef;	//¿ØÖÆ¸±°å
+
+
 #define MAINBOARD_SENDDATA_DEFAULT \
 {\
 	0,\

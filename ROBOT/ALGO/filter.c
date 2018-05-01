@@ -104,13 +104,13 @@ float FirstOrder_General(const s32 cur_val,FIRST_ORDER_FILTER*filter)
 **************************************/
 float	Filter_MPU6050_Accel(float Accel,float param)
 {			
-		static float accel[2]= {0.0,0.0};
+		static float accel[2]= {0.0f,0.0f};
 		static float a_rpm=0;
 		float output_accel;
 		accel[0]=accel[1];
 		accel[1]=Accel;
 		a_rpm=accel[0]*(1-param)+accel[1]*param;
-		output_accel=((60*abs(a_rpm)*9.8f*19)/(13.24f*PI*0.1510f));
+		output_accel=(float)((60*abs(a_rpm)*9.8f*19)/(13.24f*PI*0.1510f));
     return output_accel;
 }
 

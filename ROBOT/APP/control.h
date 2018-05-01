@@ -13,13 +13,13 @@
 ////////////////////////////////////
 
 /************行程限制**************/
-#define FALL 30
-#define ISLAND 1171
+#define LIFT_DISTANCE_FALL 30
+#define LIFT_DISTANCE_ISLAND 1170
 
 
 
 #define LIFT_POSITION_PID_P	50	//405升降电机PID
-#define LIFT_POSITION_PID_I 0.0
+#define LIFT_POSITION_PID_I 0
 #define LIFT_POSITION_PID_D	0.015f //	0.15f
 #define LIFT_POSITION_MAXOUT 8500	//位置环输出的最大速度
 #define LIFT_POSITION_MAXINPUT 99999999

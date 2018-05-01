@@ -44,11 +44,11 @@ void Control_Task(void)	//2ms
 	
 	if(time_1ms_count%50==0)
 	{
-		Debug_Send_OSC();
+//		Debug_Send_OSC();	//待完善发数逻辑
 	}
-Take_Bullet_Task();
-	Vw_tem=Chassis_Attitude_Correct(Chassis_GYRO[2],Gyro_Data.angvel[2]+2);
-  Chassis_Vw+=Vw_tem;
+//Take_Bullet_Task();
+////////////	Vw_tem=Chassis_Attitude_Correct(Chassis_GYRO[2],Gyro_Data.angvel[2]+2);	//暂时还没加陀螺仪
+////////////  Chassis_Vw+=Vw_tem;
 	Work_State_Change();
 	switch (GetWorkState())	//2018.3.15
 	{
@@ -86,7 +86,7 @@ Take_Bullet_Task();
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降
 			BulletLift_Task();
-			Take_Bullet_Task();
+			Take_Bullet_Task();	//暂时把让位给登岛
 			break;
 		}
 		case ASCEND_STATE:	//自动上岛模式
@@ -229,7 +229,7 @@ void Work_State_Change(void)
 
 
 
-extern s16 t_error_record;
+extern s16 t_error_i_record;
 void LED_Indicate(void)
 {
 	if(time_1ms_count%BLINK_CYCLE==0)
@@ -268,19 +268,19 @@ void LED_Indicate(void)
 			}
 			case ERROR_STATE:	//错误模式
 			{
-				if(t_error_record==LOST_BULLETLIFT1)	//前取弹升降
+				if(t_error_i_record==LOST_BULLETLIFT1)	//前取弹升降
 				{
 					LED_Blink_Set(3,10);
 				}
-				else if(t_error_record==LOST_BULLETLIFT2)	//后取弹升降
+				else if(t_error_i_record==LOST_BULLETLIFT2)	//后取弹升降
 				{
 					LED_Blink_Set(4,10);
 				}
-				else if(t_error_record==LOST_CM1||t_error_record==LOST_CM2||t_error_record==LOST_CM3||t_error_record==LOST_CM4)	//底盘电机
+				else if(t_error_i_record==LOST_CM1||t_error_i_record==LOST_CM2||t_error_i_record==LOST_CM3||t_error_i_record==LOST_CM4)	//底盘电机
 				{
 					LED_Blink_Set(2,10);
 				}
-				else if(t_error_record==LOST_LIFT1||t_error_record==LOST_LIFT2||t_error_record==LOST_LIFT3||t_error_record==LOST_LIFT4)	//升降
+				else if(t_error_i_record==LOST_LIFT1||t_error_i_record==LOST_LIFT2||t_error_i_record==LOST_LIFT3||t_error_i_record==LOST_LIFT4)	//升降
 				{
 					LED_Blink_Set(1,10);
 				}
@@ -368,23 +368,23 @@ void Lift_Task(void)
 	
 	if(GetWorkState()!=CALI_STATE&&GetWorkState()!=PREPARE_STATE&&GetWorkState()!=CHECK_STATE)	//标定状态下不限制行程
 	{
-		lift_Data.lf_lift_tarP=lift_Data.lf_lift_tarP<FALL?FALL:lift_Data.lf_lift_tarP;	//限制行程
-		lift_Data.lf_lift_tarP=lift_Data.lf_lift_tarP>ISLAND?ISLAND:lift_Data.lf_lift_tarP;
+		lift_Data.lf_lift_tarP=lift_Data.lf_lift_tarP<LIFT_DISTANCE_FALL?LIFT_DISTANCE_FALL:lift_Data.lf_lift_tarP;	//限制行程
+		lift_Data.lf_lift_tarP=lift_Data.lf_lift_tarP>LIFT_DISTANCE_ISLAND?LIFT_DISTANCE_ISLAND:lift_Data.lf_lift_tarP;
 		
-		lift_Data.rf_lift_tarP=lift_Data.rf_lift_tarP<FALL?FALL:lift_Data.rf_lift_tarP;	//限制行程
-		lift_Data.rf_lift_tarP=lift_Data.rf_lift_tarP>ISLAND?ISLAND:lift_Data.rf_lift_tarP;
+		lift_Data.rf_lift_tarP=lift_Data.rf_lift_tarP<LIFT_DISTANCE_FALL?LIFT_DISTANCE_FALL:lift_Data.rf_lift_tarP;	//限制行程
+		lift_Data.rf_lift_tarP=lift_Data.rf_lift_tarP>LIFT_DISTANCE_ISLAND?LIFT_DISTANCE_ISLAND:lift_Data.rf_lift_tarP;
 		
-		lift_Data.lb_lift_tarP=lift_Data.lb_lift_tarP<FALL?FALL:lift_Data.lb_lift_tarP;	//限制行程
-		lift_Data.lb_lift_tarP=lift_Data.lb_lift_tarP>ISLAND?ISLAND:lift_Data.lb_lift_tarP;
+		lift_Data.lb_lift_tarP=lift_Data.lb_lift_tarP<LIFT_DISTANCE_FALL?LIFT_DISTANCE_FALL:lift_Data.lb_lift_tarP;	//限制行程
+		lift_Data.lb_lift_tarP=lift_Data.lb_lift_tarP>LIFT_DISTANCE_ISLAND?LIFT_DISTANCE_ISLAND:lift_Data.lb_lift_tarP;
 		
-		lift_Data.rb_lift_tarP=lift_Data.rb_lift_tarP<FALL?FALL:lift_Data.rb_lift_tarP;	//限制行程
-		lift_Data.rb_lift_tarP=lift_Data.rb_lift_tarP>ISLAND?ISLAND:lift_Data.rb_lift_tarP;
+		lift_Data.rb_lift_tarP=lift_Data.rb_lift_tarP<LIFT_DISTANCE_FALL?LIFT_DISTANCE_FALL:lift_Data.rb_lift_tarP;	//限制行程
+		lift_Data.rb_lift_tarP=lift_Data.rb_lift_tarP>LIFT_DISTANCE_ISLAND?LIFT_DISTANCE_ISLAND:lift_Data.rb_lift_tarP;
 	}
-	
+		//相反的 对角互换	//又换回来了，将互换的地方挪至反馈
 	lift_Data.lf_lift_tarV=(int32_t)PID_General(lift_Data.lf_lift_tarP,lift_Data.lf_lift_fdbP,&PID_Lift_Position[LF]);	//位置环PID计算
 	lift_Data.rf_lift_tarV=(int32_t)PID_General(lift_Data.rf_lift_tarP,lift_Data.rf_lift_fdbP,&PID_Lift_Position[RF]);
-	lift_Data.lb_lift_tarV=(int32_t)PID_General((lift_Data.lb_lift_tarP),lift_Data.lb_lift_fdbP,&PID_Lift_Position[LB]);	//+13该补偿下向右正常
-	lift_Data.rb_lift_tarV=(int32_t)PID_General((lift_Data.rb_lift_tarP),lift_Data.rb_lift_fdbP,&PID_Lift_Position[RB]);	//-5
+	lift_Data.lb_lift_tarV=(int32_t)PID_General((lift_Data.lb_lift_tarP),lift_Data.lb_lift_fdbP,&PID_Lift_Position[LB]);
+	lift_Data.rb_lift_tarV=(int32_t)PID_General((lift_Data.rb_lift_tarP),lift_Data.rb_lift_fdbP,&PID_Lift_Position[RB]);
 	
 	lift_Data.lf_lift_output=PID_General(lift_Data.lf_lift_tarV,lift_Data.lf_lift_fdbV,&PID_Lift_Speed[LF]);	//速度环PID计算
 	lift_Data.rf_lift_output=PID_General(lift_Data.rf_lift_tarV,lift_Data.rf_lift_fdbV,&PID_Lift_Speed[RF]);
@@ -625,6 +625,7 @@ void Motor_Send(void)
 		case ASCEND_STATE:	//自动上岛模式
 		{
 			CAN2_Chassis_SendMsg(chassis_Data.lf_wheel_output,chassis_Data.rf_wheel_output,chassis_Data.lb_wheel_output,chassis_Data.rb_wheel_output);
+//			CAN1_Lift_SendMsg((s16)lift_Data.lf_lift_output,(s16)lift_Data.rf_lift_output,(s16)lift_Data.lb_lift_output,(s16)lift_Data.rb_lift_output);
 			CAN1_Lift_SendMsg((s16)lift_Data.lf_lift_output,(s16)lift_Data.rf_lift_output,(s16)lift_Data.lb_lift_output,(s16)lift_Data.rb_lift_output);
 			CAN2_BulletLift_SendMsg(0,0);
 			break;

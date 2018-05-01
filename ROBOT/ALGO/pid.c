@@ -25,7 +25,7 @@ float PID_General(float target,float current,PID_GENERAL *pid)
 		
 		if(abs(target - current)<=pid->tiny)pid->Data_Save[1]=0;
 		
-		pid->inte = 0.999*pid->inte+pid->Data_Save[1];
+		pid->inte = 0.999f*pid->inte+pid->Data_Save[1];
 		pid->dire = pid->k_d * (pid->Data_Save[1] - pid->Data_Save[0]);
 
 		if(pid->inte>pid->i_sum_max){pid->inte=pid->i_sum_max;}
@@ -56,7 +56,7 @@ float PID_Robust(float target,float current,float differential,PID_GENERAL *pid)
 		
 		if(abs(target - current)<=pid->tiny)pid->Data_Save[1]=0;
 		
-		pid->inte = 0.999*pid->inte+pid->Data_Save[1];
+		pid->inte = 0.999f*pid->inte+pid->Data_Save[1];
 		pid->dire = pid->k_d * differential;
 
 		if(pid->inte>pid->i_sum_max){pid->inte=pid->i_sum_max;}

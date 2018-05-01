@@ -1,18 +1,19 @@
 #include "viceboard_analysis.h"
 
 SensorDataTypeDef SensorData={0};
+ViceControlDataTypeDef ViceControlData={0};
 ViceBoardSendTypeDef SendData=MAINBOARD_SENDDATA_DEFAULT;
 
-//副板给主板串口发送函数	//2ms执行一次，10ms更新一次结果，14400的波特率，一个字节最多传输11位，11/14400=0.76ms
-void MainBoard_SendData(void)
+//主板给副板串口发送函数	//2ms执行一次，10ms更新一次结果，14400的波特率，一个字节最多传输11位，11/14400=0.76ms
+void ViceBoard_SendDataRun(void)	
 {
-	if(USART_GetFlagStatus(USART3,USART_FLAG_TC)== SET)	//如果上一帧发送完成
+	if(USART_GetFlagStatus(USART6,USART_FLAG_TC)== SET)	//如果上一帧发送完成
 	{
 		if(SendData.statu==1)
 		{
 			SendData.data[0]=0x5A;	//防止帧头帧尾被破坏
 			SendData.data[4]=0xA5;	//防止帧头帧尾被破坏
-			USART_SendData(USART3,SendData.data[SendData.count]);
+			USART_SendData(USART6,SendData.data[SendData.count]);
 			SendData.count++;
 			if(SendData.count>4)
 			{
@@ -23,6 +24,16 @@ void MainBoard_SendData(void)
 	}
 	
 }
+
+void ViceBoard_SendDataRefresh(void)//限制频率放在调用层
+{
+	if(SendData.statu==0)
+	{
+		SendData.data[1]=ViceControlData.valve[0]<<7|ViceControlData.valve[1]<<6|ViceControlData.valve[2]<<5|ViceControlData.valve[3]<<4|ViceControlData.valve[4]<<3|ViceControlData.valve[5]<<2|ViceControlData.servo[0]<<1|ViceControlData.servo[1];
+		SendData.statu=1;
+	}
+}
+
 
 
 ReceiveDataTypeDef ReceiveData={0};

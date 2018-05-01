@@ -18,29 +18,31 @@ void CAN1_Feedback_Analysis(CanRxMsg *rx_message)
 		{
 			case 0x201:
 			 {
-				 Speed_Data_deal(&lift_Data.lf_lift_fdbV,rx_message);
-				 Position_Data_deal(&lift_Data.lf_lift_fdbP,&lift_position_encoder[LF],rx_message);
+				 Speed_Data_deal(&lift_Data.rb_lift_fdbV,rx_message);
+				 Position_Data_deal(&lift_Data.rb_lift_fdbP,&lift_position_encoder[RB],rx_message);	//已将原LF,RB调换
 				 LostCountFeed(&Error_Check.count[LOST_LIFT1]);
 				 break;
 			 }
 			 case 0x202:
 			 {
-				 Speed_Data_deal(&lift_Data.rf_lift_fdbV,rx_message);
-				 Position_Data_deal(&lift_Data.rf_lift_fdbP,&lift_position_encoder[RF],rx_message);
+				 Speed_Data_deal(&lift_Data.lb_lift_fdbV,rx_message);
+				 Position_Data_deal(&lift_Data.lb_lift_fdbP,&lift_position_encoder[LB],rx_message);	//已将原LB,RF调换
 				 LostCountFeed(&Error_Check.count[LOST_LIFT2]);
 				 break;
 			 }
 			 case 0x203:
 			 {
-				 Speed_Data_deal(&lift_Data.lb_lift_fdbV,rx_message);
-				 Position_Data_deal(&lift_Data.lb_lift_fdbP,&lift_position_encoder[LB],rx_message);
+				 
+				 Speed_Data_deal(&lift_Data.rf_lift_fdbV,rx_message);
+				 Position_Data_deal(&lift_Data.rf_lift_fdbP,&lift_position_encoder[RF],rx_message);	//已将原LB,RF调换
 				 LostCountFeed(&Error_Check.count[LOST_LIFT3]);
 				 break;
 			 }
 			 case 0x204:
 			 {
-				 Speed_Data_deal(&lift_Data.rb_lift_fdbV,rx_message);
-				 Position_Data_deal(&lift_Data.rb_lift_fdbP,&lift_position_encoder[RB],rx_message);
+				 
+				 Speed_Data_deal(&lift_Data.lf_lift_fdbV,rx_message);
+				 Position_Data_deal(&lift_Data.lf_lift_fdbP,&lift_position_encoder[LF],rx_message);	//已将原LF,RB调换
 				 LostCountFeed(&Error_Check.count[LOST_LIFT4]);
 				 break;
 			 }
@@ -69,7 +71,7 @@ void CAN1_Feedback_Analysis(CanRxMsg *rx_message)
 函数返回值： 无
 描述：将数据存入TxMessage结构体再由CAN_Transmit发送
 ****************************************************/
-void CAN1_Lift_SendMsg(int motor_201,int motor_202,int motor_203,int motor_204)
+void CAN1_Lift_SendMsg(int motor_204,int motor_203,int motor_202,int motor_201)	//因为1，4 ； 2，3互换，所以这个也需要互换！
 {	
 		CanTxMsg TxMessage;
 	  TxMessage.StdId = 0x200;      //帧ID为传入参数的CAN_ID

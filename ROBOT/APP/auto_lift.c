@@ -27,7 +27,10 @@ void Ascend_Control_Center(void)	//È«×Ô¶¯µÇµº¿ØÖÆÖÐÐÄ
 		case BACKFALL_GO1:
 		{
 			if(Ascend_BackFall_GO()==1)
+			{
 				AscendState=FULLFALL_GO1;
+			}
+				
 			break;
 		}
 		case FULLFALL_GO1:
@@ -79,9 +82,9 @@ extern SensorDataTypeDef SensorData;
 extern u32 time_1ms_count;
 
 #define VW_REDRESS 30
-#define VX_SPEED_UP 110
-#define VX_SPEED_NEAR 10
-#define VX_PRESS_V0 50
+#define VX_SPEED_UP -110//
+#define VX_SPEED_NEAR -10//
+#define VX_PRESS_V0 -50//
 
 //ºìÍâ¿ª¹ØÁÁÎªµÍ£¨¼´½ü£©£¬¼´0
 //ÏÞÎ»
@@ -95,7 +98,7 @@ u8 Ascend_FullRise_GO1(void)	//Ç°½ø¡¢µ÷Õû¡¢´¥·¢µÅÍÈº¯Êý
 	Chassis_Vw=0;
 		if(SetCheck_FrontLift(1)!=1||SetCheck_BackLift(1)!=1)
 		{
-			Chassis_Vx=-70;	//Ã»ÓÐÍêÈ«ÉýÆðÀ´Ê±
+			Chassis_Vx=70;	//Ã»ÓÐÍêÈ«ÉýÆðÀ´Ê±
 			Chassis_Vw=0;
 		}
 		else
@@ -182,8 +185,9 @@ u8 Ascend_BackFall_GO(void)	//3£¬4ºÅÉý½µÌ§ÆðÇ°½øµÄ½ø³Ì
 		{
 			Chassis_Vx=-VX_PRESS_V0;
 			Chassis_Vw=0;
-			////////////////////////////////ÇÐ»»µ½ÏÂÒ»¸ö×´Ì¬
 			return 1;
+			////////////////////////////////ÇÐ»»µ½ÏÂÒ»¸ö×´Ì¬
+			
 		}
 		else if(SensorData.Limit[0]==0&&SensorData.Limit[1]==1)
 		{
@@ -225,7 +229,7 @@ u8 Ascend_FullFall_GO(void)	//¶¼Ì§Æðµ½¶¼Ì§Æðºó	//Í¨¹ý¹Û²ìÊÓÆµµÃÖªÔÚÅö×²Ò»Ë²¼äµ¯º
 				if(time_record==0)	//time_record=0ÒâË¼¼´ÎªµÚÒ»´ÎÖ´ÐÐ
 				{
 					time_record=time_1ms_count;
-					Chassis_Vx=-160;
+					Chassis_Vx=160;
 					Chassis_Vw=0;
 				}
 				
@@ -272,7 +276,7 @@ u8 Ascend_FullRise_GO2(void)	//Ç°½ø¡¢µ÷Õû¡¢´¥·¢µÅÍÈº¯Êý
 	Chassis_Vw=0;
 	if(SetCheck_FrontLift(1)!=1||SetCheck_BackLift(1)!=1)
 		{
-			Chassis_Vx=-60;	//Ã»ÓÐÍêÈ«ÉýÆðÀ´Ê±
+			Chassis_Vx=60;	//Ã»ÓÐÍêÈ«ÉýÆðÀ´Ê±
 			Chassis_Vw=0;
 		}
 		else
@@ -571,17 +575,17 @@ extern LIFT_DATA lift_Data;
 
 u8 SetCheck_FrontLift(u8 rise_state)	//Ç°Éý½µÂÖÉýÆð/ÂäÏÂ²¢¼ì²é	//0±íÊ¾FALL£¬1±íÊ¾ISLAND
 {
-	lift_Data.lf_lift_tarP=FALL-(rise_state!=0)*(FALL-ISLAND);
-	lift_Data.rf_lift_tarP=FALL-(rise_state!=0)*(FALL-ISLAND);
+	lift_Data.lf_lift_tarP=LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND);
+	lift_Data.rf_lift_tarP=LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND);
 	
-	return (abs(lift_Data.lf_lift_fdbP+lift_Data.rf_lift_fdbP-2*(FALL-(rise_state!=0)*(FALL-ISLAND)))<30);	//20
+	return (abs(lift_Data.lf_lift_fdbP+lift_Data.rf_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<30);	//20
 }
 
 u8 SetCheck_BackLift(u8 rise_state)
 {
-	lift_Data.lb_lift_tarP=FALL-(rise_state!=0)*(FALL-ISLAND);
-	lift_Data.rb_lift_tarP=FALL-(rise_state!=0)*(FALL-ISLAND);
+	lift_Data.lb_lift_tarP=LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND);
+	lift_Data.rb_lift_tarP=LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND);
 	
-	return (abs(lift_Data.lb_lift_fdbP+lift_Data.rb_lift_fdbP-2*(FALL-(rise_state!=0)*(FALL-ISLAND)))<30);	//20
+	return (abs(lift_Data.lb_lift_fdbP+lift_Data.rb_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<30);	//20
 }
 

@@ -24,7 +24,7 @@ void Remote_Task(void)
 		Chassis_Vx=RC_Ctl.rc.ch1-1024;
 	}
 	
-	if(GetWorkState()==NORMAL_STATE||GetWorkState()==ASCEND_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
+	if(GetWorkState()==NORMAL_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
 	{
 		Chassis_Vw=RC_Ctl.rc.ch2-1024;
 	}
@@ -81,7 +81,7 @@ void Overall_Motion_Ratio_Protect(CHASSIS_DATA* chassis_data)	//整体轮速比例保护
 
 
 #define CHASSIS_INTEGRAL_PID_KP 3
-#define CHASSIS_INTEGRAL_PID_KI 0.01
+#define CHASSIS_INTEGRAL_PID_KI 0.01f
 #define CHASSIS_INTEGRAL_PID_I_SUM_LIM 1000
 void Extended_Integral_PID(CHASSIS_DATA* chassis_data)	//扩展型整体PID，适用于任意动作场景	2018.4.19
 {
@@ -92,7 +92,7 @@ void Extended_Integral_PID(CHASSIS_DATA* chassis_data)	//扩展型整体PID，适用于任
 	static float inte[4];
 	s32 output_compensation[4];
 	
-	if(abs(tarv_sum)<0.1)	//相当于被除数为0
+	if(abs(tarv_sum)<0.1f)	//相当于被除数为0
 	{
 		expect[LF]=0;
 		expect[RF]=0;
