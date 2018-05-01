@@ -7,13 +7,13 @@ ViceBoardSendTypeDef SendData=MAINBOARD_SENDDATA_DEFAULT;
 //主板给副板串口发送函数	//2ms执行一次，10ms更新一次结果，14400的波特率，一个字节最多传输11位，11/14400=0.76ms
 void ViceBoard_SendDataRun(void)	
 {
-	if(USART_GetFlagStatus(USART6,USART_FLAG_TC)== SET)	//如果上一帧发送完成
+	if(USART_GetFlagStatus(USART3,USART_FLAG_TC)== SET)	//如果上一帧发送完成
 	{
 		if(SendData.statu==1)
 		{
 			SendData.data[0]=0x5A;	//防止帧头帧尾被破坏
 			SendData.data[4]=0xA5;	//防止帧头帧尾被破坏
-			USART_SendData(USART6,SendData.data[SendData.count]);
+			USART_SendData(USART3,SendData.data[SendData.count]);
 			SendData.count++;
 			if(SendData.count>4)
 			{

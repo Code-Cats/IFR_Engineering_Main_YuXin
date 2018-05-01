@@ -15,7 +15,7 @@ void BulletLift_Task(void)	//定时频率：1ms
 	if(GetWorkState()==NORMAL_STATE)
 	{
 		
-		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)	//左上
+		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)	//左下
 		{
 			if(time_1ms_count%10==0)
 			{
@@ -23,12 +23,13 @@ void BulletLift_Task(void)	//定时频率：1ms
 				{
 					case RC_SWITCH_UP:
 					{
-						bulletlift_Motor_Data[BULLETLIFT_FRONTID].tarP+=(s16)(12*(RC_Ctl.rc.ch3-1024)/600.0);
-						bulletlift_Motor_Data[BULLETLIFT_BACKID].tarP+=(s16)(12*(RC_Ctl.rc.ch3-1024)/600.0);
+						
 						break;
 					}
 					case RC_SWITCH_MIDDLE:
 					{
+						bulletlift_Motor_Data[BULLETLIFT_FRONTID].tarP+=(s16)(12*(RC_Ctl.rc.ch3-1024)/600.0);
+						bulletlift_Motor_Data[BULLETLIFT_BACKID].tarP+=(s16)(12*(RC_Ctl.rc.ch3-1024)/600.0);
 						break;
 					}
 					case RC_SWITCH_DOWN:

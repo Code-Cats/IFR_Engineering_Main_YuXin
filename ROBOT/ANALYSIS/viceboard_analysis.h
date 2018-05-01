@@ -4,7 +4,8 @@
 #include "bsp.h"
 
 
-void MainBoard_SendData(void);
+void ViceBoard_SendDataRun(void);
+void ViceBoard_SendDataRefresh(void);//限制频率放在调用层
 void Data_Receive(u8 data);	//从主板传过来的数据解析（主副板通用）
 void SensorData_Deal(u8 *pData);
 

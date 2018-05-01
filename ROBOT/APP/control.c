@@ -130,6 +130,12 @@ void Control_Task(void)	//2ms
 	Chassis_Attitude_Angle_Convert();
 	
 	Motor_Send();
+	
+	if(time_1ms_count%2==0)
+	{
+		ViceBoard_SendDataRefresh();
+		ViceBoard_SendDataRun();
+	}
 }
 
 
