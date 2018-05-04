@@ -9,7 +9,7 @@
 #define RB 3
 
 /************标定输出**************/
-#define LIFT_CALI_OUTPUT_MAX 1700//1700	//2018.4.12
+#define LIFT_CALI_OUTPUT_MAX 1900//1700	//2018.4.12
 ////////////////////////////////////
 
 /************行程限制**************/
@@ -133,6 +133,8 @@ void Teleconltroller_Data_protect(void);	//遥控器数据自保护
 
 void Lift_Time_Gauge(u8 *trigger);	//升降时间自测量
 
+u8 Check_FrontLift(void);
+u8 Check_BackLift(void);
 
 /***********************--标定状态--**********************/
 typedef enum
@@ -156,6 +158,7 @@ typedef enum
     STOP_STATE,       //停止运动状态(由遥控器控制的保护状态)
 		ASCEND_STATE,			//登岛状态
 		DESCEND_STATE,		//下岛状态
+		TAKEBULLET_STATE,	//取弹状态
 		PROTECT_STATE,		//保护状态，在程序循环时执行，当检测到程序发生异常或者传感器异常时进入该模式
 }WorkState_e;
 

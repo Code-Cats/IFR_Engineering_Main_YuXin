@@ -9,10 +9,10 @@ PID_GENERAL   PID_BulletLift_Speed[2]={PID_BULLETLIFT_SPEED_DEFAULT,PID_BULLETLI
 
 extern u32 time_1ms_count;
 
-
+s32 bullet_lift_tarp=BULLETLIFT_DOWNDISTANCE;
 void BulletLift_Task(void)	//定时频率：1ms
 { 
-	if(GetWorkState()==NORMAL_STATE)
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE)
 	{
 		
 		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)	//左下
@@ -39,6 +39,11 @@ void BulletLift_Task(void)	//定时频率：1ms
 				}
 			}
 			
+		}
+		else
+		{
+//			bulletlift_Motor_Data[BULLETLIFT_FRONTID].tarP=bullet_lift_tarp;	//debug用
+//			bulletlift_Motor_Data[BULLETLIFT_BACKID].tarP=bullet_lift_tarp;
 		}
 	}
 	

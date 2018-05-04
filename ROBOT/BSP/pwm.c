@@ -1,5 +1,15 @@
 #include "pwm.h"
 
+#define STEER_UP_L_INIT 500//1210	//2500
+#define STEER_UP_R_INIT 2500//1950	//500
+#define STEER_DOWN_L_INIT 1650	//1000
+#define STEER_DOWN_R_INIT 1550	//2180
+//2018.5.4
+#define STEER_UP_L_REVERSAL 1500//2500	//2500
+#define STEER_UP_R_REVERSAL 1500//630	//500
+#define STEER_DOWN_L_REVERSAL 1000	//1000
+#define STEER_DOWN_R_REVERSAL 2180	//2180
+
 /***********************************
 函数名称：PWM_Config
 函数功能：配置定时器3的通道3和通道4为摩擦轮PWM
@@ -92,6 +102,9 @@ void PWM_Config(void)
 //		TIM_Cmd(TIM14,ENABLE);
     TIM_Cmd(TIM3,ENABLE);
 		TIM_Cmd(TIM5,ENABLE);
+		
+		PWM3_1=STEER_UP_L_INIT;
+		PWM3_2=STEER_UP_R_INIT;
 }
 
 

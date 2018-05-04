@@ -244,6 +244,16 @@
           <WinNumber>1</WinNumber>
           <ItemText>t_error_i_record,0x0A</ItemText>
         </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>bullet_lift_tarp,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>lift_Data,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
@@ -300,6 +310,11 @@
           <count>10</count>
           <WinNumber>2</WinNumber>
           <ItemText>ViceControlData,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>TakeBulletState</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>

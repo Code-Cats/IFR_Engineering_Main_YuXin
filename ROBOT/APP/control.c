@@ -83,10 +83,10 @@ void Control_Task(void)	//2ms
 		case NORMAL_STATE:	//Õý³£²Ù×÷Ä£Ê½
 		{
 			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
+			TakeBullet_Control_Center();	//ÔÝÊ±°ÑÈÃÎ»¸øµÇµº
 			Remote_Task();	//Ö´ÐÐÒÆ¶¯
 			Lift_Task();	//¿ªÆôÉý½µ
 			BulletLift_Task();
-			Take_Bullet_Task();	//ÔÝÊ±°ÑÈÃÎ»¸øµÇµº
 			break;
 		}
 		case ASCEND_STATE:	//×Ô¶¯ÉÏµºÄ£Ê½
@@ -102,6 +102,15 @@ void Control_Task(void)	//2ms
 		{
 			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
 			Descend_Control_Center();
+			Remote_Task();	//Ö´ÐÐÒÆ¶¯
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
+			break;
+		}
+		case TAKEBULLET_STATE:
+		{
+			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
+			TakeBullet_Control_Center();	//È¡µ¯¿ØÖÆÖÐÐÄ
 			Remote_Task();	//Ö´ÐÐÒÆ¶¯
 			Lift_Task();	//¿ªÆôÉý½µ
 			BulletLift_Task();
@@ -139,7 +148,7 @@ void Control_Task(void)	//2ms
 }
 
 
-
+extern TakeBulletState_e TakeBulletState;	//(×Ô¶¯)È¡µ¯±êÖ¾Î»
 extern AscendState_e AscendState;
 extern DescendState_e DescendState;
 /*************************************
@@ -181,6 +190,7 @@ void Work_State_Change(void)
 			else if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN&&Switch_Right_Last==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_UP)
 			{
 //				SetWorkState(DESCEND_STATE);
+				SetWorkState(TAKEBULLET_STATE);
 			}
 			
 			break;
@@ -199,6 +209,15 @@ void Work_State_Change(void)
 			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	
 			{
 				DescendState=FULLFALL_DOWN1;	//ÖØÖÃ·ÀÖ¹ÏÂÒ»´ÎÒì³£
+				SetWorkState(STOP_STATE);
+			}
+			break;
+		}
+		case TAKEBULLET_STATE:	//È¡µ¯Ä£Ê½
+		{
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	//×óÖÐ
+			{
+				TakeBulletState=BULLET_ACQUIRE;	//(×Ô¶¯)È¡µ¯±êÖ¾ÖØÖÃ
 				SetWorkState(STOP_STATE);
 			}
 			break;
@@ -272,6 +291,11 @@ void LED_Indicate(void)
 				LED_Blink_Set(1,0);
 				break;
 			}
+			case TAKEBULLET_STATE:
+			{
+				LED_Blink_Set(1,0);
+				break;
+			}
 			case ERROR_STATE:	//´íÎóÄ£Ê½
 			{
 				if(t_error_i_record==LOST_BULLETLIFT1)	//Ç°È¡µ¯Éý½µ
@@ -335,7 +359,7 @@ void Lift_Task(void)
 //	lift_Data.rf_lift_tarP=LIFT_tarP;
 //	lift_Data.lb_lift_tarP=LIFT_tarP;
 //	lift_Data.rb_lift_tarP=LIFT_tarP;
-	if(GetWorkState()==NORMAL_STATE)
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE)
 	{
 		
 		if(RC_Ctl.rc.switch_left==RC_SWITCH_UP)	//×óÉÏ
@@ -643,6 +667,13 @@ void Motor_Send(void)
 			CAN2_BulletLift_SendMsg(0,0);
 			break;
 		}
+		case TAKEBULLET_STATE:
+		{
+			CAN2_BulletLift_SendMsg((s16)bulletlift_Motor_Data[BULLETLIFT_FRONTID].output,(s16)bulletlift_Motor_Data[BULLETLIFT_BACKID].output);
+			CAN2_Chassis_SendMsg(chassis_Data.lf_wheel_output,chassis_Data.rf_wheel_output,chassis_Data.lb_wheel_output,chassis_Data.rb_wheel_output);
+			CAN1_Lift_SendMsg((s16)lift_Data.lf_lift_output,(s16)lift_Data.rf_lift_output,(s16)lift_Data.lb_lift_output,(s16)lift_Data.rb_lift_output);
+			break;
+		}
 		default:
 		{
 			CAN2_Chassis_SendMsg(0,0,0,0);
@@ -751,6 +782,21 @@ void Lift_Cali_GYRO_Compensate(float cali_send[4])	//»ùÓÚÍÓÂÝÒÇµÄµ×ÅÌ±ê¶¨Êä³ö²¹³
 	}
 	  
 }
+
+
+
+u8 Check_FrontLift(void)	//ÓÃÓÚ×Ô¶¯µÇµº×´Ì¬±£»¤
+{
+	u8 rise_state=1;
+	return (abs(lift_Data.lf_lift_fdbP+lift_Data.rf_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<50);	//Ç°£¨Í¬Ó¢ÐÛ£©Éý½µÎ»ÖÃ¼ì²é£¬1ÎªÉýÆð×´Ì¬£»0Îªµ×²¿×´Ì¬
+}
+
+u8 Check_BackLift(void)	//ÓÃÓÚ×Ô¶¯µÇµº×´Ì¬±£»¤
+{
+	u8 rise_state=1;
+	return (abs(lift_Data.lb_lift_fdbP+lift_Data.rb_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<50);	//ºó£¨Í¬Ó¢ÐÛ£©Éý½µÎ»ÖÃ¼ì²é£¬1ÎªÉýÆð×´Ì¬£»0Îªµ×²¿×´Ì¬
+}
+
 
 
 u16 lift_time_gauge_count=0;

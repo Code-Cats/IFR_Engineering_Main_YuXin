@@ -19,12 +19,12 @@ extern GYRO_DATA Gyro_Data;
 s32 t_Vw_PID=0;
 void Remote_Task(void)
 {
-	if(GetWorkState()==NORMAL_STATE)
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE)
 	{
 		Chassis_Vx=RC_Ctl.rc.ch1-1024;
 	}
 	
-	if(GetWorkState()==NORMAL_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
 	{
 		Chassis_Vw=RC_Ctl.rc.ch2-1024;
 	}
@@ -47,7 +47,7 @@ void Remote_Task(void)
 	chassis_Data.rf_wheel_output=PID_General(chassis_Data.rf_wheel_tarV,chassis_Data.rf_wheel_fdbV,&PID_Chassis_Speed[RF]);
 	chassis_Data.lb_wheel_output=PID_General(chassis_Data.lb_wheel_tarV,chassis_Data.lb_wheel_fdbV,&PID_Chassis_Speed[LB]);
 	chassis_Data.rb_wheel_output=PID_General(chassis_Data.rb_wheel_tarV,chassis_Data.rb_wheel_fdbV,&PID_Chassis_Speed[RB]);
-	if((GetWorkState()==NORMAL_STATE||GetWorkState()==ASCEND_STATE)&&RC_Ctl.rc.switch_left==RC_SWITCH_UP)
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==ASCEND_STATE||GetWorkState()==TAKEBULLET_STATE)
 	{
 		Extended_Integral_PID(&chassis_Data);
 	}
