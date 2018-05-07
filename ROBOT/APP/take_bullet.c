@@ -9,8 +9,8 @@ TakeBulletState_e TakeBulletState=BULLET_ACQUIRE;	//(自动)取弹标志位
 
 #define STEER_UP_L_INIT 500//1210	//2500
 #define STEER_UP_R_INIT 2500//1950	//500
-#define STEER_DOWN_L_INIT 1650	//1000
-#define STEER_DOWN_R_INIT 1550	//2180
+#define STEER_DOWN_L_INIT 1570//1650	//1000小-内
+#define STEER_DOWN_R_INIT 1430//1550	//2180小-外
 //2018.5.4
 #define STEER_UP_L_REVERSAL 1500//2500	//2500
 #define STEER_UP_R_REVERSAL 1500//630	//500
@@ -20,8 +20,8 @@ u16 Steer_Send[4]={STEER_UP_L_INIT,STEER_UP_R_INIT,STEER_DOWN_L_INIT,STEER_DOWN_
 
 u8 valve_fdbstate[6]={0};	//记录是否伸出的反馈标志
 u8 servo_fdbstate[2]={0};
-const u32 valve_GOODdelay[6]={300,1200,900,1000,1000,1000};	//待加入，延时参数
-const u32 valve_POORdelay[6]={300,1200,900,1000,1000,1000};	//待加入，延时参数
+const u32 valve_GOODdelay[6]={300,1200,700,1000,1000,1000};	//待加入，延时参数
+const u32 valve_POORdelay[6]={300,1200,700,1000,1000,1000};	//待加入，延时参数
 const u32 servo_GOODdelay[2]={2000,1000};	//延时参数	//第一段为2000是将子弹落下的延时也加进去了，因为舵机翻转和子弹下落必须是连在一体的
 const u32 servo_POORdelay[2]={1000,1000};	//延时参数
 
@@ -122,6 +122,7 @@ void TakeBullet_Control_Center(void)
 	}
 	else	//GetWorkState()==TAKEBULLET_STATE&&RC_Ctl.rc.switch_left==RC_SWITCH_DOWN的else
 	{
+		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)
 		SetCheck_TakeBullet_TakeBack();
 	}
 
@@ -260,7 +261,7 @@ u8 SetCheck_TakeBullet_TakeBack(void)	//取弹回位
 
 
 //#define LIFT_DISTANCE_FALL 30
-#define LIFT_DISTANCE_GRIPBULLET	900	//夹弹药箱时底盘高度
+#define LIFT_DISTANCE_GRIPBULLET	900	//夹弹药箱时底盘高度900-810	890-807  880-803
 #define BULLETLIFT_DISTANCE_GRIPBULLET	330	//夹弹药箱时夹持升降高度	//经过实验300为极限可容许前伸高度
 #define BULLETLIFT_DISTANCE_DISGRIPBULLET	1070	//拔起弹药箱夹持机构高度
 extern LIFT_DATA lift_Data;
@@ -270,7 +271,7 @@ u8 SetCheck_GripBulletLift(u8 grip_state)	//夹持机构升降函数//是否与弹药箱平齐,g
 	bulletlift_Motor_Data[BULLETLIFT_FRONTID].tarP=BULLETLIFT_DISTANCE_DISGRIPBULLET-(grip_state!=0)*(BULLETLIFT_DISTANCE_DISGRIPBULLET-BULLETLIFT_DISTANCE_GRIPBULLET);
 	bulletlift_Motor_Data[BULLETLIFT_BACKID].tarP=BULLETLIFT_DISTANCE_DISGRIPBULLET-(grip_state!=0)*(BULLETLIFT_DISTANCE_DISGRIPBULLET-BULLETLIFT_DISTANCE_GRIPBULLET);
 	
-	return (abs(bulletlift_Motor_Data[BULLETLIFT_FRONTID].fdbP+bulletlift_Motor_Data[BULLETLIFT_BACKID].fdbP-2*(BULLETLIFT_DISTANCE_DISGRIPBULLET-(grip_state!=0)*(BULLETLIFT_DISTANCE_DISGRIPBULLET-BULLETLIFT_DISTANCE_GRIPBULLET)))<20);	//这里是仅以前两腿为反馈传回的
+	return (abs(bulletlift_Motor_Data[BULLETLIFT_FRONTID].fdbP+bulletlift_Motor_Data[BULLETLIFT_BACKID].fdbP-2*(BULLETLIFT_DISTANCE_DISGRIPBULLET-(grip_state!=0)*(BULLETLIFT_DISTANCE_DISGRIPBULLET-BULLETLIFT_DISTANCE_GRIPBULLET)))<30);	//这里是仅以前两腿为反馈传回的
 }
 
 u8	SetCheck_LiftAll_To_bullet(u8 bullet_state)	//底盘升降函数	//取弹时底盘升至固定高度，1为升，0为降

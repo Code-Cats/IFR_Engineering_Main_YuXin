@@ -508,6 +508,11 @@
               <FileType>1</FileType>
               <FilePath>..\ROBOT\APP\take_bullet.c</FilePath>
             </File>
+            <File>
+              <FileName>semi_automatic_landing.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\APP\semi_automatic_landing.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

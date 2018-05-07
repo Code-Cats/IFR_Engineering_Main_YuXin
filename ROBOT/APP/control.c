@@ -1,4 +1,5 @@
 #include "control.h"
+#include "semi_automatic_landing.h"
 
 WorkState_e workState=PREPARE_STATE;
 
@@ -84,6 +85,10 @@ void Control_Task(void)	//2ms
 		{
 			Teleconltroller_Data_protect();	//遥控器数据保护
 			TakeBullet_Control_Center();	//暂时把让位给登岛
+			if(RC_Ctl.rc.switch_right==RC_SWITCH_MIDDLE)
+			{
+				semi_auto_landing_center();
+			}
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降
 			BulletLift_Task();
@@ -185,12 +190,12 @@ void Work_State_Change(void)
 			
 			if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN&&Switch_Right_Last==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_DOWN)
 			{
-//				SetWorkState(ASCEND_STATE);
+				SetWorkState(ASCEND_STATE);
 			}
 			else if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN&&Switch_Right_Last==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_UP)
 			{
-//				SetWorkState(DESCEND_STATE);
-				SetWorkState(TAKEBULLET_STATE);
+				SetWorkState(DESCEND_STATE);
+//				SetWorkState(TAKEBULLET_STATE);
 			}
 			
 			break;
@@ -688,9 +693,9 @@ void Motor_Send(void)
 
 void Lift_Cali_Output_Limit(float cm_out,float * cali_out)
 {
-	if(cm_out>LIFT_CALI_OUTPUT_MAX+3000)
+	if(cm_out>LIFT_CALI_OUTPUT_MAX+3300)
 	{
-		*cali_out=LIFT_CALI_OUTPUT_MAX+3000;
+		*cali_out=LIFT_CALI_OUTPUT_MAX+3300;
 	}
 	else if(cm_out<-LIFT_CALI_OUTPUT_MAX)
 	{

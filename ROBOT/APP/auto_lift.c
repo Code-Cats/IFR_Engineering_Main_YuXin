@@ -82,9 +82,12 @@ extern SensorDataTypeDef SensorData;
 extern u32 time_1ms_count;
 
 #define VW_REDRESS 30
-#define VX_SPEED_UP -110//
-#define VX_SPEED_NEAR -10//
-#define VX_PRESS_V0 -50//
+#define VX_SPEED_UP -110//¼ÓËÙ
+#define VX_SPEED_NEAR -10//ºìÍâ¼ì²âµ½ºó
+#define VX_PRESS_V0 -40//ÉìËõÍÈÊ±ÏòµºÑ¹½ôÁ¦
+#define VX_SPEED_RUSH -160	//³åÌ¨½×
+#define VX_SPEED_WAITUP -70	//Ã»ÓĞÍêÈ«ÉıÆğÀ´Ê±ËÙ¶È
+#define VX_SPEED_WAIT_FRONTFALL	-90	//ºóÍÈÒÑ¾­´îÉÏºó£¬Ç°½ø×²Ç°ÍÈµÄ¹ı³Ì
 
 //ºìÍâ¿ª¹ØÁÁÎªµÍ£¨¼´½ü£©£¬¼´0
 //ÏŞÎ»
@@ -98,7 +101,7 @@ u8 Ascend_FullRise_GO1(void)	//Ç°½ø¡¢µ÷Õû¡¢´¥·¢µÅÍÈº¯Êı
 	Chassis_Vw=0;
 		if(SetCheck_FrontLift(1)!=1||SetCheck_BackLift(1)!=1)
 		{
-			Chassis_Vx=70;	//Ã»ÓĞÍêÈ«ÉıÆğÀ´Ê±
+			Chassis_Vx=-VX_SPEED_WAITUP;	//Ã»ÓĞÍêÈ«ÉıÆğÀ´Ê±ËÙ¶È
 			Chassis_Vw=0;
 		}
 		else
@@ -154,14 +157,30 @@ u8 Ascend_FullRise_GO1(void)	//Ç°½ø¡¢µ÷Õû¡¢´¥·¢µÅÍÈº¯Êı
 
 u8 Ascend_BackFall_GO(void)	//3£¬4ºÅÉı½µÌ§ÆğÇ°½øµÄ½ø³Ì
 {
+	static u32 time_record=0;
 	Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
 	SetCheck_FrontLift(1);
 	SetCheck_BackLift(0);
 	Chassis_Vw=0;
 	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(0)==1)	//Íê³ÉÌ§ÍÈ¶¯×÷ºó
 	{
-		Chassis_Vx=-VX_SPEED_UP;	//Õâ¸öÖµÔÚ¼ì²âµ½ºó»á±»ifÖĞµÄÖµ¸²¸Ç	//ÕâÀï¼Ó¿ìÁËËÙ¶È-²¹³¥
-		Chassis_Vw=0;
+		if(time_record==0)
+		{
+			time_record=time_1ms_count;
+		}
+		
+		if(time_1ms_count-time_record<400)	//ÕâÀïÊÇÏòÇ°³åÒÔ±ãÓÚºóÍÈ³åÉÏÌ¨½×
+		{
+			Chassis_Vx=-VX_SPEED_RUSH;
+			Chassis_Vw=0;
+		}
+		else if(time_1ms_count-time_record>400&&time_record!=0)
+		{
+			Chassis_Vx=-VX_SPEED_WAIT_FRONTFALL;	//Õâ¸öÖµÔÚ¼ì²âµ½ºó»á±»ifÖĞµÄÖµ¸²¸Ç	//ÕâÀïÊÇ×²Ç°ÍÈ£¨µÇµºµÄºóÍÈ£©µÄËÙ¶È
+			Chassis_Vw=0;
+		}
+		
+
 		if(SensorData.Infrare[0]==0&&SensorData.Infrare[1]==0)
 		{
 			Chassis_Vx=-VX_SPEED_NEAR;
@@ -185,6 +204,7 @@ u8 Ascend_BackFall_GO(void)	//3£¬4ºÅÉı½µÌ§ÆğÇ°½øµÄ½ø³Ì
 		{
 			Chassis_Vx=-VX_PRESS_V0;
 			Chassis_Vw=0;
+			time_record=0;	//ÖØÖÃ¼ÆÊ±
 			return 1;
 			////////////////////////////////ÇĞ»»µ½ÏÂÒ»¸ö×´Ì¬
 			
@@ -229,11 +249,11 @@ u8 Ascend_FullFall_GO(void)	//¶¼Ì§Æğµ½¶¼Ì§Æğºó	//Í¨¹ı¹Û²ìÊÓÆµµÃÖªÔÚÅö×²Ò»Ë²¼äµ¯º
 				if(time_record==0)	//time_record=0ÒâË¼¼´ÎªµÚÒ»´ÎÖ´ĞĞ
 				{
 					time_record=time_1ms_count;
-					Chassis_Vx=160;
+					Chassis_Vx=-VX_SPEED_RUSH;
 					Chassis_Vw=0;
 				}
 				
-				if(time_1ms_count-time_record>650)	//0.6s
+				if(time_1ms_count-time_record>630)	//0.6s
 				{
 					Chassis_Vx=-VX_PRESS_V0;
 					Chassis_Vw=0;
@@ -276,7 +296,7 @@ u8 Ascend_FullRise_GO2(void)	//Ç°½ø¡¢µ÷Õû¡¢´¥·¢µÅÍÈº¯Êı
 	Chassis_Vw=0;
 	if(SetCheck_FrontLift(1)!=1||SetCheck_BackLift(1)!=1)
 		{
-			Chassis_Vx=60;	//Ã»ÓĞÍêÈ«ÉıÆğÀ´Ê±
+			Chassis_Vx=-VX_SPEED_WAITUP;	//Ã»ÓĞÍêÈ«ÉıÆğÀ´Ê±
 			Chassis_Vw=0;
 		}
 		else
@@ -402,9 +422,12 @@ void Descend_Control_Center(void)
 
 
 
-#define VX_NEAR_DOWN 40
-u8 Descend_FullFall_Down(void)
+#define VX_NEAR_DOWN -40
+#define VX_WAITALLFALL -70		//-90
+#define VW_DESCEND 30
+u8 Descend_FullFall_Down(void)	//È«²¿ÂäÏÂ×¼±¸Ç°ÍÈÂäµ½ÏÂÒ»¼¶¶¯×÷
 {
+	Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
   Chassis_Vx=0;
 	Chassis_Vw=0;
 	
@@ -424,12 +447,14 @@ u8 Descend_FullFall_Down(void)
 		else if(SensorData.Infrare[0]==0&&SensorData.Infrare[1]==1)	//0´ú±íÎ´´¥·¢(»¹ÔÚµºÉÏ)
 		{
 			Chassis_Vx=0;
-			Chassis_Vw=30;	//½ÃÕı Ë³Ê±Õë×ª¶¯
+			Chassis_Vw=VW_DESCEND;	//½ÃÕı Ë³Ê±Õë×ª¶¯
+			Set_Attitude_Correct_State(CALI_SELF_STATE);	//×ËÌ¬½ÃÕıº¯Êı½øĞĞ×ÔĞ£×¼
 		}
 		else if(SensorData.Infrare[0]==1&&SensorData.Infrare[1]==0)
 		{
 			Chassis_Vx=0;
-			Chassis_Vw=-30;	//½ÃÕı ÄæÊ±Õë×ª¶¯
+			Chassis_Vw=-VW_DESCEND;	//½ÃÕı ÄæÊ±Õë×ª¶¯
+			Set_Attitude_Correct_State(CALI_SELF_STATE);	//×ËÌ¬½ÃÕıº¯Êı½øĞĞ×ÔĞ£×¼
 		}
 		
 	}
@@ -440,6 +465,7 @@ u8 Descend_FullFall_Down(void)
 
 u8 Descend_FrontRise_Down(void)
 {
+	Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
 	Chassis_Vx=0;
 	Chassis_Vw=0;
 	
@@ -448,7 +474,7 @@ u8 Descend_FrontRise_Down(void)
 	
 	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(0)==1)	//Íê³ÉÇ°ÂÖÉìÍÈºó
 	{
-			Chassis_Vx=VX_NEAR_DOWN-5;
+			Chassis_Vx=VX_NEAR_DOWN;
 			Chassis_Vw=0;
 		if(SensorData.Infrare[2]==1&&SensorData.Infrare[3]==1)
 		{
@@ -460,12 +486,14 @@ u8 Descend_FrontRise_Down(void)
 		else if(SensorData.Infrare[2]==0&&SensorData.Infrare[3]==1)	//0´ú±íÎ´´¥·¢(»¹ÔÚµºÉÏ)
 		{
 			Chassis_Vx=0;
-			Chassis_Vw=30;	//½ÃÕı Ë³Ê±Õë×ª¶¯
+			Chassis_Vw=VW_DESCEND;	//½ÃÕı Ë³Ê±Õë×ª¶¯
+			Set_Attitude_Correct_State(CALI_SELF_STATE);	//×ËÌ¬½ÃÕıº¯Êı½øĞĞ×ÔĞ£×¼
 		}
 		else if(SensorData.Infrare[2]==1&&SensorData.Infrare[3]==0)
 		{
 			Chassis_Vx=0;
-			Chassis_Vw=-30;	//½ÃÕı ÄæÊ±Õë×ª¶¯
+			Chassis_Vw=-VW_DESCEND;	//½ÃÕı ÄæÊ±Õë×ª¶¯
+			Set_Attitude_Correct_State(CALI_SELF_STATE);	//×ËÌ¬½ÃÕıº¯Êı½øĞĞ×ÔĞ£×¼
 		}
 		
 	}
@@ -477,6 +505,8 @@ u8 Descend_FullRise_Down1(void)
 {
 	static u32 time_record=0;
 		
+	Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
+	
 	Chassis_Vx=0;
 	Chassis_Vw=0;
 	
@@ -490,16 +520,16 @@ u8 Descend_FullRise_Down1(void)
 			time_record=time_1ms_count;
 		}
 		
-		Chassis_Vx=VX_NEAR_DOWN+50;	//40
+		Chassis_Vx=VX_WAITALLFALL;	//70	//Õâ¸öËÙ¶ÈÊÇÔÚÖĞ¼ä²ãÌ¨½×ÉÏ¿ìËÙÍ¨¹ı
 		Chassis_Vw=0;
 		
-		if(time_1ms_count-time_record>100)
+		if(time_1ms_count-time_record>130)	//Õâ¸öÑÓÊ±ÊÇÈÃÇ°µ¼ÂÖÀë¿ªÉÏÒ»¼¶Ì¨½×
 		{
 			SetCheck_FrontLift(0);	//ÍêÈ«½µÂä
 			SetCheck_BackLift(0);
 		}
 		
-		if(time_1ms_count-time_record>1200)
+		if(time_1ms_count-time_record>1200)	//Õâ¸öÑÓÊ±×÷ÓÃÊÇÖ±½Ó³åµ½±ßÔµÒÔ±ã¼Ó¿ìËÙ¶È
 		{
 			Chassis_Vx=0;
 			Chassis_Vw=0;

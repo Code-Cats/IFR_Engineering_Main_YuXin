@@ -9,7 +9,7 @@
 #define RB 3
 
 /************标定输出**************/
-#define LIFT_CALI_OUTPUT_MAX 1900//1700	//2018.4.12
+#define LIFT_CALI_OUTPUT_MAX 2000//1700	//2018.4.12
 ////////////////////////////////////
 
 /************行程限制**************/
@@ -159,6 +159,8 @@ typedef enum
 		ASCEND_STATE,			//登岛状态
 		DESCEND_STATE,		//下岛状态
 		TAKEBULLET_STATE,	//取弹状态
+		SEMI_ASCEND_STATE,	//半自动、手动上岛
+		SEMI_DESCEND_STATE,	//半自动、手动下岛
 		PROTECT_STATE,		//保护状态，在程序循环时执行，当检测到程序发生异常或者传感器异常时进入该模式
 }WorkState_e;
 
