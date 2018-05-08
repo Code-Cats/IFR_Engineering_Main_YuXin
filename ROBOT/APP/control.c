@@ -121,6 +121,26 @@ void Control_Task(void)	//2ms
 			BulletLift_Task();
 			break;
 		}
+		case SEMI_ASCEND_STATE:
+		{
+			Teleconltroller_Data_protect();	//遥控器数据保护
+			if(RC_Ctl.rc.switch_right==RC_SWITCH_MIDDLE)
+			{
+				semi_auto_landing_center();
+			}
+			Remote_Task();	//执行移动
+			Lift_Task();	//开启升降
+			BulletLift_Task();
+			break;
+		}
+		case SEMI_DESCEND_STATE:
+		{
+			Teleconltroller_Data_protect();	//遥控器数据保护
+			Remote_Task();	//执行移动
+			Lift_Task();	//开启升降
+			BulletLift_Task();
+			break;
+		}
 		case ERROR_STATE:	//错误模式
 		{
 			break;
@@ -227,6 +247,16 @@ void Work_State_Change(void)
 			}
 			break;
 		}
+		case SEMI_ASCEND_STATE:	//半自动、手动上岛
+		{
+
+			break;
+		}
+		case SEMI_DESCEND_STATE:	//半自动、手动下岛
+		{
+
+			break;
+		}
 		case ERROR_STATE:	//错误模式
 		{
 			break;
@@ -257,6 +287,78 @@ void Work_State_Change(void)
 	Switch_Right_Last=RC_Ctl.rc.switch_right;
 }
 
+
+void Work_State_Change_Gaming(void)	//战场版控制
+{	//战场版
+	switch(RC_Ctl.rc.switch_left)
+	{
+		case RC_SWITCH_UP:
+		{
+			switch(RC_Ctl.rc.switch_right)
+			{
+				case RC_SWITCH_UP:
+				{
+					SetWorkState(NORMAL_STATE);
+					break;
+				}
+				case RC_SWITCH_MIDDLE:
+				{
+					
+					break;
+				}
+				case RC_SWITCH_DOWN:
+				{
+					break;
+				}
+			}
+			break;
+		}
+		case RC_SWITCH_MIDDLE:
+		{
+			switch(RC_Ctl.rc.switch_right)
+			{
+				case RC_SWITCH_UP:
+				{
+					
+					break;
+				}
+				case RC_SWITCH_MIDDLE:
+				{
+					SetWorkState(DESCEND_STATE);
+					break;
+				}
+				case RC_SWITCH_DOWN:
+				{
+					SetWorkState(SEMI_DESCEND_STATE);
+					break;
+				}
+			}
+			break;
+		}
+		case RC_SWITCH_DOWN:
+		{
+			switch(RC_Ctl.rc.switch_right)
+			{
+				case RC_SWITCH_UP:
+				{
+					SetWorkState(ASCEND_STATE);
+					break;
+				}
+				case RC_SWITCH_MIDDLE:
+				{
+					SetWorkState(SEMI_ASCEND_STATE);
+					break;
+				}
+				case RC_SWITCH_DOWN:
+				{
+					SetWorkState(TAKEBULLET_STATE);
+					break;
+				}
+			}
+			break;
+		}
+	}
+}
 
 
 extern s16 t_error_i_record;
@@ -297,6 +399,16 @@ void LED_Indicate(void)
 				break;
 			}
 			case TAKEBULLET_STATE:
+			{
+				LED_Blink_Set(1,0);
+				break;
+			}
+			case SEMI_ASCEND_STATE:
+			{
+				LED_Blink_Set(1,0);
+				break;
+			}
+			case SEMI_DESCEND_STATE:
 			{
 				LED_Blink_Set(1,0);
 				break;
@@ -673,6 +785,20 @@ void Motor_Send(void)
 			break;
 		}
 		case TAKEBULLET_STATE:
+		{
+			CAN2_BulletLift_SendMsg((s16)bulletlift_Motor_Data[BULLETLIFT_FRONTID].output,(s16)bulletlift_Motor_Data[BULLETLIFT_BACKID].output);
+			CAN2_Chassis_SendMsg(chassis_Data.lf_wheel_output,chassis_Data.rf_wheel_output,chassis_Data.lb_wheel_output,chassis_Data.rb_wheel_output);
+			CAN1_Lift_SendMsg((s16)lift_Data.lf_lift_output,(s16)lift_Data.rf_lift_output,(s16)lift_Data.lb_lift_output,(s16)lift_Data.rb_lift_output);
+			break;
+		}
+		case SEMI_ASCEND_STATE:
+		{
+			CAN2_BulletLift_SendMsg((s16)bulletlift_Motor_Data[BULLETLIFT_FRONTID].output,(s16)bulletlift_Motor_Data[BULLETLIFT_BACKID].output);
+			CAN2_Chassis_SendMsg(chassis_Data.lf_wheel_output,chassis_Data.rf_wheel_output,chassis_Data.lb_wheel_output,chassis_Data.rb_wheel_output);
+			CAN1_Lift_SendMsg((s16)lift_Data.lf_lift_output,(s16)lift_Data.rf_lift_output,(s16)lift_Data.lb_lift_output,(s16)lift_Data.rb_lift_output);
+			break;
+		}
+		case SEMI_DESCEND_STATE:
 		{
 			CAN2_BulletLift_SendMsg((s16)bulletlift_Motor_Data[BULLETLIFT_FRONTID].output,(s16)bulletlift_Motor_Data[BULLETLIFT_BACKID].output);
 			CAN2_Chassis_SendMsg(chassis_Data.lf_wheel_output,chassis_Data.rf_wheel_output,chassis_Data.lb_wheel_output,chassis_Data.rb_wheel_output);

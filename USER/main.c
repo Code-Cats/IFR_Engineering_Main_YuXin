@@ -1,4 +1,5 @@
 #include "main.h"
+u16 tim5_t_send[4];
 
 int main(void)
 {
@@ -11,7 +12,9 @@ int main(void)
 
 	while(1)
 	 {
-
+		 STEER_IMAGE=tim5_t_send[0];
+		 STEER_RFID=tim5_t_send[1];
+		 
 	 }
 }
 

@@ -1,7 +1,8 @@
 #include "remote_analysis.h"
 
 RC_Ctl_t RC_Ctl=RC_DATA_DEFAULT;
-//extern KEYBOARD_DATA  keyData;
+KeyBoardTypeDef KeyBoardData[KEY_NUMS]={0};
+
 /*****************************************
 函数名称：RemoteData_analysis
 函数功能：对大疆遥控器数据进行移位解析
@@ -35,5 +36,66 @@ void RemoteData_analysis(uint8_t *sbus_rx_buffer)
 
 void Key_Analysis(void)
 {
+	KeyBoardData[KEY_W].value=RC_Ctl.key.v_l&0x01;
+	KeyBoardData[KEY_S].value=(RC_Ctl.key.v_l&0x02)>>1;
+	KeyBoardData[KEY_A].value=(RC_Ctl.key.v_l&0x04)>>2;
+	KeyBoardData[KEY_D].value=(RC_Ctl.key.v_l&0x08)>>3;
+	KeyBoardData[KEY_SHIFT].value=(RC_Ctl.key.v_l&0x10)>>4;
+	KeyBoardData[KEY_CTRL].value=(RC_Ctl.key.v_l&0x20)>>5;
+	KeyBoardData[KEY_Q].value=(RC_Ctl.key.v_l&0x40)>>6;
+	KeyBoardData[KEY_E].value=(RC_Ctl.key.v_l&0x80)>>7;
+
+	KeyBoardData[KEY_R].value=RC_Ctl.key.v_h&0x01;
+	KeyBoardData[KEY_F].value=(RC_Ctl.key.v_h&0x02)>>1;
+	KeyBoardData[KEY_G].value=(RC_Ctl.key.v_h&0x04)>>2;
+	KeyBoardData[KEY_Z].value=(RC_Ctl.key.v_h&0x08)>>3;
+	KeyBoardData[KEY_X].value=(RC_Ctl.key.v_h&0x10)>>4;
+	KeyBoardData[KEY_C].value=(RC_Ctl.key.v_h&0x20)>>5;
+	KeyBoardData[KEY_V].value=(RC_Ctl.key.v_h&0x40)>>6;
+	KeyBoardData[KEY_B].value=(RC_Ctl.key.v_h&0x80)>>7;
 	
+//	for(int keyid=0;keyid<KEY_NUMS;keyid++)	//放在定时器里
+//	{
+//		ButtonStatu_Verdict(&KeyBoardData[keyid]);
+//	}
+	
+
 }
+
+
+//键位处理函数
+//结果值：1:短按 2:长按 0:未按
+//两种短按的触发方式 自行注释选择
+//2017.4.29
+void ButtonStatu_Verdict(KeyBoardTypeDef * Key)	//有两种检测方法，一种是以时间为分界点和后来者即为最终值的原理。另一种修复了长按状态前始终会存在另一状态的缺点
+{																			//处理频率100HZ，还是放在定时器里，，
+	if(Key->last==1)
+	{
+		Key->count++;
+	}
+	else
+	{
+		Key->count=0;
+	}
+	
+	if(Key->count>10)	//防抖动部分 10ms
+	{
+		if(Key->count<1000)	//1s
+		{
+			if(Key->last==1&&Key->value==0)
+			{
+				Key->statu=1;
+			}
+		}
+		else
+		{
+			Key->statu=2;
+		}
+	}
+	else
+	{
+		Key->statu=0;
+	}
+	Key->last=Key->value;
+}
+

@@ -35,6 +35,36 @@ typedef struct
 	}key;
 }RC_Ctl_t;
 
+typedef struct
+{
+	u16 count;
+	u8 value;
+	u8 last;
+	u8 statu;
+}KeyBoardTypeDef;
+
+enum KEYBOARDID	//键位标识
+{
+	KEY_W,
+	KEY_S,
+	KEY_A,
+	KEY_D,
+	KEY_SHIFT,
+	KEY_CTRL,
+	KEY_Q,
+	KEY_E,\
+	\
+	KEY_R,
+	KEY_F,
+	KEY_G,
+	KEY_Z,
+	KEY_X,
+	KEY_C,
+	KEY_V,
+	KEY_B,
+	KEY_NUMS,
+};
+
 #define RC_DATA_DEFAULT \
 {\
 	{1024,1024,1024,1024,3,3},\
@@ -43,8 +73,11 @@ typedef struct
 }\
 
 extern RC_Ctl_t RC_Ctl;
+void Key_Analysis(void);
+extern KeyBoardTypeDef KeyBoardData[KEY_NUMS];
 
 void RemoteData_analysis(uint8_t *djiData);
+void ButtonStatu_Verdict(KeyBoardTypeDef * Key);	//有两种检测方法，一种是以时间为分界点和后来者即为最终值的原理。另一种修复了长按状态前始终会存在另一状态的缺点
 
 #endif
 

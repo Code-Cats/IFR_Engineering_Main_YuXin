@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\IFR_Engineering_Main_2018.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\IFR_Engineering_Main_2018.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Tue May 08 02:00:14 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Tue May 08 11:40:40 2018
 <BR><P>
 <H3>Maximum Stack Usage =        172 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -832,7 +832,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Task
 </UL>
 
-<P><STRONG><a name="[b2]"></a>Control_Task</STRONG> (Thumb, 256 bytes, Stack size 8 bytes, control.o(i.Control_Task))
+<P><STRONG><a name="[b2]"></a>Control_Task</STRONG> (Thumb, 304 bytes, Stack size 8 bytes, control.o(i.Control_Task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Control_Task &rArr; Remote_Task &rArr; Extended_Integral_PID
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
@@ -1226,7 +1226,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Init
 </UL>
 
-<P><STRONG><a name="[be]"></a>LED_Indicate</STRONG> (Thumb, 336 bytes, Stack size 8 bytes, control.o(i.LED_Indicate))
+<P><STRONG><a name="[be]"></a>LED_Indicate</STRONG> (Thumb, 356 bytes, Stack size 8 bytes, control.o(i.LED_Indicate))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = LED_Indicate &rArr; LED_Blink_Run
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
@@ -1301,7 +1301,7 @@ Global Symbols
 <P><STRONG><a name="[5]"></a>MemManage_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.MemManage_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f4xx.o(RESET)
 </UL>
-<P><STRONG><a name="[c0]"></a>Motor_Send</STRONG> (Thumb, 894 bytes, Stack size 8 bytes, control.o(i.Motor_Send))
+<P><STRONG><a name="[c0]"></a>Motor_Send</STRONG> (Thumb, 1158 bytes, Stack size 8 bytes, control.o(i.Motor_Send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = Motor_Send &rArr; CAN2_Chassis_SendMsg &rArr; CAN_Transmit
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
@@ -1344,7 +1344,7 @@ Global Symbols
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
 </UL>
 
-<P><STRONG><a name="[83]"></a>PWM_Config</STRONG> (Thumb, 408 bytes, Stack size 48 bytes, pwm.o(i.PWM_Config))
+<P><STRONG><a name="[83]"></a>PWM_Config</STRONG> (Thumb, 480 bytes, Stack size 48 bytes, pwm.o(i.PWM_Config))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = PWM_Config &rArr; GPIO_PinAFConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC4PreloadConfig
@@ -1833,7 +1833,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Task
 </UL>
 
-<P><STRONG><a name="[b4]"></a>Work_State_Change</STRONG> (Thumb, 342 bytes, Stack size 4 bytes, control.o(i.Work_State_Change))
+<P><STRONG><a name="[b4]"></a>Work_State_Change</STRONG> (Thumb, 346 bytes, Stack size 4 bytes, control.o(i.Work_State_Change))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Work_State_Change
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
@@ -1886,7 +1886,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Init
 </UL>
 
-<P><STRONG><a name="[6c]"></a>main</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, main.o(i.main))
+<P><STRONG><a name="[6c]"></a>main</STRONG> (Thumb, 58 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 172<LI>Call Chain = main &rArr; BSP_Init &rArr; USART1_DMA_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
