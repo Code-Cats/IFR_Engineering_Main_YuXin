@@ -591,17 +591,63 @@ void Set_Attitude_Correct_State(AttitudeCorrectState_e state)
 }
 
 
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
 
 extern LIFT_DATA lift_Data;
+	//前后腿定义同英雄
+u8 Check_FrontLift(void)	//用于自动登岛状态识别	//返回1是升，0是降
+{
+	u8 rise_state=1;
+	return (abs(lift_Data.lf_lift_fdbP+lift_Data.rf_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<50);	//前（同英雄）升降位置检查，1为升起状态；0为底部状态
+}
+
+u8 Check_BackLift(void)	//用于自动登岛状态识别
+{
+	u8 rise_state=1;
+	return (abs(lift_Data.lb_lift_fdbP+lift_Data.rb_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<50);	//后（同英雄）升降位置检查，1为升起状态；0为底部状态
+}
+
+
+AscendState_e Island_State_Recognize(void)	//切入自动登岛状态自动辨识
+{
+	AscendState_e islandstate;
+	if(Check_FrontLift()==0&&Check_BackLift()==0)	//全部都是落下的，将状态置到初始登岛，以全部升起
+	{
+		islandstate=FULLRISE_GO1;	//全部升起
+	}
+	else if(Check_FrontLift()==1&&Check_BackLift()==0)	//后腿0收起来，前腿1伸出，说明在第2状态
+	{
+		islandstate=BACKFALL_GO1;
+	}
+	else	//一般情况不可能出现这种情况，暂时置为全部升起
+	{
+		islandstate=FULLRISE_GO1;	//全部升起
+	}
+	return islandstate;
+}
+
+DescendState_e OutIsland_State_Recognize(void)	//切入自动下岛状态自动辨识
+{
+	DescendState_e outislandstate;
+	if((Check_FrontLift()==0&&Check_BackLift()==0)||(Check_FrontLift()==1&&Check_BackLift()==1))
+	{
+		outislandstate=FULLFALL_DOWN1;
+	}
+	else if(Check_FrontLift()==1&&Check_BackLift()==0)
+	{
+		outislandstate=FRONTRISE_DOWM1;
+	}
+	else
+	{
+		outislandstate=FULLFALL_DOWN1;	//第一个全部下降准备下一级台阶
+	}
+	return outislandstate;
+}
+////////////////////////////////////////////////////////////////////////////////
+
 
 u8 SetCheck_FrontLift(u8 rise_state)	//前升降轮升起/落下并检查	//0表示FALL，1表示ISLAND
 {

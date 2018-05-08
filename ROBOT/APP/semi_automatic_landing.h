@@ -5,7 +5,7 @@
 
 
 void semi_auto_landing_center(void);
-
+void semi_auto_outlanding_center(void);	//利用红外半自动下岛
 
 
 

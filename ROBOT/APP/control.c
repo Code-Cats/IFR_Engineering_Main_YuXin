@@ -50,7 +50,143 @@ void Control_Task(void)	//2ms
 //Take_Bullet_Task();
 ////////////	Vw_tem=Chassis_Attitude_Correct(Chassis_GYRO[2],Gyro_Data.angvel[2]+2);	//ÔÝÊ±»¹Ã»¼ÓÍÓÂÝÒÇ
 ////////////  Chassis_Vw+=Vw_tem;
-	Work_State_Change();
+	Work_State_Change_Gaming();	//Õ½³¡°æ
+	//
+	Work_Execute_Gaming();	//Õ½³¡°æ
+	//
+	
+	LED_Indicate();
+	
+	Chassis_Attitude_Angle_Convert();
+	
+	Motor_Send();
+	
+	if(time_1ms_count%2==0)
+	{
+		ViceBoard_SendDataRefresh();
+		ViceBoard_SendDataRun();
+	}
+}
+
+
+extern TakeBulletState_e TakeBulletState;	//(×Ô¶¯)È¡µ¯±êÖ¾Î»
+extern AscendState_e AscendState;
+extern DescendState_e DescendState;
+/*************************************
+RC»òPC¶Ô»úÆ÷×´Ì¬µÄÇÐ»»
+*************************************/
+void Work_State_Change(void)
+{
+	static u8 Switch_Right_Last=0;
+	static WorkState_e State_Record=CHECK_STATE;	
+	
+	switch (GetWorkState())	//2018.3.15
+	{
+		case CHECK_STATE:	//×Ô¼ìÄ£Ê½
+		{	//°åÔØÍâÉè³õÊ¼»¯ºó±ã½øÈë×Ô¼ìÄ£Ê½ 
+			
+			break;
+		}
+		case PREPARE_STATE:	//Ô¤±¸Ä£Ê½
+		{	
+			
+			break;
+		}
+		case CALI_STATE:	//±ê¶¨Ä£Ê½
+		{
+			
+			break;
+		}
+		case NORMAL_STATE:	//Õý³£²Ù×÷Ä£Ê½
+		{
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	//×óÖÐ
+			{
+				SetWorkState(STOP_STATE);
+			}
+			
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN&&Switch_Right_Last==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_DOWN)
+			{
+				SetWorkState(ASCEND_STATE);
+			}
+			else if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN&&Switch_Right_Last==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_UP)
+			{
+				SetWorkState(DESCEND_STATE);
+//				SetWorkState(TAKEBULLET_STATE);
+			}
+			
+			break;
+		}
+		case ASCEND_STATE:	//×Ô¶¯ÉÏµºÄ£Ê½
+		{
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	//×óÖÐ
+			{
+				AscendState=FULLRISE_GO1;	//ÖØÖÃ·ÀÖ¹ÏÂÒ»´ÎÒì³£
+				SetWorkState(STOP_STATE);
+			}
+			break;
+		}
+		case DESCEND_STATE:	//×Ô¶¯ÏÂµºÄ£Ê½
+		{
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	
+			{
+				DescendState=FULLFALL_DOWN1;	//ÖØÖÃ·ÀÖ¹ÏÂÒ»´ÎÒì³£
+				SetWorkState(STOP_STATE);
+			}
+			break;
+		}
+		case TAKEBULLET_STATE:	//È¡µ¯Ä£Ê½
+		{
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	//×óÖÐ
+			{
+				TakeBulletState=BULLET_ACQUIRE;	//(×Ô¶¯)È¡µ¯±êÖ¾ÖØÖÃ
+				SetWorkState(STOP_STATE);
+			}
+			break;
+		}
+		case SEMI_ASCEND_STATE:	//°ë×Ô¶¯¡¢ÊÖ¶¯ÉÏµº
+		{
+
+			break;
+		}
+		case SEMI_DESCEND_STATE:	//°ë×Ô¶¯¡¢ÊÖ¶¯ÏÂµº
+		{
+
+			break;
+		}
+		case ERROR_STATE:	//´íÎóÄ£Ê½
+		{
+			break;
+		}
+		case LOST_STATE:	//´íÎóÄ£Ê½
+		{
+			SetWorkState(CHECK_STATE);
+			time_1ms_count=0;	//½øÈë³õÊ¼×´Ì¬ÖØÐÂ×Ô¼ì
+			break;
+		}
+		case STOP_STATE:	//Í£Ö¹×´Ì¬
+		{
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_UP||RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)	
+			{
+				SetWorkState(NORMAL_STATE);
+			}
+			break;
+		}
+		case PROTECT_STATE:	//×ÔÎÒ±£»¤Ä£Ê½
+		{
+			if(Error_Check.statu[LOST_DBUS]==0||abs(RC_Ctl.rc.ch0+RC_Ctl.rc.ch1+RC_Ctl.rc.ch2+RC_Ctl.rc.ch3-1024*4)>8)
+			{
+				SetWorkState(STOP_STATE);
+			}
+			break;
+		}
+	}
+	Switch_Right_Last=RC_Ctl.rc.switch_right;
+	State_Record=GetWorkState();
+}
+
+
+void Work_Execute_LastVersion(void)	//Ö®Ç°°æ±¾µÄÖ´ÐÐ
+{
 	switch (GetWorkState())	//2018.3.15
 	{
 		case CHECK_STATE:	//×Ô¼ìÄ£Ê½
@@ -158,103 +294,108 @@ void Control_Task(void)	//2ms
 			break;
 		}
 	}
-	
-	LED_Indicate();
-	
-	Chassis_Attitude_Angle_Convert();
-	
-	Motor_Send();
-	
-	if(time_1ms_count%2==0)
-	{
-		ViceBoard_SendDataRefresh();
-		ViceBoard_SendDataRun();
-	}
 }
 
-
-extern TakeBulletState_e TakeBulletState;	//(×Ô¶¯)È¡µ¯±êÖ¾Î»
-extern AscendState_e AscendState;
-extern DescendState_e DescendState;
-/*************************************
-RC»òPC¶Ô»úÆ÷×´Ì¬µÄÇÐ»»
-*************************************/
-void Work_State_Change(void)
+void Work_Execute_Gaming(void)	//Õ½³¡°æswitch¹¤×÷Ö´ÐÐ
 {
-	static u8 Switch_Right_Last=0;
-	static WorkState_e State_Record=CHECK_STATE;	
-	State_Record=GetWorkState();
-	switch (GetWorkState())	//2018.3.15
+	static WorkState_e State_Record=CHECK_STATE;
+	switch (GetWorkState())	//2018.5.9
 	{
 		case CHECK_STATE:	//×Ô¼ìÄ£Ê½
-		{	//°åÔØÍâÉè³õÊ¼»¯ºó±ã½øÈë×Ô¼ìÄ£Ê½ 
-			
+		{	//°åÔØÍâÉè³õÊ¼»¯ºó±ã½øÈë×Ô¼ìÄ£Ê½ //´ËÊ±ÍâÉè¸Õ¸Õ¿ªÆô£¬ÐèµÈ´ýÒ»¶ÎÊ±¼äÈ«¾Ö×Ô¼ìÎ´¼ì²âµ½Òì³££¨2-3¸ö×Ô¼ì´¥·¢ÖÜÆÚÒÔÉÏ£©£¬ÓÖÒòÎªÊ±¼ä¼ÆËãÆðµãÎª¶¨Ê±Æ÷Æô¶¯µã£¬¹ÊÎÞÐè½øÐÐÊ±¼ä²î¼ÇÂ¼
+			if(time_1ms_count>300)	//Èô´ÓLOST×´Ì¬»Øµ½CHECKÄ£Ê½£¬ÔòÖ´ÐÐ¼ÆÊýÇåÁã²Ù×÷
+			{	//ÈôÄÜÖ´ÐÐµ½ÕâÀïËµÃ÷LOSTCHECKÍ¨¹ý£¬½øÐÐÊýÖµ¼ì²â
+				RC_Calibration();	//self check
+				if(1)	//selfcheck±êÖ¾
+				{
+					SetWorkState(PREPARE_STATE);	//´Ë²½ÒâÎ¶×Ô¼ìÍ¨¹ý£¬Ò»ÇÐÓ²¼þÄ£¿éÕý³£
+					//Êý¾Ý³õÊ¼»¯¡ý
+				}
+			}
 			break;
 		}
 		case PREPARE_STATE:	//Ô¤±¸Ä£Ê½
-		{	
-			
+		{	//µÈ´ý³µÉí×´Ì¬ÎÈ¶¨£¬²¢ÉèÖÃ³õÖµ
+			SetWorkState(CALI_STATE);
 			break;
 		}
 		case CALI_STATE:	//±ê¶¨Ä£Ê½
 		{
-			
+			if(Lift_Cali()==1&&BulletLift_Cali()==1)
+			{
+				SetWorkState(NORMAL_STATE);
+			}
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
 			break;
 		}
 		case NORMAL_STATE:	//Õý³£²Ù×÷Ä£Ê½
 		{
-			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	//×óÖÐ
-			{
-				SetWorkState(STOP_STATE);
-			}
-			
-			if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN&&Switch_Right_Last==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_DOWN)
-			{
-				SetWorkState(ASCEND_STATE);
-			}
-			else if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN&&Switch_Right_Last==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_UP)
-			{
-				SetWorkState(DESCEND_STATE);
-//				SetWorkState(TAKEBULLET_STATE);
-			}
-			
+			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
+			TakeBullet_Control_Center();	//ÔÝÊ±°ÑÈÃÎ»¸øµÇµº???/////////////////////////////////////////////////////////////////´ýÉ¾³ý
+
+			Remote_Task();	//Ö´ÐÐÒÆ¶¯
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
 			break;
 		}
 		case ASCEND_STATE:	//×Ô¶¯ÉÏµºÄ£Ê½
 		{
-			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	//×óÖÐ
+			if(State_Record!=ASCEND_STATE)	//2018.5.9
 			{
-				AscendState=FULLRISE_GO1;	//ÖØÖÃ·ÀÖ¹ÏÂÒ»´ÎÒì³£
-				SetWorkState(STOP_STATE);
+				AscendState=Island_State_Recognize();	//×Ô¶¯±æÊ¶µ±Ç°×´Ì¬
 			}
+			
+			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
+			Ascend_Control_Center();
+			Remote_Task();	//Ö´ÐÐÒÆ¶¯
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
 			break;
 		}
 		case DESCEND_STATE:	//×Ô¶¯ÏÂµºÄ£Ê½
 		{
-			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	
+			if(State_Record!=DESCEND_STATE)
 			{
-				DescendState=FULLFALL_DOWN1;	//ÖØÖÃ·ÀÖ¹ÏÂÒ»´ÎÒì³£
-				SetWorkState(STOP_STATE);
+				DescendState=OutIsland_State_Recognize();
 			}
+			
+			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
+			Descend_Control_Center();
+			Remote_Task();	//Ö´ÐÐÒÆ¶¯
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
 			break;
 		}
-		case TAKEBULLET_STATE:	//È¡µ¯Ä£Ê½
+		case TAKEBULLET_STATE:
 		{
-			if(RC_Ctl.rc.switch_left==RC_SWITCH_MIDDLE)	//×óÖÐ
-			{
-				TakeBulletState=BULLET_ACQUIRE;	//(×Ô¶¯)È¡µ¯±êÖ¾ÖØÖÃ
-				SetWorkState(STOP_STATE);
-			}
+			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
+			TakeBullet_Control_Center();	//È¡µ¯¿ØÖÆÖÐÐÄ
+			Remote_Task();	//Ö´ÐÐÒÆ¶¯
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
 			break;
 		}
-		case SEMI_ASCEND_STATE:	//°ë×Ô¶¯¡¢ÊÖ¶¯ÉÏµº
+		case SEMI_ASCEND_STATE:
 		{
+			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
 
+			semi_auto_landing_center();
+
+			Remote_Task();	//Ö´ÐÐÒÆ¶¯
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
 			break;
 		}
-		case SEMI_DESCEND_STATE:	//°ë×Ô¶¯¡¢ÊÖ¶¯ÏÂµº
+		case SEMI_DESCEND_STATE:
 		{
-
+			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êý¾Ý±£»¤
+			
+			semi_auto_outlanding_center();
+			
+			Remote_Task();	//Ö´ÐÐÒÆ¶¯
+			Lift_Task();	//¿ªÆôÉý½µ
+			BulletLift_Task();
 			break;
 		}
 		case ERROR_STATE:	//´íÎóÄ£Ê½
@@ -263,103 +404,107 @@ void Work_State_Change(void)
 		}
 		case LOST_STATE:	//´íÎóÄ£Ê½
 		{
-			SetWorkState(CHECK_STATE);
-			time_1ms_count=0;	//½øÈë³õÊ¼×´Ì¬ÖØÐÂ×Ô¼ì
 			break;
 		}
 		case STOP_STATE:	//Í£Ö¹×´Ì¬
 		{
-			if(RC_Ctl.rc.switch_left==RC_SWITCH_UP||RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)	
-			{
-				SetWorkState(NORMAL_STATE);
-			}
 			break;
 		}
 		case PROTECT_STATE:	//×ÔÎÒ±£»¤Ä£Ê½
 		{
-			if(Error_Check.statu[LOST_DBUS]==0||abs(RC_Ctl.rc.ch0+RC_Ctl.rc.ch1+RC_Ctl.rc.ch2+RC_Ctl.rc.ch3-1024*4)>8)
-			{
-				SetWorkState(STOP_STATE);
-			}
 			break;
 		}
 	}
-	Switch_Right_Last=RC_Ctl.rc.switch_right;
+	State_Record=GetWorkState();
 }
 
-
-void Work_State_Change_Gaming(void)	//Õ½³¡°æ¿ØÖÆ
+void Work_State_Change_Gaming(void)	//Õ½³¡°æ¿ØÖÆ×´Ì¬ÇÐ»»
 {	//Õ½³¡°æ
-	switch(RC_Ctl.rc.switch_left)
+	static u8 Switch_Right_Last=0;
+	static u8 Switch_Left_Last=0;
+	if(GetWorkState()!=CHECK_STATE&&GetWorkState()!=PREPARE_STATE&&GetWorkState()!=CALI_STATE)	//ÕâÈýÖÖ×´Ì¬²»½ø×´Ì¬ÇÐ»»£¨²»ÊÜ¿Ø£©
 	{
-		case RC_SWITCH_UP:
+		switch(RC_Ctl.rc.switch_left)
 		{
-			switch(RC_Ctl.rc.switch_right)
+			case RC_SWITCH_UP:
 			{
-				case RC_SWITCH_UP:
+				switch(RC_Ctl.rc.switch_right)
 				{
-					SetWorkState(NORMAL_STATE);
-					break;
+					case RC_SWITCH_UP:	//UP-UP	Ò»°ã×´Ì¬
+					{
+						SetWorkState(NORMAL_STATE);
+						break;
+					}
+					case RC_SWITCH_MIDDLE:
+					{
+						
+						break;
+					}
+					case RC_SWITCH_DOWN:
+					{
+						break;
+					}
 				}
-				case RC_SWITCH_MIDDLE:
-				{
-					
-					break;
-				}
-				case RC_SWITCH_DOWN:
-				{
-					break;
-				}
+				break;
 			}
-			break;
-		}
-		case RC_SWITCH_MIDDLE:
-		{
-			switch(RC_Ctl.rc.switch_right)
+			case RC_SWITCH_MIDDLE:
 			{
-				case RC_SWITCH_UP:
+				switch(RC_Ctl.rc.switch_right)
 				{
-					
-					break;
+					case RC_SWITCH_UP:
+					{
+						
+						break;
+					}
+					case RC_SWITCH_MIDDLE:	//MID-MID	È«×Ô¶¯ÏÂµº
+					{
+						if(Switch_Left_Last!=RC_SWITCH_MIDDLE)	//±£»¤Ò»¿ªÊ¼Î´°Ñ²¦¸ËÖÃµ½×îÉÏ
+						SetWorkState(DESCEND_STATE);
+						break;
+					}
+					case RC_SWITCH_DOWN:	//MID-DOWN	ÊÖ¶¯ÏÂµº
+					{
+						SetWorkState(SEMI_DESCEND_STATE);
+						break;
+					}
 				}
-				case RC_SWITCH_MIDDLE:
-				{
-					SetWorkState(DESCEND_STATE);
-					break;
-				}
-				case RC_SWITCH_DOWN:
-				{
-					SetWorkState(SEMI_DESCEND_STATE);
-					break;
-				}
+				break;
 			}
-			break;
-		}
-		case RC_SWITCH_DOWN:
-		{
-			switch(RC_Ctl.rc.switch_right)
+			case RC_SWITCH_DOWN:
 			{
-				case RC_SWITCH_UP:
+				switch(RC_Ctl.rc.switch_right)
 				{
-					SetWorkState(ASCEND_STATE);
-					break;
+					case RC_SWITCH_UP:	//DOWN-UP	È«×Ô¶¯ÉÏµº
+					{
+						if(Switch_Left_Last!=RC_SWITCH_DOWN)	//±£»¤Ò»¿ªÊ¼Î´°Ñ²¦¸ËÖÃµ½×îÉÏ
+						SetWorkState(ASCEND_STATE);
+						break;
+					}
+					case RC_SWITCH_MIDDLE:	//DOWN-MID	°ë×Ô¶¯ÉÏµº
+					{
+						SetWorkState(SEMI_ASCEND_STATE);
+						break;
+					}
+					case RC_SWITCH_DOWN:	//DOWN-DOWN	È¡µ¯
+					{
+						SetWorkState(TAKEBULLET_STATE);
+						break;
+					}
 				}
-				case RC_SWITCH_MIDDLE:
-				{
-					SetWorkState(SEMI_ASCEND_STATE);
-					break;
-				}
-				case RC_SWITCH_DOWN:
-				{
-					SetWorkState(TAKEBULLET_STATE);
-					break;
-				}
+				break;
 			}
-			break;
 		}
 	}
+
+	Switch_Right_Last=RC_Ctl.rc.switch_right;
+	Switch_Left_Last=RC_Ctl.rc.switch_left;
 }
 
+
+void Work_State_Change_BackProtect(void)	//µ±´ÓÄ³Ò»×´Ì¬ÍË³öÊ±£¬È·±£¸Ã×´Ì¬µÄÒ»ÇÐÒÅÁô¿ØÖÆ¶¼¹éÎ»
+{
+	
+}
 
 extern s16 t_error_i_record;
 void LED_Indicate(void)
@@ -914,19 +1059,6 @@ void Lift_Cali_GYRO_Compensate(float cali_send[4])	//»ùÓÚÍÓÂÝÒÇµÄµ×ÅÌ±ê¶¨Êä³ö²¹³
 	  
 }
 
-
-
-u8 Check_FrontLift(void)	//ÓÃÓÚ×Ô¶¯µÇµº×´Ì¬±£»¤
-{
-	u8 rise_state=1;
-	return (abs(lift_Data.lf_lift_fdbP+lift_Data.rf_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<50);	//Ç°£¨Í¬Ó¢ÐÛ£©Éý½µÎ»ÖÃ¼ì²é£¬1ÎªÉýÆð×´Ì¬£»0Îªµ×²¿×´Ì¬
-}
-
-u8 Check_BackLift(void)	//ÓÃÓÚ×Ô¶¯µÇµº×´Ì¬±£»¤
-{
-	u8 rise_state=1;
-	return (abs(lift_Data.lb_lift_fdbP+lift_Data.rb_lift_fdbP-2*(LIFT_DISTANCE_FALL-(rise_state!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<50);	//ºó£¨Í¬Ó¢ÐÛ£©Éý½µÎ»ÖÃ¼ì²é£¬1ÎªÉýÆð×´Ì¬£»0Îªµ×²¿×´Ì¬
-}
 
 
 

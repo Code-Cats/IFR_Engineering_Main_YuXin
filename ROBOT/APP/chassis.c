@@ -19,12 +19,12 @@ extern GYRO_DATA Gyro_Data;
 s32 t_Vw_PID=0;
 void Remote_Task(void)
 {
-	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE)
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)
 	{
 		Chassis_Vx=RC_Ctl.rc.ch1-1024;
 	}
 	
-	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
 	{
 		Chassis_Vw=RC_Ctl.rc.ch2-1024;
 	}

@@ -13,7 +13,7 @@ u8 SetCheck_BackLift(u8 rise_state);
 extern SensorDataTypeDef SensorData;
 extern u32 time_1ms_count;
 
-void semi_auto_landing_center(void)
+void semi_auto_landing_center(void)	//利用限位半自动登岛
 {
 	if(SensorData.Limit[2]==1&&SensorData.Limit[3]==1)	//关联后腿的收起
 	{
@@ -25,3 +25,15 @@ void semi_auto_landing_center(void)
 	}
 }
 
+
+void semi_auto_outlanding_center(void)	//利用红外半自动下岛
+{
+	if(SensorData.Infrare[0]==1&&SensorData.Infrare[1]==1)	//关联前腿伸出
+	{
+		SetCheck_FrontLift(1);
+	}
+	if(SensorData.Infrare[2]==1&&SensorData.Infrare[3]==1)	//关联前腿的升起
+	{
+		SetCheck_BackLift(1);
+	}
+}

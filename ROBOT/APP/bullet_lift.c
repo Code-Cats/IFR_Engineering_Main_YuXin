@@ -91,7 +91,7 @@ u8 BulletLift_Cali(void)
 		{
 			bulletlift_Motor_Data[BULLETLIFT_FRONTID].tarP=-10000;
 			bulletlift_Motor_Data[BULLETLIFT_BACKID].tarP=-10000;
-			if((bulletlift_Motor_Data[BULLETLIFT_FRONTID].fdbV+bulletlift_Motor_Data[BULLETLIFT_BACKID].fdbV)>30)
+			if((bulletlift_Motor_Data[BULLETLIFT_FRONTID].fdbV+bulletlift_Motor_Data[BULLETLIFT_BACKID].fdbV)<-30)
 			{
 				BulletLiftCali_state=DOWN_STATE;
 			}
@@ -121,8 +121,8 @@ u8 BulletLift_Cali(void)
 	return 0;
 }
 
-#define BULLETLIFT_CALI_OUTPUT_UPMAX 3200
-#define BULLETLIFT_CALI_OUTPUT_DOWNMAX	1800
+#define BULLETLIFT_CALI_OUTPUT_UPMAX 3300
+#define BULLETLIFT_CALI_OUTPUT_DOWNMAX	1900
 void BulletLift_Cali_Output_Limit(float cm_out,float * cali_out)
 {
 	if(cm_out>BULLETLIFT_CALI_OUTPUT_UPMAX)

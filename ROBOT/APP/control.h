@@ -115,6 +115,9 @@ extern float Chassis_GYRO[3];
 
 void Control_Task(void);
 void Work_State_Change(void);	//RC,PC对机器状态的控制
+void Work_State_Change_Gaming(void);	//战场版控制状态切换
+void Work_Execute_LastVersion(void);	//之前版本的执行
+void Work_Execute_Gaming(void);	//战场版switch工作执行
 void LED_Indicate(void);	//灯光指示
 
 void Lift_Task(void);
@@ -133,8 +136,6 @@ void Teleconltroller_Data_protect(void);	//遥控器数据自保护
 
 void Lift_Time_Gauge(u8 *trigger);	//升降时间自测量
 
-u8 Check_FrontLift(void);
-u8 Check_BackLift(void);
 
 /***********************--标定状态--**********************/
 typedef enum

@@ -35,6 +35,7 @@ u8 auto_takebullet_statu=0;
 void TakeBullet_Control_Center(void)
 {
 	static u8 swicth_Last_state=0;	//右拨杆
+	static u8 auto_takebullet_statu_last=0;
 	
 	static u8 valve_last[6]={0};	//记录上一次数值	//保持与工程车兼容性
 	static u8 servo_last[2]={0};	//记录上一次数值	//保持与工程车兼容性
@@ -45,15 +46,25 @@ void TakeBullet_Control_Center(void)
 	static u32 servo_startPOOR_time[2]={0};	//记录逆向触发时间	//保持与工程车兼容性
 	
 	
-	if(GetWorkState()==TAKEBULLET_STATE&&RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)	//取弹升降给DOWN-MID，前伸出发-夹紧一套给DOWN-MID-->DOWN-DOWN;舵机旋转给DOWN-MID-->DOWN-UP
+	if(GetWorkState()==TAKEBULLET_STATE)	//5.9更新//上一版--》//取弹升降给DOWN-MID，前伸出发-夹紧一套给DOWN-MID-->DOWN-DOWN;舵机旋转给DOWN-MID-->DOWN-UP
 	{
 		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)
 		{
-			if(swicth_Last_state==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_DOWN)
-			{
-				auto_takebullet_statu=!auto_takebullet_statu;
-				TakeBulletState=BULLET_ACQUIRE;
-			}
+//			if(swicth_Last_state==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_DOWN)
+//			{
+					if(RC_Ctl.rc.ch3-1024>100)	/////////////////////////////修改操作模式时需要修改
+					{
+						auto_takebullet_statu=1;
+					}
+					else if(RC_Ctl.rc.ch3-1024<-100)
+					{
+						auto_takebullet_statu=0;
+					}
+					if(auto_takebullet_statu_last!=auto_takebullet_statu)
+					{
+						TakeBulletState=BULLET_ACQUIRE;
+					}
+//			}
 			else if(swicth_Last_state==RC_SWITCH_MIDDLE&&RC_Ctl.rc.switch_right==RC_SWITCH_UP)
 			{
 			}
@@ -65,6 +76,8 @@ void TakeBullet_Control_Center(void)
 
 		}
 
+		auto_takebullet_statu_last=auto_takebullet_statu;
+		
 		if(auto_takebullet_statu==1)	//自动取弹
 		{
 			switch(TakeBulletState)	//自动取弹过程
@@ -109,20 +122,25 @@ void TakeBullet_Control_Center(void)
 					ViceControlData.servo[0]=0;
 					if(servo_fdbstate[0]==0)	//先让舵机归位的原因是以便让弹药箱能够顺利回位
 					{
-						if(SetCheck_GripBulletLift(0)==1)//车身回复到抬起（扔）弹药箱高度，扔掉弹药箱并准备下一次平移，工程实际无需此函数
+						if(SetCheck_GripBulletLift(0)==1)//车身回复到抬起（扔）弹药箱高度，扔掉弹药箱并准备下一次平移，工程实际无需此函数		//这里实际需要加一个当取弹松开后退出，不然在夹紧延时没有计算完，程序再次执行会直接跳到最后一步
 						{
 							ViceControlData.valve[VALVE_BULLET_CLAMP]=0;
 						//	ViceControlData.valve[VALVE_BULLET_PROTRACT]=0;	//注释以便平移取下一颗弹
+							auto_takebullet_statu=0;		//重置
 						}//如果车身抬起且舵机到位，则松开夹紧，至此一个完整取弹结束
 					}
 					break;
 				}
 			}
 		}
+		else	//如果取弹状态等于0，就回到待命状态
+		{
+			SetCheck_LiftAll_To_bullet(1);	//取弹时底盘升至固定高度，1为升，0为降
+		}
 	}
 	else	//GetWorkState()==TAKEBULLET_STATE&&RC_Ctl.rc.switch_left==RC_SWITCH_DOWN的else
 	{
-		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)
+//		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)
 		SetCheck_TakeBullet_TakeBack();
 	}
 

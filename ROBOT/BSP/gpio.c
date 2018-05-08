@@ -40,3 +40,5 @@ void Laser_Config(void)
 	 GPIO_ResetBits(GPIOC, GPIO_Pin_5);
 }
 
+
+

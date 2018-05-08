@@ -19,6 +19,10 @@ u8 Descend_FullRise_Down1(void);
 
 s16 Chassis_Attitude_Correct(float fdbP,s16 fdbV);	//上岛姿态自校正函数
 
+u8 Check_FrontLift(void);	//辨别状态
+u8 Check_BackLift(void);	//辨别状态
+
+
 typedef enum
 {
     FULLRISE_GO1,  		//第一次全部升起
@@ -46,5 +50,8 @@ typedef enum
 }AttitudeCorrectState_e;
 
 void Set_Attitude_Correct_State(AttitudeCorrectState_e state);	//设置矫正状态的函数
+
+AscendState_e Island_State_Recognize(void);	//切入自动登岛状态自动辨识
+DescendState_e OutIsland_State_Recognize(void);	//切入自动下岛状态自动辨识
 
 #endif
