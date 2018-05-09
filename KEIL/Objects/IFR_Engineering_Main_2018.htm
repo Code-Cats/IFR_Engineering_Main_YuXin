@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\IFR_Engineering_Main_2018.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\IFR_Engineering_Main_2018.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu May 10 02:31:20 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu May 10 03:02:14 2018
 <BR><P>
 <H3>Maximum Stack Usage =        172 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -557,9 +557,9 @@ Global Symbols
 <P><STRONG><a name="[77]"></a>Ascend_BackFall_GO</STRONG> (Thumb, 322 bytes, Stack size 4 bytes, auto_lift.o(i.Ascend_BackFall_GO))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Ascend_BackFall_GO
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 </UL>
@@ -567,12 +567,12 @@ Global Symbols
 <P><STRONG><a name="[7b]"></a>Ascend_Control_Center</STRONG> (Thumb, 226 bytes, Stack size 8 bytes, auto_lift.o(i.Ascend_Control_Center))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = Ascend_Control_Center &rArr; Ascend_FullRise_GO2
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetWorkState
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullRise_GO2
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullRise_GO1
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullFall_GO
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_BackFall_GO
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetWorkState
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_Execute_Gaming
 </UL>
@@ -580,9 +580,9 @@ Global Symbols
 <P><STRONG><a name="[7d]"></a>Ascend_FullFall_GO</STRONG> (Thumb, 228 bytes, Stack size 4 bytes, auto_lift.o(i.Ascend_FullFall_GO))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Ascend_FullFall_GO
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 </UL>
@@ -590,9 +590,9 @@ Global Symbols
 <P><STRONG><a name="[7c]"></a>Ascend_FullRise_GO1</STRONG> (Thumb, 294 bytes, Stack size 4 bytes, auto_lift.o(i.Ascend_FullRise_GO1))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Ascend_FullRise_GO1
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 </UL>
@@ -600,9 +600,9 @@ Global Symbols
 <P><STRONG><a name="[7e]"></a>Ascend_FullRise_GO2</STRONG> (Thumb, 294 bytes, Stack size 4 bytes, auto_lift.o(i.Ascend_FullRise_GO2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Ascend_FullRise_GO2
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 </UL>
@@ -724,8 +724,8 @@ Global Symbols
 <P><STRONG><a name="[ab]"></a>CAN2_Feedback_Analysis</STRONG> (Thumb, 218 bytes, Stack size 8 bytes, can2_analysis.o(i.CAN2_Feedback_Analysis))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = CAN2_Feedback_Analysis &rArr; Position_Data_deal &rArr; __aeabi_d2iz
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LostCountFeed
-<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Feedback_Deal
+<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Feedback_Deal
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LostCountFeed
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Receive
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Speed_Data_deal
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Position_Data_deal
@@ -847,7 +847,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[b2]"></a>Control_Task</STRONG> (Thumb, 92 bytes, Stack size 8 bytes, control.o(i.Control_Task))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = Control_Task &rArr; Work_Execute_Gaming &rArr; Remote_Task &rArr; Extended_Integral_PID
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = Control_Task &rArr; Work_Execute_Gaming &rArr; BulletLift_Task &rArr; __aeabi_d2iz
 </UL>
 <BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ViceBoard_SendDataRun
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ViceBoard_SendDataRefresh
@@ -947,10 +947,10 @@ Global Symbols
 <P><STRONG><a name="[c7]"></a>Descend_Control_Center</STRONG> (Thumb, 220 bytes, Stack size 8 bytes, auto_lift.o(i.Descend_Control_Center))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = Descend_Control_Center &rArr; Descend_FullRise_Down1
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullRise_Down1
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetWorkState
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullRise_Down1
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullFall_Down
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FrontRise_Down
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetWorkState
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_Execute_Gaming
 </UL>
@@ -958,9 +958,9 @@ Global Symbols
 <P><STRONG><a name="[c9]"></a>Descend_FrontRise_Down</STRONG> (Thumb, 166 bytes, Stack size 4 bytes, auto_lift.o(i.Descend_FrontRise_Down))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Descend_FrontRise_Down
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_Control_Center
 </UL>
@@ -968,9 +968,9 @@ Global Symbols
 <P><STRONG><a name="[c8]"></a>Descend_FullFall_Down</STRONG> (Thumb, 156 bytes, Stack size 4 bytes, auto_lift.o(i.Descend_FullFall_Down))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Descend_FullFall_Down
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_Control_Center
 </UL>
@@ -978,9 +978,9 @@ Global Symbols
 <P><STRONG><a name="[ca]"></a>Descend_FullRise_Down1</STRONG> (Thumb, 140 bytes, Stack size 4 bytes, auto_lift.o(i.Descend_FullRise_Down1))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = Descend_FullRise_Down1
 </UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_Attitude_Correct_State
 </UL>
 <BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_Control_Center
 </UL>
@@ -1047,25 +1047,25 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d2]"></a>GPIO_ResetBits</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(i.GPIO_ResetBits))
-<BR><BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Laser_Config
+<BR><BR>[Called By]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Blink_Run
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Laser_Config
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_WriteBit
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_WaitAck
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Stop
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Start
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_ReadBit
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Ack
-<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Blink_Run
 </UL>
 
 <P><STRONG><a name="[d1]"></a>GPIO_SetBits</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(i.GPIO_SetBits))
-<BR><BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Config
+<BR><BR>[Called By]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Blink_Run
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Config
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_WriteBit
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_WaitAck
 <LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Stop
 <LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Start
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_ReadBit
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Ack
-<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Blink_Run
 </UL>
 
 <P><STRONG><a name="[109]"></a>GPIO_StructInit</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(i.GPIO_StructInit))
@@ -1078,17 +1078,17 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[91]"></a>GetWorkState</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, control.o(i.GetWorkState))
-<BR><BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Remote_Task
+<BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Task
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
+<LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Remote_Task
 <LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RC_Control_Chassis
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PC_Control_Chassis
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TakeBullet_Control_Center
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check_Task
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Task
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_State_Change_Gaming
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_State_Change_BackProtect
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_Execute_Gaming
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Send
-<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
 <LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Indicate
 </UL>
 
@@ -1225,9 +1225,9 @@ Global Symbols
 <P><STRONG><a name="[df]"></a>LED_Blink_Run</STRONG> (Thumb, 268 bytes, Stack size 8 bytes, gpioctrl.o(i.LED_Blink_Run))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LED_Blink_Run
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
+<BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ToggleBits
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
 <LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ToggleBits
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Indicate
 </UL>
@@ -1249,9 +1249,9 @@ Global Symbols
 <P><STRONG><a name="[b8]"></a>LED_Indicate</STRONG> (Thumb, 356 bytes, Stack size 8 bytes, control.o(i.LED_Indicate))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = LED_Indicate &rArr; LED_Blink_Run
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
-<LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Blink_Set
+<BR>[Calls]<UL><LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Blink_Set
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LED_Blink_Run
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Task
 </UL>
@@ -1266,7 +1266,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BSP_Init
 </UL>
 
-<P><STRONG><a name="[11b]"></a>Lift_Cali</STRONG> (Thumb, 400 bytes, Stack size 0 bytes, control.o(i.Lift_Cali))
+<P><STRONG><a name="[11b]"></a>Lift_Cali</STRONG> (Thumb, 400 bytes, Stack size 0 bytes, lift.o(i.Lift_Cali))
 <BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_Execute_Gaming
 </UL>
 
@@ -1274,10 +1274,12 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Send
 </UL>
 
-<P><STRONG><a name="[e2]"></a>Lift_Task</STRONG> (Thumb, 992 bytes, Stack size 24 bytes, control.o(i.Lift_Task))
+<P><STRONG><a name="[e2]"></a>Lift_Task</STRONG> (Thumb, 1064 bytes, Stack size 24 bytes, lift.o(i.Lift_Task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = Lift_Task &rArr; __aeabi_d2iz
 </UL>
-<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_General
+<BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_FrontLift
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetCheck_BackLift
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PID_General
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2d
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
@@ -1324,11 +1326,11 @@ Global Symbols
 <P><STRONG><a name="[ba]"></a>Motor_Send</STRONG> (Thumb, 1158 bytes, Stack size 8 bytes, control.o(i.Motor_Send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = Motor_Send &rArr; CAN2_Chassis_SendMsg &rArr; CAN_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
+<BR>[Calls]<UL><LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Cali_Output_Limit
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN2_Chassis_SendMsg
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN2_BulletLift_SendMsg
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_Lift_SendMsg
-<LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Cali_Output_Limit
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Cali_Output_Limit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Task
@@ -1376,9 +1378,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[95]"></a>PID_General</STRONG> (Thumb, 552 bytes, Stack size 0 bytes, pid.o(i.PID_General))
-<BR><BR>[Called By]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Remote_Task
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Task
+<BR><BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Task
 <LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
+<LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Remote_Task
 </UL>
 
 <P><STRONG><a name="[83]"></a>PWM_Config</STRONG> (Thumb, 480 bytes, Stack size 48 bytes, pwm.o(i.PWM_Config))
@@ -1486,7 +1488,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_Execute_Gaming
 </UL>
 
-<P><STRONG><a name="[f9]"></a>RC_Control_Chassis</STRONG> (Thumb, 302 bytes, Stack size 8 bytes, chassis.o(i.RC_Control_Chassis))
+<P><STRONG><a name="[f9]"></a>RC_Control_Chassis</STRONG> (Thumb, 294 bytes, Stack size 8 bytes, chassis.o(i.RC_Control_Chassis))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = RC_Control_Chassis
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
@@ -1523,7 +1525,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[7a]"></a>SetCheck_BackLift</STRONG> (Thumb, 172 bytes, Stack size 0 bytes, auto_lift.o(i.SetCheck_BackLift))
-<BR><BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullRise_Down1
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullRise_Down1
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullFall_Down
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FrontRise_Down
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullRise_GO2
@@ -1536,7 +1539,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[79]"></a>SetCheck_FrontLift</STRONG> (Thumb, 172 bytes, Stack size 0 bytes, auto_lift.o(i.SetCheck_FrontLift))
-<BR><BR>[Called By]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullRise_Down1
+<BR><BR>[Called By]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullRise_Down1
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FullFall_Down
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_FrontRise_Down
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullRise_GO2
@@ -1569,10 +1573,10 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[7f]"></a>SetWorkState</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, control.o(i.SetWorkState))
-<BR><BR>[Called By]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_Control_Center
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
-<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR><BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_Control_Center
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check_Task
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_State_Change_Gaming
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Work_Execute_Gaming
 <LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Teleconltroller_Data_protect
@@ -1585,8 +1589,8 @@ Global Symbols
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullRise_GO2
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullRise_GO1
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_FullFall_GO
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_BackFall_GO
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 </UL>
 
 <P><STRONG><a name="[98]"></a>Speed_Data_deal</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, can1_analysis.o(i.Speed_Data_deal))
@@ -1617,7 +1621,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[42]"></a>TIM6_DAC_IRQHandler</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, heartbeat.o(i.TIM6_DAC_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = TIM6_DAC_IRQHandler &rArr; Control_Task &rArr; Work_Execute_Gaming &rArr; Remote_Task &rArr; Extended_Integral_PID
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = TIM6_DAC_IRQHandler &rArr; Control_Task &rArr; Work_Execute_Gaming &rArr; BulletLift_Task &rArr; __aeabi_d2iz
 </UL>
 <BR>[Calls]<UL><LI><a href="#[102]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_GetITStatus
 <LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ClearITPendingBit
@@ -1887,24 +1891,24 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[b7]"></a>Work_Execute_Gaming</STRONG> (Thumb, 288 bytes, Stack size 8 bytes, control.o(i.Work_Execute_Gaming))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Work_Execute_Gaming &rArr; Remote_Task &rArr; Extended_Integral_PID
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = Work_Execute_Gaming &rArr; BulletLift_Task &rArr; __aeabi_d2iz
 </UL>
-<BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
+<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Task
+<LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Cali
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
+<LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Cali
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetWorkState
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Remote_Task
-<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OutIsland_State_Recognize
-<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Island_State_Recognize
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_Control_Center
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetWorkState
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;semi_auto_outlanding_center
 <LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;semi_auto_landing_center
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TakeBullet_Control_Center
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Task
-<LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BulletLift_Cali
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OutIsland_State_Recognize
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Island_State_Recognize
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Descend_Control_Center
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascend_Control_Center
 <LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Teleconltroller_Data_protect
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RC_Calibration
-<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Task
-<LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Lift_Cali
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Control_Task
 </UL>

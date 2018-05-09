@@ -112,6 +112,7 @@ void RC_Control_Chassis(void)
 				Chassis_Vx=RC_Ctl.rc.ch1-1024;
 			}
 		}
+		Chassis_Vw=RC_Ctl.rc.ch2-1024;
 //		Chassis_Vx=RC_Ctl.rc.ch1-1024;	//代替为斜坡函数
 		Chassis_Vx_last=Chassis_Vx;
 	}
@@ -132,11 +133,7 @@ void RC_Control_Chassis(void)
 		}
 	}
 	Chassis_Vy_last=Chassis_Vy;
-	
-	if(GetWorkState()==TAKEBULLET_STATE)	//取弹模式
-	{
-		Chassis_Vw=RC_Ctl.rc.ch2-1024;
-	}
+
 //	Chassis_Vy=RC_Ctl.rc.ch0-1024;
 }
 

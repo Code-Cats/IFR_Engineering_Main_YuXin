@@ -121,11 +121,9 @@ void Work_Execute_Gaming(void);	//战场版switch工作执行
 void Work_State_Change_BackProtect(void);	//当从某一状态退出时，确保该状态的一切遗留控制都归位
 void LED_Indicate(void);	//灯光指示
 
-void Lift_Task(void);
 
-u8 Lift_Cali(void);	//新版升降标定
 void RC_Calibration(void);
-void Lift_Calibration(void);	//升降电机上电标定
+
 void Motor_Send(void);
 void Lift_Cali_Output_Limit(float cm_out,float * cali_out);
 

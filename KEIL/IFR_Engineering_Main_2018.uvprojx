@@ -474,19 +474,19 @@
           <GroupName>APP</GroupName>
           <Files>
             <File>
-              <FileName>auto_lift.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ROBOT\APP\auto_lift.c</FilePath>
-            </File>
-            <File>
               <FileName>chassis.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ROBOT\APP\chassis.c</FilePath>
             </File>
             <File>
-              <FileName>control.c</FileName>
+              <FileName>lift.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\ROBOT\APP\control.c</FilePath>
+              <FilePath>..\ROBOT\APP\lift.c</FilePath>
+            </File>
+            <File>
+              <FileName>bullet_lift.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\APP\bullet_lift.c</FilePath>
             </File>
             <File>
               <FileName>gpioctrl.c</FileName>
@@ -494,14 +494,19 @@
               <FilePath>..\ROBOT\APP\gpioctrl.c</FilePath>
             </File>
             <File>
+              <FileName>control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\APP\control.c</FilePath>
+            </File>
+            <File>
               <FileName>protect.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ROBOT\APP\protect.c</FilePath>
             </File>
             <File>
-              <FileName>bullet_lift.c</FileName>
+              <FileName>auto_lift.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\ROBOT\APP\bullet_lift.c</FilePath>
+              <FilePath>..\ROBOT\APP\auto_lift.c</FilePath>
             </File>
             <File>
               <FileName>take_bullet.c</FileName>

@@ -22,6 +22,7 @@
 #include "protect.h"
 #include "bullet_lift.h"
 #include "take_bullet.h"
+#include "lift.h"
 
 #include "mpu6050IIC.h"
 #include "mpu6050_it.h"
