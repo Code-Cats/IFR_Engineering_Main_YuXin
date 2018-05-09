@@ -3,6 +3,9 @@
 
 #include "main.h"
 
+#define RC_CONTROL 0	//遥控器操纵模式
+#define PC_CONTROL 1	//键盘操纵模式
+
 #define CHASSIS_SPEED_PID_P 3.0f	//底盘PID参数
 #define CHASSIS_SPEED_PID_I 0.035f
 #define CHASSIS_SPEED_PID_D 0
@@ -100,6 +103,8 @@ typedef struct
 }CHASSIS_DATA;	//CAN2
 
 void Remote_Task(void);
+void RC_Control_Chassis(void);
+void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw);	//和英雄不同的是Vw的控制(s16 * chassis_vx,s16 * chassis_vy);	//1000Hz
 void Extended_Integral_PID(CHASSIS_DATA* chassis_data);	//扩展型整体PID，适用于任意动作场景	2018.4.19
 void Overall_Motion_Ratio_Protect(CHASSIS_DATA* chassis_data);	//整体轮速比例保护,一定要放在整体轮速解算出来后
 

@@ -13,22 +13,55 @@ s16 Chassis_Vw=0;
 
 extern RC_Ctl_t RC_Ctl;
 extern GYRO_DATA Gyro_Data;
+extern u32 time_1ms_count;
 
 
 #define K_SPEED 8
 s32 t_Vw_PID=0;
+
+u8 Chassis_Control_RCorPC=RC_CONTROL;
+
 void Remote_Task(void)
 {
-	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)
+	if(GetWorkState()==NORMAL_STATE)	//底盘PID复位
 	{
-		Chassis_Vx=RC_Ctl.rc.ch1-1024;
+		for(int i=0;i<4;i++)
+		{
+			PID_Chassis_Speed[i].k_i=CHASSIS_SPEED_PID_I;
+			PID_Chassis_Speed[i].i_sum_max=CHASSIS_SPEED_I_MAX;
+		}
 	}
 	
-	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//模式切换
 	{
-		Chassis_Vw=RC_Ctl.rc.ch2-1024;
+		if(RC_Ctl.key.v_h!=0||RC_Ctl.key.v_l!=0)
+		{
+			Chassis_Control_RCorPC=PC_CONTROL;
+		}
+		else if(abs(RC_Ctl.rc.ch0-1024)>3||abs(RC_Ctl.rc.ch1-1024)>3)
+		{
+			Chassis_Control_RCorPC=RC_CONTROL;
+		}
 	}
-	Chassis_Vy=RC_Ctl.rc.ch0-1024;
+	
+	if(Chassis_Control_RCorPC==RC_CONTROL)
+	{
+		RC_Control_Chassis();
+	}
+	else if(Chassis_Control_RCorPC==PC_CONTROL)
+	{
+		PC_Control_Chassis(&Chassis_Vx,&Chassis_Vy,&Chassis_Vw);
+	}
+//	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)
+//	{
+//		Chassis_Vx=RC_Ctl.rc.ch1-1024;
+//	}
+//	
+//	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//仅在正常情况下遥控器可驱动电机，(自动)登岛模式下交由程序自动控制
+//	{
+//		Chassis_Vw=RC_Ctl.rc.ch2-1024;
+//	}
+//	Chassis_Vy=RC_Ctl.rc.ch0-1024;
 
 	chassis_Data.lf_wheel_tarV=(Chassis_Vx+Chassis_Vy+Chassis_Vw)*K_SPEED;
 	chassis_Data.rf_wheel_tarV=(-Chassis_Vx+Chassis_Vy+Chassis_Vw)*K_SPEED;
@@ -56,6 +89,133 @@ void Remote_Task(void)
 }
 
 
+
+void RC_Control_Chassis(void)
+{
+	static s16 Chassis_Vx_last=0;
+	static s16 Chassis_Vy_last=0;
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//暂时加入取弹受控
+	{
+		
+		if(time_1ms_count%1==0)
+		{
+			if(RC_Ctl.rc.ch1-1024-Chassis_Vx_last>1&&RC_Ctl.rc.ch1-1024>10)	//只在前进加速时生效，
+			{
+				Chassis_Vx+=1;
+			}
+			else if(RC_Ctl.rc.ch1-1024-Chassis_Vx_last<-1&&RC_Ctl.rc.ch1-1024<-10)	//只在后退加速时生效
+			{
+				Chassis_Vx-=1;
+			}
+			else
+			{
+				Chassis_Vx=RC_Ctl.rc.ch1-1024;
+			}
+		}
+//		Chassis_Vx=RC_Ctl.rc.ch1-1024;	//代替为斜坡函数
+		Chassis_Vx_last=Chassis_Vx;
+	}
+	
+	if(time_1ms_count%1==0)
+	{
+		if(RC_Ctl.rc.ch0-1024-Chassis_Vy_last>1&&RC_Ctl.rc.ch0-1024>10)
+		{
+			Chassis_Vy+=1;
+		}
+		else if(RC_Ctl.rc.ch0-1024-Chassis_Vy_last<-1&&RC_Ctl.rc.ch0-1024<-10)	//刹车按不缓冲
+		{
+			Chassis_Vy-=1;
+		}
+		else
+		{
+			Chassis_Vy=RC_Ctl.rc.ch0-1024;
+		}
+	}
+	Chassis_Vy_last=Chassis_Vy;
+	
+	if(GetWorkState()==TAKEBULLET_STATE)	//取弹模式
+	{
+		Chassis_Vw=RC_Ctl.rc.ch2-1024;
+	}
+//	Chassis_Vy=RC_Ctl.rc.ch0-1024;
+}
+
+extern KeyBoardTypeDef KeyBoardData[KEY_NUMS];
+void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//1000Hz	//和英雄不同的是Vw的控制
+{
+	static s16 chassis_vx_record=0;
+	static s16 chassis_vy_record=0;
+	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)
+	{
+		if(time_1ms_count%2==0)
+		{
+			if(KeyBoardData[KEY_W].value!=0)
+			{
+				if(chassis_vx_record<660&&chassis_vx_record>=0)
+				{
+					chassis_vx_record++;
+				}
+				else if(chassis_vx_record<0)
+				{
+					chassis_vx_record=0;
+				}
+			}
+			else if(KeyBoardData[KEY_S].value!=0)
+			{
+				if(chassis_vx_record>-660&&chassis_vx_record<=0)
+				{
+					chassis_vx_record--;
+				}
+				else if(chassis_vx_record>0)
+				{
+					chassis_vx_record=0;
+				}
+			}
+			else
+			{
+				chassis_vx_record=0;
+			}
+			///////////////////////////////////////
+			if(KeyBoardData[KEY_D].value!=0)
+			{
+				if(chassis_vy_record<660&&chassis_vy_record>=0)
+				{
+					chassis_vy_record++;
+				}
+				else if(*chassis_vy<0)
+				{
+					chassis_vy_record=0;
+				}
+			}
+			else if(KeyBoardData[KEY_A].value!=0)
+			{
+				if(chassis_vy_record>-660&&chassis_vy_record<=0)
+				{
+					chassis_vy_record--;
+				}
+				else if(chassis_vy_record>0)
+				{
+					chassis_vy_record=0;
+				}
+			}
+			else
+			{
+				chassis_vy_record=0;
+			}
+			*chassis_vx=chassis_vx_record;
+			*chassis_vy=chassis_vy_record;
+		}
+
+		*chassis_vw=RC_Ctl.mouse.x*7;
+	}
+	else
+	{
+	}
+		
+}
+
+
+
 #define CHASSIS_SPEEDMAX 8500.0f
 void Overall_Motion_Ratio_Protect(CHASSIS_DATA* chassis_data)	//整体轮速比例保护,一定要放在整体轮速解算出来后
 {
@@ -77,7 +237,6 @@ void Overall_Motion_Ratio_Protect(CHASSIS_DATA* chassis_data)	//整体轮速比例保护
 	}
 	
 }
-
 
 
 #define CHASSIS_INTEGRAL_PID_KP 3
@@ -139,5 +298,7 @@ void Extended_Integral_PID(CHASSIS_DATA* chassis_data)	//扩展型整体PID，适用于任
 	chassis_data->lb_wheel_output+=output_compensation[LB];
 	chassis_data->rb_wheel_output+=output_compensation[RB];
 }
+
+
 
 
