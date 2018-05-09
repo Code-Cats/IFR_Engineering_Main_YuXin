@@ -455,6 +455,7 @@ void Work_Execute_LastVersion(void)	//之前版本的执行
 	}
 }
 
+u8 t_trailer_sensor_data_simu=0;	//传感器数据仿真
 extern u8 SetCheck_TakeBullet_TakeBack_statu;	//切出取弹保护执行标志位	//加在这里是让半自动下岛能有下降的前提条件	//这个statu为0都是在一次执行完成后才有
 void Work_Execute_Gaming(void)	//战场版switch工作执行
 {
@@ -493,7 +494,9 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 		{
 			Teleconltroller_Data_protect();	//遥控器数据保护
 			TakeBullet_Control_Center();	//加上这个是因为关于舵机、气缸的假想反馈计算在这里面，切出取弹归位保护需要它，其内部已经做了仅在TAKEBULLET下做逻辑处理
-
+			
+			Trailer_Task(t_trailer_sensor_data_simu);
+			
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降
 			BulletLift_Task();

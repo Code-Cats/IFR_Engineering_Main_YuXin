@@ -1,5 +1,5 @@
-#ifndef __LIFT_H__
-#define __LIFT_H__
+#ifndef __LIFT_H_
+#define __LIFT_H_
 
 #include "bsp.h"
 

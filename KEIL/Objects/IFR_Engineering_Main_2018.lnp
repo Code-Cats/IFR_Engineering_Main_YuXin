@@ -18,6 +18,7 @@
 ".\objects\auto_lift.o"
 ".\objects\take_bullet.o"
 ".\objects\semi_automatic_landing.o"
+".\objects\trailer.o"
 ".\objects\delay.o"
 ".\objects\filter.o"
 ".\objects\pid.o"

@@ -483,7 +483,7 @@ u8 Descend_FrontRise_Down(void)
 				///////////////////////设置到下一个状态
 			return 1;
 		}
-		else if(SensorData.Infrare[2]==0&&SensorData.Infrare[3]==1)	//0代表未触发(还在岛上)
+		else if(SensorData.Infrare[2]==0&&SensorData.Infrare[3]==1)	//0代表未触发(还在岛上)（近距离）
 		{
 			Chassis_Vx=0;
 			Chassis_Vw=VW_DESCEND;	//矫正 顺时针转动
