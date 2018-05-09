@@ -20,6 +20,9 @@
 
 #define STEER_IMAGE PWM5_4
 #define STEER_RFID	PWM5_3
+
+#define AV_CUT1
+#define AV_CUT2
 				
 #define FRICTION_INIT      800
 

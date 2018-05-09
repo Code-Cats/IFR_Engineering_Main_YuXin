@@ -52,6 +52,8 @@ void Control_Task(void)	//2ms
 ////////////  Chassis_Vw+=Vw_tem;
 	Work_State_Change_Gaming();	//战场版
 	//
+	Work_State_Change_BackProtect();
+	//
 	Work_Execute_Gaming();	//战场版
 	//
 	
@@ -184,6 +186,160 @@ void Work_State_Change(void)
 	State_Record=GetWorkState();
 }
 
+void Work_State_Change_Gaming(void)	//战场版控制状态切换
+{	//战场版
+	static u8 Switch_Right_Last=0;
+	static u8 Switch_Left_Last=0;
+	if(GetWorkState()!=CHECK_STATE&&GetWorkState()!=PREPARE_STATE&&GetWorkState()!=CALI_STATE&&GetWorkState()!=LOST_STATE&&GetWorkState()!=ERROR_STATE&&GetWorkState()!=PROTECT_STATE)	//这三种初始状态+3种保护状态不进状态切换（不受控）
+	{
+		switch(RC_Ctl.rc.switch_left)
+		{
+			case RC_SWITCH_UP:
+			{
+				switch(RC_Ctl.rc.switch_right)
+				{
+					case RC_SWITCH_UP:	//UP-UP	一般状态
+					{
+						SetWorkState(NORMAL_STATE);
+						break;
+					}
+					case RC_SWITCH_MIDDLE:
+					{
+						
+						break;
+					}
+					case RC_SWITCH_DOWN:
+					{
+						break;
+					}
+				}
+				break;
+			}
+			case RC_SWITCH_MIDDLE:
+			{
+				switch(RC_Ctl.rc.switch_right)
+				{
+					case RC_SWITCH_UP:
+					{
+						
+						break;
+					}
+					case RC_SWITCH_MIDDLE:	//MID-MID	全自动下岛
+					{
+						if(Switch_Left_Last!=RC_SWITCH_MIDDLE)	//保护一开始未把拨杆置到最上
+						SetWorkState(DESCEND_STATE);
+						break;
+					}
+					case RC_SWITCH_DOWN:	//MID-DOWN	手动下岛
+					{
+						SetWorkState(SEMI_DESCEND_STATE);
+						break;
+					}
+				}
+				break;
+			}
+			case RC_SWITCH_DOWN:
+			{
+				switch(RC_Ctl.rc.switch_right)
+				{
+					case RC_SWITCH_UP:	//DOWN-UP	全自动上岛
+					{
+						if(Switch_Left_Last!=RC_SWITCH_DOWN)	//保护一开始未把拨杆置到最上
+						SetWorkState(ASCEND_STATE);
+						break;
+					}
+					case RC_SWITCH_MIDDLE:	//DOWN-MID	半自动上岛
+					{
+						SetWorkState(SEMI_ASCEND_STATE);
+						break;
+					}
+					case RC_SWITCH_DOWN:	//DOWN-DOWN	取弹
+					{
+						SetWorkState(TAKEBULLET_STATE);
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
+	
+	switch (GetWorkState())	//2018.5.9
+	{
+		case CHECK_STATE:	//自检模式
+		{	//板载外设初始化后便进入自检模式 
+			break;
+		}
+		case PREPARE_STATE:	//预备模式
+		{	
+			
+			break;
+		}
+		case CALI_STATE:	//标定模式
+		{
+			
+			break;
+		}
+		case NORMAL_STATE:	//正常操作模式
+		{
+			break;
+		}
+		case ASCEND_STATE:	//自动上岛模式
+		{
+
+			break;
+		}
+		case DESCEND_STATE:	//自动下岛模式
+		{
+
+			break;
+		}
+		case TAKEBULLET_STATE:	//取弹模式
+		{
+
+			break;
+		}
+		case SEMI_ASCEND_STATE:	//半自动、手动上岛
+		{
+
+			break;
+		}
+		case SEMI_DESCEND_STATE:	//半自动、手动下岛
+		{
+
+			break;
+		}
+		case ERROR_STATE:	//错误模式
+		{
+			break;
+		}
+		case LOST_STATE:	//错误模式
+		{
+			SetWorkState(CHECK_STATE);
+			time_1ms_count=0;	//进入初始状态重新自检
+			break;
+		}
+		case STOP_STATE:	//停止状态
+		{
+			if(RC_Ctl.rc.switch_left==RC_SWITCH_UP)	
+			{
+				SetWorkState(NORMAL_STATE);
+			}
+			break;
+		}
+		case PROTECT_STATE:	//自我保护模式
+		{
+			if(Error_Check.statu[LOST_DBUS]==0||abs(RC_Ctl.rc.ch0+RC_Ctl.rc.ch1+RC_Ctl.rc.ch2+RC_Ctl.rc.ch3-1024*4)>8)
+			{
+				SetWorkState(NORMAL_STATE);
+			}
+			break;
+		}
+	}
+
+	Switch_Right_Last=RC_Ctl.rc.switch_right;
+	Switch_Left_Last=RC_Ctl.rc.switch_left;
+}
 
 void Work_Execute_LastVersion(void)	//之前版本的执行
 {
@@ -296,6 +452,7 @@ void Work_Execute_LastVersion(void)	//之前版本的执行
 	}
 }
 
+extern u8 SetCheck_TakeBullet_TakeBack_statu;	//切出取弹保护执行标志位	//加在这里是让半自动下岛能有下降的前提条件	//这个statu为0都是在一次执行完成后才有
 void Work_Execute_Gaming(void)	//战场版switch工作执行
 {
 	static WorkState_e State_Record=CHECK_STATE;
@@ -332,7 +489,7 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 		case NORMAL_STATE:	//正常操作模式
 		{
 			Teleconltroller_Data_protect();	//遥控器数据保护
-			TakeBullet_Control_Center();	//暂时把让位给登岛???/////////////////////////////////////////////////////////////////待删除
+			TakeBullet_Control_Center();	//加上这个是因为关于舵机、气缸的假想反馈计算在这里面，切出取弹归位保护需要它，其内部已经做了仅在TAKEBULLET下做逻辑处理
 
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降
@@ -355,6 +512,7 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 		}
 		case DESCEND_STATE:	//自动下岛模式
 		{
+			TakeBullet_Control_Center();	//加上这个是因为关于舵机、气缸的假想反馈计算在这里面，切出取弹归位保护需要它，其内部已经做了仅在TAKEBULLET下做逻辑处理
 			if(State_Record!=DESCEND_STATE)
 			{
 				DescendState=OutIsland_State_Recognize();
@@ -391,7 +549,11 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 		{
 			Teleconltroller_Data_protect();	//遥控器数据保护
 			
-			semi_auto_outlanding_center();
+			TakeBullet_Control_Center();	//加上这个是因为关于舵机、气缸的假想反馈计算在这里面，切出取弹归位保护需要它，其内部已经做了仅在TAKEBULLET下做逻辑处理
+			if(SetCheck_TakeBullet_TakeBack_statu==0)	//只有当取弹状态完全退出时，statu才会被置0
+			{
+				semi_auto_outlanding_center();
+			}
 			
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降
@@ -418,92 +580,23 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 	State_Record=GetWorkState();
 }
 
-void Work_State_Change_Gaming(void)	//战场版控制状态切换
-{	//战场版
-	static u8 Switch_Right_Last=0;
-	static u8 Switch_Left_Last=0;
-	if(GetWorkState()!=CHECK_STATE&&GetWorkState()!=PREPARE_STATE&&GetWorkState()!=CALI_STATE)	//这三种状态不进状态切换（不受控）
-	{
-		switch(RC_Ctl.rc.switch_left)
-		{
-			case RC_SWITCH_UP:
-			{
-				switch(RC_Ctl.rc.switch_right)
-				{
-					case RC_SWITCH_UP:	//UP-UP	一般状态
-					{
-						SetWorkState(NORMAL_STATE);
-						break;
-					}
-					case RC_SWITCH_MIDDLE:
-					{
-						
-						break;
-					}
-					case RC_SWITCH_DOWN:
-					{
-						break;
-					}
-				}
-				break;
-			}
-			case RC_SWITCH_MIDDLE:
-			{
-				switch(RC_Ctl.rc.switch_right)
-				{
-					case RC_SWITCH_UP:
-					{
-						
-						break;
-					}
-					case RC_SWITCH_MIDDLE:	//MID-MID	全自动下岛
-					{
-						if(Switch_Left_Last!=RC_SWITCH_MIDDLE)	//保护一开始未把拨杆置到最上
-						SetWorkState(DESCEND_STATE);
-						break;
-					}
-					case RC_SWITCH_DOWN:	//MID-DOWN	手动下岛
-					{
-						SetWorkState(SEMI_DESCEND_STATE);
-						break;
-					}
-				}
-				break;
-			}
-			case RC_SWITCH_DOWN:
-			{
-				switch(RC_Ctl.rc.switch_right)
-				{
-					case RC_SWITCH_UP:	//DOWN-UP	全自动上岛
-					{
-						if(Switch_Left_Last!=RC_SWITCH_DOWN)	//保护一开始未把拨杆置到最上
-						SetWorkState(ASCEND_STATE);
-						break;
-					}
-					case RC_SWITCH_MIDDLE:	//DOWN-MID	半自动上岛
-					{
-						SetWorkState(SEMI_ASCEND_STATE);
-						break;
-					}
-					case RC_SWITCH_DOWN:	//DOWN-DOWN	取弹
-					{
-						SetWorkState(TAKEBULLET_STATE);
-						break;
-					}
-				}
-				break;
-			}
-		}
-	}
 
-	Switch_Right_Last=RC_Ctl.rc.switch_right;
-	Switch_Left_Last=RC_Ctl.rc.switch_left;
-}
-
-
+//extern u8 SetCheck_TakeBullet_TakeBack_statu;	//切出取弹保护执行标志位	//放在前面extern
 void Work_State_Change_BackProtect(void)	//当从某一状态退出时，确保该状态的一切遗留控制都归位
 {
+	static WorkState_e State_Record=CHECK_STATE;
 	
+	if(State_Record==TAKEBULLET_STATE&&GetWorkState()!=TAKEBULLET_STATE)	//退出取弹模式
+	{
+		SetCheck_TakeBullet_TakeBack_statu=1;	//刷新处
+	}
+	
+	if(State_Record!=TAKEBULLET_STATE&&GetWorkState()==TAKEBULLET_STATE)
+	{
+		SetCheck_GripBulletLift(1);
+	}
+	SetCheck_TakeBullet_TakeBack();	//执行处
+	State_Record=GetWorkState();
 }
 
 extern s16 t_error_i_record;

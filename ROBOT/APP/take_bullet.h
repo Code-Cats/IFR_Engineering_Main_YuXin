@@ -25,7 +25,7 @@ typedef enum
 void TakeBullet_Control_Center(void);
 u8 SetCheck_GripBulletLift(u8 grip_state);	//夹持机构升降函数//是否与弹药箱平齐,grip抓住的意思	//0表示不抓住，即需要丢弹药箱或拔起弹药箱高度，1表示抓住，即需要夹紧弹药箱时的高度
 u8	SetCheck_LiftAll_To_bullet(u8 bullet_state);	//底盘升降函数	//取弹时底盘升至固定高度，1为升，0为降
-u8 SetCheck_TakeBullet_TakeBack(void);	//取弹回位
+void SetCheck_TakeBullet_TakeBack(void);	//切出取弹状态时回位
 
 #endif
 

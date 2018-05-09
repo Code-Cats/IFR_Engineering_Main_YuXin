@@ -135,13 +135,15 @@ void TakeBullet_Control_Center(void)
 		}
 		else	//如果取弹状态等于0，就回到待命状态
 		{
+			ViceControlData.valve[VALVE_BULLET_CLAMP]=0;
+			ViceControlData.servo[0]=0;
 			SetCheck_LiftAll_To_bullet(1);	//取弹时底盘升至固定高度，1为升，0为降
 		}
 	}
 	else	//GetWorkState()==TAKEBULLET_STATE&&RC_Ctl.rc.switch_left==RC_SWITCH_DOWN的else
 	{
 //		if(RC_Ctl.rc.switch_left==RC_SWITCH_DOWN)
-		SetCheck_TakeBullet_TakeBack();
+//		SetCheck_TakeBullet_TakeBack();	//独立到工作状态改变中
 	}
 
 
@@ -261,18 +263,23 @@ void TakeBullet_Control_Center(void)
 	PWM3_4=Steer_Send[DOWN_R];
 }
 
-u8 SetCheck_TakeBullet_TakeBack(void)	//取弹回位
+u8 SetCheck_TakeBullet_TakeBack_statu=0;	//切出取弹保护执行标志位
+void SetCheck_TakeBullet_TakeBack(void)	//切出取弹机构回位保护
 {
-	ViceControlData.valve[VALVE_BULLET_CLAMP]=0;
-	ViceControlData.valve[VALVE_BULLET_PROTRACT]=0;
-	
-	if(valve_fdbstate[VALVE_BULLET_PROTRACT]==0)
+	if(SetCheck_TakeBullet_TakeBack_statu==1)//当状态为更新到1
 	{
-		SetCheck_GripBulletLift(1);
-		if(SetCheck_LiftAll_To_bullet(0)==1)
-		return 1;
+		ViceControlData.valve[VALVE_BULLET_CLAMP]=0;
+		ViceControlData.valve[VALVE_BULLET_PROTRACT]=0;
+		
+		if(valve_fdbstate[VALVE_BULLET_PROTRACT]==0)
+		{
+			SetCheck_GripBulletLift(1);
+			if(SetCheck_LiftAll_To_bullet(0)==1)
+				SetCheck_TakeBullet_TakeBack_statu=0;
+//			return 1;
+		}
 	}
-	return 0;
+//	return 0;
 }
 
 

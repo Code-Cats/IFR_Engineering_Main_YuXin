@@ -118,6 +118,7 @@ void Work_State_Change(void);	//RC,PC对机器状态的控制
 void Work_State_Change_Gaming(void);	//战场版控制状态切换
 void Work_Execute_LastVersion(void);	//之前版本的执行
 void Work_Execute_Gaming(void);	//战场版switch工作执行
+void Work_State_Change_BackProtect(void);	//当从某一状态退出时，确保该状态的一切遗留控制都归位
 void LED_Indicate(void);	//灯光指示
 
 void Lift_Task(void);
