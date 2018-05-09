@@ -47,6 +47,15 @@ void Control_Task(void)	//2ms
 	{
 //		Debug_Send_OSC();	//待完善发数逻辑
 	}
+	
+	if(time_1ms_count%1==0)	//1000hz
+	{
+		for(int keyid=0;keyid<KEY_NUMS;keyid++)	//放在定时器里
+		{
+			ButtonStatu_Verdict(&KeyBoardData[keyid]);	//键位信息高级处理
+		}
+	}
+	
 //Take_Bullet_Task();
 ////////////	Vw_tem=Chassis_Attitude_Correct(Chassis_GYRO[2],Gyro_Data.angvel[2]+2);	//暂时还没加陀螺仪
 ////////////  Chassis_Vw+=Vw_tem;
