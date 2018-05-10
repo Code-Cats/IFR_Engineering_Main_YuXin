@@ -523,6 +523,11 @@
               <FileType>1</FileType>
               <FilePath>..\ROBOT\APP\trailer.c</FilePath>
             </File>
+            <File>
+              <FileName>image_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\APP\image_control.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

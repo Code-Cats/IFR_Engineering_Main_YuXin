@@ -496,6 +496,7 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 			TakeBullet_Control_Center();	//加上这个是因为关于舵机、气缸的假想反馈计算在这里面，切出取弹归位保护需要它，其内部已经做了仅在TAKEBULLET下做逻辑处理
 			
 			Trailer_Task(t_trailer_sensor_data_simu);
+			Image_Cut_Task();
 			
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降

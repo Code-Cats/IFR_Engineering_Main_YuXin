@@ -3,7 +3,7 @@ u16 tim5_t_send[4];
 
 int main(void)
 {
-	 delay_ms(2000);
+   	 delay_ms(2000);
 	 SetWorkState(CHECK_STATE);	//启动后默认自检状态	//后续状态切换不在主函数进行
    delay_ms(500);
 	 BSP_Init();	//板载外设初始化	//此时定时器启动，开始计时

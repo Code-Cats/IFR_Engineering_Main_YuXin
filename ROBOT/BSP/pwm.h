@@ -19,12 +19,14 @@
 #define STEER_DOWN_R PWM3_4
 
 #define STEER_IMAGE PWM5_4
-#define STEER_RFID	PWM5_3
-
-#define AV_CUT1
-#define AV_CUT2
+#define IMAGE_START	PWM5_3
+#define STEER_RFID	PWM5_2
+#define t_AV_CUT PWM5_2	//临时的，给切换图传用的
 				
 #define FRICTION_INIT      800
+
+#define PWM_IO_ON	20000
+#define PWM_IO_OFF	0
 
 void PWM_Config(void);
 

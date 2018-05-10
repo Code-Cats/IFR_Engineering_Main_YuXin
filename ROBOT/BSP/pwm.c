@@ -43,8 +43,8 @@ void PWM_Config(void)
 		GPIO_PinAFConfig(GPIOA,GPIO_PinSource6,GPIO_AF_TIM3);//定时器3 通道1
 		GPIO_PinAFConfig(GPIOA,GPIO_PinSource7,GPIO_AF_TIM3);//定时器3 通道2
 		
-		GPIO_PinAFConfig(GPIOA,GPIO_PinSource0,GPIO_AF_TIM5);//定时器5 通道3
-		GPIO_PinAFConfig(GPIOA,GPIO_PinSource1,GPIO_AF_TIM5);//定时器5 通道3
+		GPIO_PinAFConfig(GPIOA,GPIO_PinSource0,GPIO_AF_TIM5);//定时器5 通道1
+		GPIO_PinAFConfig(GPIOA,GPIO_PinSource1,GPIO_AF_TIM5);//定时器5 通道2
 		GPIO_PinAFConfig(GPIOA,GPIO_PinSource2,GPIO_AF_TIM5);//定时器5 通道3
 		GPIO_PinAFConfig(GPIOA,GPIO_PinSource3,GPIO_AF_TIM5);//定时器5 通道4
 	
