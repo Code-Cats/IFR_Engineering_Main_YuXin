@@ -26,6 +26,7 @@ void Trailer_Task(u8 sensor_data)	//传入函数为测距传感器数据
 {
 	static u8 sensor_data_last=0;
 	static u8 key_f_last=0;
+	static u8 trailer_statu_last=0;
 	if(key_f_last==0&&KeyBoardData[KEY_F].value==1)	//待加入图传自动转向看向拖车
 	{
 		Trailer_statu=!Trailer_statu;	//翻转
@@ -43,7 +44,7 @@ void Trailer_Task(u8 sensor_data)	//传入函数为测距传感器数据
 			lift_Data.rb_lift_tarP=LIFT_DISTANCE_TRAILER;
 		}
 	}
-	else
+	else if(trailer_statu_last==1&&Trailer_statu==0)
 	{
 		ViceControlData.valve[VALVE_TRAILER]=0;
 		lift_Data.lf_lift_tarP=LIFT_DISTANCE_FALL;
@@ -53,6 +54,7 @@ void Trailer_Task(u8 sensor_data)	//传入函数为测距传感器数据
 	}
 	key_f_last=KeyBoardData[KEY_F].value;	//自己记录last而非直接调用keydata中的last可以避免因为刷新频率不同导致变值点检测窗口的丢失
 	sensor_data_last=sensor_data;
+	trailer_statu_last=Trailer_statu;
 }
 
 

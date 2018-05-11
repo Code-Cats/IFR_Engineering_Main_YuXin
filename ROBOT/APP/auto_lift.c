@@ -85,7 +85,7 @@ extern u32 time_1ms_count;
 #define VX_SPEED_UP -110//¼ÓËÙ
 #define VX_SPEED_NEAR -10//ºìÍâ¼ì²âµ½ºó
 #define VX_PRESS_V0 -40//ÉìËõÍÈÊ±ÏòµºÑ¹½ôÁ¦
-#define VX_SPEED_RUSH -160	//³åÌ¨½×
+#define VX_SPEED_RUSH -200	//³åÌ¨½×
 #define VX_SPEED_WAITUP -70	//Ã»ÓĞÍêÈ«ÉıÆğÀ´Ê±ËÙ¶È
 #define VX_SPEED_WAIT_FRONTFALL	-90	//ºóÍÈÒÑ¾­´îÉÏºó£¬Ç°½ø×²Ç°ÍÈµÄ¹ı³Ì
 
@@ -233,18 +233,24 @@ u8 Ascend_FullFall_GO(void)	//¶¼Ì§Æğµ½¶¼Ì§Æğºó	//Í¨¹ı¹Û²ìÊÓÆµµÃÖªÔÚÅö×²Ò»Ë²¼äµ¯º
 	static u32 time_record=0;	//ÕâÀï¿ÉÒÔÓÃÎ»ÖÃ»·À´´úÌæ
 	static u32 time_record_all=0;
 	
+	static u8 full_fall_statu=0;
+	
 	if(time_record_all==0)
 	{
 		time_record_all=time_1ms_count;
 	}
-	if(time_1ms_count-time_record_all>450)	//ÑÓÊ±0.6s
+	if(time_1ms_count-time_record_all>400)	//ÑÓÊ±0.6s,Õâ¸öÑÓÊ±ÊÇÎªÁËÅö×²»º³å
 	{
 			Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
-			SetCheck_FrontLift(0);
-			SetCheck_BackLift(0);
+		
+			if(SetCheck_FrontLift(0)==1&&SetCheck_BackLift(0)==1&&full_fall_statu==0)	//ÂÖÒÑÊÕÆğ	//ÕâÏÂÃæµÄÑÓÊ±ÊÇÏòÇ°³åµÄÒ»Ğ¡¶Î£¬¼Ó¿ìËÙ¶È
+			{
+				full_fall_statu=1;
+			}
+		
 			Chassis_Vw=0;
 			
-			if(SetCheck_FrontLift(0)==1&&SetCheck_BackLift(0)==1)	//ÂÖÒÑÊÕÆğ
+			if(full_fall_statu==1)	//ÂÖÒÑÊÕÆğ	//ÕâÏÂÃæµÄÑÓÊ±ÊÇÏòÇ°³åµÄÒ»Ğ¡¶Î£¬¼Ó¿ìËÙ¶È
 			{
 				if(time_record==0)	//time_record=0ÒâË¼¼´ÎªµÚÒ»´ÎÖ´ĞĞ
 				{
@@ -252,14 +258,20 @@ u8 Ascend_FullFall_GO(void)	//¶¼Ì§Æğµ½¶¼Ì§Æğºó	//Í¨¹ı¹Û²ìÊÓÆµµÃÖªÔÚÅö×²Ò»Ë²¼äµ¯º
 					Chassis_Vx=-VX_SPEED_RUSH;
 					Chassis_Vw=0;
 				}
+				if(time_1ms_count-time_record>300&&time_record!=0)	//Õâ¸ö0.3sÊÇ·ÀÖ¹»¹Î´³åÉÏÈ¥¾ÍÈ«²¿ÉıÆğ·­³µ
+				{
+					SetCheck_FrontLift(1);
+					SetCheck_BackLift(1);
+				}
 				
-				if(time_1ms_count-time_record>630)	//0.6s
+				if(time_1ms_count-time_record>630&&time_record!=0)	//0.6s
 				{
 					Chassis_Vx=-VX_PRESS_V0;
 					Chassis_Vw=0;
 					/////////////////////////////ÉèÖÃµ½ÏÂÒ»¸ö×´Ì¬
 					time_record=0;
 					time_record_all=0;
+					full_fall_statu=0;
 					return 1;
 					
 				}
@@ -421,7 +433,7 @@ void Descend_Control_Center(void)
 }
 
 
-
+#define VX_WAIT_BACKRISE	-72	//µÈ´ı²»Ì«Î£ÏÕµÄºóÍÈÇ°½øºìÍâ´¥·¢£¬¿ÉÒÔ¿ìÒ»µã
 #define VX_NEAR_DOWN -40
 #define VX_WAITALLFALL -70		//-90
 #define VW_DESCEND 30
@@ -463,7 +475,7 @@ u8 Descend_FullFall_Down(void)	//È«²¿ÂäÏÂ×¼±¸Ç°ÍÈÂäµ½ÏÂÒ»¼¶¶¯×÷
 }
  
 
-u8 Descend_FrontRise_Down(void)
+u8 Descend_FrontRise_Down(void)	//Íê³ÉÇ°ÂÖÏÂÈ¥ºó£¬×îÈİÒ×·­³µµÄÂ·¶ÎÒÑ¾­¹ıÈ¥£¬¿ÉÒÔ¼Ó¿ìËÙ¶È
 {
 	Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
 	Chassis_Vx=0;
@@ -472,9 +484,9 @@ u8 Descend_FrontRise_Down(void)
 	SetCheck_FrontLift(1);
 	SetCheck_BackLift(0);
 	
-	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(0)==1)	//Íê³ÉÇ°ÂÖÉìÍÈºó
+	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(0)==1)	//Íê³ÉÇ°ÂÖÉìÍÈºó,¼ÓËÙ
 	{
-			Chassis_Vx=VX_NEAR_DOWN;
+			Chassis_Vx=VX_WAIT_BACKRISE;
 			Chassis_Vw=0;
 		if(SensorData.Infrare[2]==1&&SensorData.Infrare[3]==1)
 		{
@@ -501,19 +513,23 @@ u8 Descend_FrontRise_Down(void)
 }
 
 
-u8 Descend_FullRise_Down1(void)
+u8 Descend_FullRise_Down1(void)	//5.10¸üĞÂ
 {
 	static u32 time_record=0;
-		
+	static u8 full_fall_statu=0;
+	
 	Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
 	
 	Chassis_Vx=0;
 	Chassis_Vw=0;
 	
-	SetCheck_FrontLift(1);
-	SetCheck_BackLift(1);
 	
-	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(1)==1)	//Íê³ÉºóÂÖÉìÍÈºó
+	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(1)==1&&full_fall_statu==0)	//Íê³ÉºóÂÖÉìÍÈºófull_fall_statu==1ºó²»Ö´ĞĞ
+	{
+		full_fall_statu=1;
+	}
+	
+	if(full_fall_statu==1)	//Íê³ÉºóÂÖÉìÍÈºó
 	{
 		if(time_record==0)	//time_record=0ÒâË¼¼´ÎªµÚÒ»´ÎÖ´ĞĞ
 		{
@@ -523,17 +539,18 @@ u8 Descend_FullRise_Down1(void)
 		Chassis_Vx=VX_WAITALLFALL;	//70	//Õâ¸öËÙ¶ÈÊÇÔÚÖĞ¼ä²ãÌ¨½×ÉÏ¿ìËÙÍ¨¹ı
 		Chassis_Vw=0;
 		
-		if(time_1ms_count-time_record>130)	//Õâ¸öÑÓÊ±ÊÇÈÃÇ°µ¼ÂÖÀë¿ªÉÏÒ»¼¶Ì¨½×
+		if(time_1ms_count-time_record>200&&time_record!=0)	//Õâ¸öÑÓÊ±ÊÇÈÃÇ°µ¼ÂÖÀë¿ªÉÏÒ»¼¶Ì¨½×
 		{
 			SetCheck_FrontLift(0);	//ÍêÈ«½µÂä
 			SetCheck_BackLift(0);
 		}
 		
-		if(time_1ms_count-time_record>1200)	//Õâ¸öÑÓÊ±×÷ÓÃÊÇÖ±½Ó³åµ½±ßÔµÒÔ±ã¼Ó¿ìËÙ¶È
+		if(time_1ms_count-time_record>1200&&time_record!=0)	//Õâ¸öÑÓÊ±×÷ÓÃÊÇÖ±½Ó³åµ½±ßÔµÒÔ±ã¼Ó¿ìËÙ¶È
 		{
 			Chassis_Vx=0;
 			Chassis_Vw=0;
 			time_record=0;
+			full_fall_statu=0;
 			return 1;
 		}
 		

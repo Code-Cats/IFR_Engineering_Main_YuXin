@@ -1,6 +1,6 @@
 Dependencies for Project 'IFR_Engineering_Main_2018', Target 'IFR_Engineering_Main_2018': (DO NOT MODIFY !)
 F (..\USER\common_definition.h)(0x5AB1217B)()
-F (..\USER\main.c)(0x5AF11C03)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (..\USER\main.c)(0x5AF39E9C)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (..\USER\main.h)(0x5AF35CCA)
 I (..\STM32MCU\stm32f4xx.h)(0x573EF04C)
 I (D:\KEIL V514\ARM\CMSIS\Include\core_cm4.h)(0x53463974)
@@ -366,7 +366,7 @@ I (..\ROBOT\MODULE\MPU60500\mpu6050_it.h)(0x5A12BB3C)
 I (..\ROBOT\MODULE\MPU60500\mpu6050_process.h)(0x5A12E150)
 I (D:\KEIL V514\ARM\ARMCC\include\string.h)(0x5475F300)
 I (D:\KEIL V514\ARM\ARMCC\include\math.h)(0x5475F2FE)
-F (..\ROBOT\BSP\pwm.c)(0x5AF11780)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\pwm.o --omf_browse .\objects\pwm.crf --depend .\objects\pwm.d)
+F (..\ROBOT\BSP\pwm.c)(0x5AF39E9A)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\pwm.o --omf_browse .\objects\pwm.crf --depend .\objects\pwm.d)
 I (..\ROBOT\BSP\pwm.h)(0x5AF35C78)
 I (..\USER\main.h)(0x5AF35CCA)
 I (..\STM32MCU\stm32f4xx.h)(0x573EF04C)
@@ -977,7 +977,7 @@ I (..\ROBOT\MODULE\MPU60500\mpu6050_it.h)(0x5A12BB3C)
 I (..\ROBOT\MODULE\MPU60500\mpu6050_process.h)(0x5A12E150)
 I (D:\KEIL V514\ARM\ARMCC\include\string.h)(0x5475F300)
 I (D:\KEIL V514\ARM\ARMCC\include\math.h)(0x5475F2FE)
-F (..\ROBOT\APP\auto_lift.c)(0x5AF349D8)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\auto_lift.o --omf_browse .\objects\auto_lift.crf --depend .\objects\auto_lift.d)
+F (..\ROBOT\APP\auto_lift.c)(0x5AF50E04)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\auto_lift.o --omf_browse .\objects\auto_lift.crf --depend .\objects\auto_lift.d)
 I (..\ROBOT\APP\auto_lift.h)(0x5AF1EBEC)
 I (..\ROBOT\BSP\bsp.h)(0x5A93BB8C)
 I (..\USER\main.h)(0x5AF35CCA)
@@ -1161,7 +1161,7 @@ I (..\ROBOT\MODULE\IMU_Uranus\imu_data_decode.h)(0x593FAED8)
 I (D:\KEIL V514\ARM\ARMCC\include\stdbool.h)(0x5475F300)
 I (..\ROBOT\MODULE\IMU_Uranus\packet.h)(0x593E3A82)
 I (..\ROBOT\MODULE\IMU_Uranus\dma_uart4.h)(0x5A741EFE)
-F (..\ROBOT\APP\trailer.c)(0x5AF35291)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\trailer.o --omf_browse .\objects\trailer.crf --depend .\objects\trailer.d)
+F (..\ROBOT\APP\trailer.c)(0x5AF50FE8)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I..\STM32MCU -I..\ROBOT\ALGO -I..\ROBOT\APP -I..\ROBOT\BSP -I..\ROBOT\MODULE\MPU60500 -I..\USER -I..\ROBOT\ANALYSIS -I..\ROBOT\MODULE\IMU_Uranus-I E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE-I "D:\KEIL V514\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0"-I "D:\KEIL V514\ARM\CMSIS\Include"-D__UVISION_VERSION="514" -DSTM32F405xx -DUSE_STDPERIPH_DRIVER -D__FPU_PRESENT="1" -D__FPU_USED="1"-o .\objects\trailer.o --omf_browse .\objects\trailer.crf --depend .\objects\trailer.d)
 I (..\ROBOT\APP\trailer.h)(0x5AF35316)
 I (..\ROBOT\BSP\bsp.h)(0x5A93BB8C)
 I (..\USER\main.h)(0x5AF35CCA)
