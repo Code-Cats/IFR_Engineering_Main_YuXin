@@ -5,7 +5,7 @@
 #define VALVE_ISLAND 0		//µÁ¥≈∑ßøÿ÷∆Œª∂®“Â
 #define VALVE_BULLET_PROTRACT 1	//«∞…Ï
 #define VALVE_BULLET_CLAMP 2	//º–ΩÙ
-#define VALVE_BULLET_STORAGE 3	//µØ“©≤’
+#define VALVE_BULLET_STORAGE 3	//µØ“©≤’≤πµØ
 #define VALVE_TRAILER 5	//Õœ≥µ
 
 #define UP_L 0

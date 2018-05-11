@@ -539,13 +539,13 @@ u8 Descend_FullRise_Down1(void)	//5.10更新
 		Chassis_Vx=VX_WAITALLFALL;	//70	//这个速度是在中间层台阶上快速通过
 		Chassis_Vw=0;
 		
-		if(time_1ms_count-time_record>200&&time_record!=0)	//这个延时是让前导轮离开上一级台阶
+		if(time_1ms_count-time_record>300&&time_record!=0)	//这个延时是让所有轮子已经上岛，再升高
 		{
 			SetCheck_FrontLift(0);	//完全降落
 			SetCheck_BackLift(0);
 		}
 		
-		if(time_1ms_count-time_record>1200&&time_record!=0)	//这个延时作用是直接冲到边缘以便加快速度
+		if(time_1ms_count-time_record>1100&&time_record!=0)	//这个延时作用是直接冲到边缘以便加快速度
 		{
 			Chassis_Vx=0;
 			Chassis_Vw=0;
