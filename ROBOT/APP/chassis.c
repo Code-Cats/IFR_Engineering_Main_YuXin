@@ -34,7 +34,7 @@ void Remote_Task(void)
 	
 	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//Ä£Ê½ÇÐ»»
 	{
-		if(RC_Ctl.key.v_h!=0||RC_Ctl.key.v_l!=0)
+		if(RC_Ctl.key.v_h!=0||RC_Ctl.key.v_l!=0||abs(RC_Ctl.mouse.x)>3)
 		{
 			Chassis_Control_RCorPC=PC_CONTROL;
 		}
@@ -150,7 +150,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			{
 				if(chassis_vx_record<660&&chassis_vx_record>=0)
 				{
-					chassis_vx_record++;
+					chassis_vx_record+=2;
 				}
 				else if(chassis_vx_record<0)
 				{
@@ -161,7 +161,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			{
 				if(chassis_vx_record>-660&&chassis_vx_record<=0)
 				{
-					chassis_vx_record--;
+					chassis_vx_record-=2;
 				}
 				else if(chassis_vx_record>0)
 				{
@@ -177,7 +177,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			{
 				if(chassis_vy_record<660&&chassis_vy_record>=0)
 				{
-					chassis_vy_record++;
+					chassis_vy_record+=2;
 				}
 				else if(*chassis_vy<0)
 				{
@@ -188,7 +188,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			{
 				if(chassis_vy_record>-660&&chassis_vy_record<=0)
 				{
-					chassis_vy_record--;
+					chassis_vy_record-=2;
 				}
 				else if(chassis_vy_record>0)
 				{
@@ -203,7 +203,17 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			*chassis_vy=chassis_vy_record;
 		}
 
-		*chassis_vw=RC_Ctl.mouse.x*7;
+		*chassis_vw=RC_Ctl.mouse.x*8;
+		if(KeyBoardData[KEY_Q].value!=0)
+		{
+			*chassis_vw=-160;
+		}
+		
+		if(KeyBoardData[KEY_E].value!=0)
+		{
+			*chassis_vw=160;
+		}
+		
 	}
 	else
 	{
