@@ -39,7 +39,6 @@ void Screen_Start(void)	//屏幕启动切换到AV信道
 
 }
 
-u8 t_cut_re=0;
 
 extern u8 Replenish_Bullet_Statu;	//补弹状态位
 extern u8 Trailer_statu;
@@ -53,31 +52,31 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 	static u8 replenish_bullet_statu_last=0;
 //	t_AV_CUT=av_cut*20000;
 	if(trailer_statu_last==0&&Trailer_statu==1)	//切换到拖车状态
-	{t_cut_re=1;
+	{
 		Steer_Image_state=1;
 		Image_Cut_Screen(IMAGE_CUTLIST_TRAILER);
 	}
 	
 	if(replenish_bullet_statu_last==0&&Replenish_Bullet_Statu==1)
-	{t_cut_re=2;
+	{
 		Steer_Image_state=1;
 		Image_Cut_Screen(IMAGE_CUTLIST_REPLENISHBULLET);
 	}
 	
 	if(GetWorkState()==TAKEBULLET_STATE)	//取弹模式
-	{t_cut_re=3;
+	{
 		Steer_Image_state=1;
 		Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);
 	}
 	
 	if(GetWorkState()==ASCEND_STATE||GetWorkState()==DESCEND_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)
-	{t_cut_re=4;
+	{
 		Steer_Image_state=1;
 		Image_Cut_Screen(IMAGE_CUTLIST_CHASSIS);
 	}
 	
 	if(Trailer_statu==0&&Replenish_Bullet_Statu==0&&GetWorkState()==NORMAL_STATE)	//复位
-	{t_cut_re=5;
+	{
 		Steer_Image_state=0;
 		Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);
 	}

@@ -43,7 +43,7 @@ void Remote_Task(void)
 		{
 			Chassis_Control_RCorPC=PC_CONTROL;
 		}
-		else if(abs(RC_Ctl.rc.ch0-1024)>3||abs(RC_Ctl.rc.ch1-1024)>3)
+		else if(abs(RC_Ctl.rc.ch0-1024)>3||abs(RC_Ctl.rc.ch1-1024)>3||abs(RC_Ctl.rc.ch2-1024)>3)
 		{
 			Chassis_Control_RCorPC=RC_CONTROL;
 		}
