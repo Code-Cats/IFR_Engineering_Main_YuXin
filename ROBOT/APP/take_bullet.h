@@ -8,6 +8,9 @@
 #define VALVE_BULLET_STORAGE 3	//µ¯Ò©²Õ²¹µ¯
 #define VALVE_TRAILER 5	//ÍÏ³µ
 
+#define	SERVO_BULLET_UP 0
+#define SERVO_BULLET_DOWN 1
+
 #define UP_L 0
 #define UP_R 1
 #define DOWN_L 2

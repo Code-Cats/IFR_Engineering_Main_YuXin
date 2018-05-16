@@ -1,9 +1,11 @@
 #include "auto_lift.h"
 #include "common_definition.h"
 
+extern LIFT_DATA lift_Data;
 
 AscendState_e AscendState=FULLRISE_GO1;	//登岛状态位
 
+extern ViceControlDataTypeDef ViceControlData;
 extern PID_GENERAL PID_Chassis_Speed[4];
 //rise fall 
 //
@@ -15,11 +17,11 @@ void Ascend_Control_Center(void)	//全自动登岛控制中心
 		PID_Chassis_Speed[i].k_i=CHASSIS_SPEED_PID_I*3;
 		PID_Chassis_Speed[i].i_sum_max=CHASSIS_SPEED_I_MAX*1.5f;
 	}
-	
 	switch(AscendState)
 	{
 		case FULLRISE_GO1:
 		{
+			ViceControlData.valve[VALVE_ISLAND]=1;	//后面高优先级会覆盖
 			if(Ascend_FullRise_GO1()==1)
 				AscendState=BACKFALL_GO1;
 			break;
@@ -30,7 +32,6 @@ void Ascend_Control_Center(void)	//全自动登岛控制中心
 			{
 				AscendState=FULLFALL_GO1;
 			}
-				
 			break;
 		}
 		case FULLFALL_GO1:
@@ -57,6 +58,7 @@ void Ascend_Control_Center(void)	//全自动登岛控制中心
 			{
 			SetWorkState(NORMAL_STATE);
 			AscendState=FULLRISE_GO1;	//重置防止下一次异常
+			ViceControlData.valve[VALVE_ISLAND]=0;
 			for(int i=0;i<4;i++)
 			{
 				PID_Chassis_Speed[i].k_i=CHASSIS_SPEED_PID_I;
@@ -373,6 +375,8 @@ u8 Ascend_FullRise_GO2(void)	//前进、调整、触发蹬腿函数
 
 DescendState_e DescendState=FULLFALL_DOWN1;	//下岛状态记录位
 
+u8 descend_valve_prepare_state=0;	//自动下岛电磁阀到位保护
+u32 descend_valve_prepare_state_count=0;
 void Descend_Control_Center(void)
 {
 	
@@ -382,7 +386,25 @@ void Descend_Control_Center(void)
 		PID_Chassis_Speed[i].i_sum_max=CHASSIS_SPEED_I_MAX*1.5f;
 	}
 	
+	if(descend_valve_prepare_state==0)	//准备只需要上升然后触发电磁阀，直接可以交给程序，程序会自动下降。而且这样可以避免进行了误操作的风险（全部下落）	
+	{
+		if(Check_FrontLift()!=0||descend_valve_prepare_state_count>500)	//前腿升起，肯定是
+		{
+			descend_valve_prepare_state=1;
+		}
+		SetCheck_FrontLift(1);
+		SetCheck_BackLift(1);
+		descend_valve_prepare_state_count++;
+	}
+	else	//如果前腿不在最底部，只有两种可能：	1、准备进行下岛；2、前腿已经落到下一级准备下岛，这两种情况都可以直接执行
+	{
+	//	descend_valve_prepare_state=1;
+	}
 	
+	ViceControlData.valve[VALVE_ISLAND]=1;	//后面高优先级会覆盖
+	
+	if(descend_valve_prepare_state==1)
+	{
 		switch(DescendState)
 		{
 			case FULLFALL_DOWN1:
@@ -417,6 +439,11 @@ void Descend_Control_Center(void)
 			}
 			case FULLRISE_DOWN2:
 			{
+//				if(abs(lift_Data.lb_lift_fdbP+lift_Data.rb_lift_fdbP-2*(LIFT_DISTANCE_FALL-(1!=0)*(LIFT_DISTANCE_FALL-LIFT_DISTANCE_ISLAND)))<100)	//提前收回导轮，防止降下去后收不回来		//在上升即将到顶部的时候收回导论
+//				{
+//					ViceControlData.valve[VALVE_ISLAND]=0;	//收回导轮
+//				}
+				
 				if(Descend_FullRise_Down1()==1)
 				{
 					DescendState=FULLFALL_DOWN1;	//重置防止下一次异常
@@ -430,6 +457,7 @@ void Descend_Control_Center(void)
 				break;
 			}
 		}
+	}
 }
 
 
@@ -545,7 +573,7 @@ u8 Descend_FullRise_Down1(void)	//5.10更新
 			SetCheck_BackLift(0);
 		}
 		
-		if(time_1ms_count-time_record>1100&&time_record!=0)	//这个延时作用是直接冲到边缘以便加快速度
+		if(time_1ms_count-time_record>1200&&time_record!=0)	//1200这个延时如果小了会导致切换到下一状态升降还未完成，VX=0，这个和chassis一系列加权参数都有关，牵一发而动全身//这个延时作用是直接冲到边缘以便加快速度
 		{
 			Chassis_Vx=VX_NEAR_DOWN;	//???可能会翻车
 			Chassis_Vw=0;
@@ -613,7 +641,7 @@ void Set_Attitude_Correct_State(AttitudeCorrectState_e state)
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-extern LIFT_DATA lift_Data;
+
 	//前后腿定义同英雄
 u8 Check_FrontLift(void)	//用于自动登岛状态识别	//返回1是升，0是降
 {

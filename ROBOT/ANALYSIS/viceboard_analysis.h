@@ -21,6 +21,7 @@ typedef struct
 {
 	u8 valve[6];
 	u8 servo[2];
+	u8 image_cut[2];	//工程是第1位第2位都有效
 }ViceControlDataTypeDef;	//控制副板
 
 
@@ -41,7 +42,7 @@ typedef struct
 
 typedef struct
 {
-	u8 Infrare[4];
+	u8 Infrare[6];		//[4]为上下岛加速保护，[5]为拖车检测
 	u8 Limit[4];
 }SensorDataTypeDef;
 

@@ -20,7 +20,11 @@ extern u32 time_1ms_count;
 s32 t_Vw_PID=0;
 
 u8 Chassis_Control_RCorPC=RC_CONTROL;
+s8 Chassis_Control_Heading=1;	//机器前进方向
 
+
+s16 test_chassis_vx=100;
+s16 test_chassis_vx_=0;
 void Remote_Task(void)
 {
 	if(GetWorkState()==NORMAL_STATE)	//底盘PID复位
@@ -31,6 +35,7 @@ void Remote_Task(void)
 			PID_Chassis_Speed[i].i_sum_max=CHASSIS_SPEED_I_MAX;
 		}
 	}
+	
 	
 	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//模式切换
 	{
@@ -62,6 +67,21 @@ void Remote_Task(void)
 //		Chassis_Vw=RC_Ctl.rc.ch2-1024;
 //	}
 //	Chassis_Vy=RC_Ctl.rc.ch0-1024;
+	test_chassis_vx_=Chassis_Vx;
+	
+	if(Chassis_Control_Heading==-1)	//机器朝向信息	//放在这里执行反向操作会影响RC_Control中的赋值，故放在顶层
+	{
+//		s16 chassis_vx=Chassis_Vx;
+//		s16 chassis_vy=Chassis_Vy;
+//		Chassis_Vx=-Chassis_Vx;
+//		Chassis_Vy=-Chassis_Vy;
+//		test_chassis_vx_=-test_chassis_vx;
+//		test_chassis_vx_=-test_chassis_vx_;
+	}
+	else
+	{
+//		test_chassis_vx_=test_chassis_vx;
+	}
 
 	chassis_Data.lf_wheel_tarV=(Chassis_Vx+Chassis_Vy+Chassis_Vw)*K_SPEED;
 	chassis_Data.rf_wheel_tarV=(-Chassis_Vx+Chassis_Vy+Chassis_Vw)*K_SPEED;
@@ -94,6 +114,7 @@ void RC_Control_Chassis(void)
 {
 	static s16 Chassis_Vx_last=0;
 	static s16 Chassis_Vy_last=0;
+	
 	if(GetWorkState()==NORMAL_STATE||GetWorkState()==TAKEBULLET_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)	//暂时加入取弹受控
 	{
 		

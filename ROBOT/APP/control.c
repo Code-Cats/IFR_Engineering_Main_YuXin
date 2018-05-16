@@ -12,7 +12,8 @@ extern GYRO_DATA Gyro_Data;
 
 extern CHASSIS_DATA chassis_Data;
 extern BULLETLIFT_MOTOR_DATA bulletlift_Motor_Data[2];
-
+extern ViceControlDataTypeDef ViceControlData;
+extern SensorDataTypeDef SensorData;
 
 extern s16 Chassis_Vx;
 extern s16 Chassis_Vy;
@@ -492,11 +493,12 @@ void Work_Execute_Gaming(void)	//Õ½³¡°æswitch¹¤×÷Ö´ĞĞ
 		}
 		case NORMAL_STATE:	//Õı³£²Ù×÷Ä£Ê½
 		{
+			ViceControlData.valve[VALVE_ISLAND]=0;
 			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êı¾İ±£»¤
 			TakeBullet_Control_Center();	//¼ÓÉÏÕâ¸öÊÇÒòÎª¹ØÓÚ¶æ»ú¡¢Æø¸×µÄ¼ÙÏë·´À¡¼ÆËãÔÚÕâÀïÃæ£¬ÇĞ³öÈ¡µ¯¹éÎ»±£»¤ĞèÒªËü£¬ÆäÄÚ²¿ÒÑ¾­×öÁË½öÔÚTAKEBULLETÏÂ×öÂß¼­´¦Àí
 			
-			Trailer_Task(t_trailer_sensor_data_simu);
-			Image_Cut_Task();
+			Replenish_Bullet_Task(KeyBoardData[KEY_R].value);	//¸ø²¹¸øÕ¾²¹µ¯
+			Trailer_Task(SensorData.Infrare[5]);	//ÍÏ³µ
 			
 			Remote_Task();	//Ö´ĞĞÒÆ¶¯
 			Lift_Task();	//¿ªÆôÉı½µ
@@ -584,14 +586,24 @@ void Work_Execute_Gaming(void)	//Õ½³¡°æswitch¹¤×÷Ö´ĞĞ
 			break;
 		}
 	}
+	Image_Cut_Task();
 	State_Record=GetWorkState();
 }
 
 
+
+extern u8 descend_valve_prepare_state;	//×Ô¶¯ÏÂµºµç´Å·§µ½Î»±£»¤
+extern u32 descend_valve_prepare_state_count;
 //extern u8 SetCheck_TakeBullet_TakeBack_statu;	//ÇĞ³öÈ¡µ¯±£»¤Ö´ĞĞ±êÖ¾Î»	//·ÅÔÚÇ°Ãæextern
 void Work_State_Change_BackProtect(void)	//µ±´ÓÄ³Ò»×´Ì¬ÍË³öÊ±£¬È·±£¸Ã×´Ì¬µÄÒ»ÇĞÒÅÁô¿ØÖÆ¶¼¹éÎ»
 {
 	static WorkState_e State_Record=CHECK_STATE;
+	
+	if(State_Record!=DESCEND_STATE&&GetWorkState()==DESCEND_STATE)
+	{
+		descend_valve_prepare_state=0;
+		descend_valve_prepare_state_count=0;
+	}
 	
 	if(State_Record==TAKEBULLET_STATE&&GetWorkState()!=TAKEBULLET_STATE)	//ÍË³öÈ¡µ¯Ä£Ê½
 	{
@@ -601,6 +613,7 @@ void Work_State_Change_BackProtect(void)	//µ±´ÓÄ³Ò»×´Ì¬ÍË³öÊ±£¬È·±£¸Ã×´Ì¬µÄÒ»ÇĞÒ
 	if(State_Record!=TAKEBULLET_STATE&&GetWorkState()==TAKEBULLET_STATE)
 	{
 		SetCheck_GripBulletLift(1);
+		ViceControlData.valve[VALVE_ISLAND]=0;	//È¡µ¯ÊÕ»Øµ¼ÂÖ
 	}
 	SetCheck_TakeBullet_TakeBack();	//Ö´ĞĞ´¦
 	State_Record=GetWorkState();

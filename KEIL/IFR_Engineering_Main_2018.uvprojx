@@ -528,6 +528,11 @@
               <FileType>1</FileType>
               <FilePath>..\ROBOT\APP\image_control.c</FilePath>
             </File>
+            <File>
+              <FileName>replenish_bullet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\APP\replenish_bullet.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -679,14 +684,14 @@
               <FilePath>..\ROBOT\ANALYSIS\can2_analysis.c</FilePath>
             </File>
             <File>
-              <FileName>remote_analysis.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ROBOT\ANALYSIS\remote_analysis.c</FilePath>
-            </File>
-            <File>
               <FileName>usart6_wifi_Debug_OSC.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ROBOT\ANALYSIS\usart6_wifi_Debug_OSC.c</FilePath>
+            </File>
+            <File>
+              <FileName>remote_analysis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\ANALYSIS\remote_analysis.c</FilePath>
             </File>
             <File>
               <FileName>viceboard_analysis.c</FileName>

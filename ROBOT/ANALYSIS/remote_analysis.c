@@ -10,10 +10,9 @@ KeyBoardTypeDef KeyBoardData[KEY_NUMS]={0};
 函数返回值：无
 描述： 无
 *****************************************/
-u16 t_dbus_count=0;
+extern s8 Chassis_Control_Heading;
 void RemoteData_analysis(uint8_t *sbus_rx_buffer)
 {
-	t_dbus_count++;
 	if(sbus_rx_buffer == NULL)
 	{
 			return;
@@ -39,16 +38,36 @@ void RemoteData_analysis(uint8_t *sbus_rx_buffer)
 	RC_Ctl.key.v_l = sbus_rx_buffer[14]; //!< KeyBoard value
 	RC_Ctl.key.v_h = sbus_rx_buffer[15];
 	
+	if(Chassis_Control_Heading==-1)	//机器反向
+	{
+		RC_Ctl.rc.ch0=RC_Ctl.rc.ch0-2*(RC_Ctl.rc.ch0-1024);
+		RC_Ctl.rc.ch1=RC_Ctl.rc.ch1-2*(RC_Ctl.rc.ch1-1024);
+//		RC_Ctl.mouse.y=-RC_Ctl.mouse.y;
+	}
+	
 	Key_Analysis();
 }
 
 
 void Key_Analysis(void)
 {
-	KeyBoardData[KEY_W].value=RC_Ctl.key.v_l&0x01;
-	KeyBoardData[KEY_S].value=(RC_Ctl.key.v_l&0x02)>>1;
-	KeyBoardData[KEY_A].value=(RC_Ctl.key.v_l&0x04)>>2;
-	KeyBoardData[KEY_D].value=(RC_Ctl.key.v_l&0x08)>>3;
+	
+	
+	if(Chassis_Control_Heading!=-1)	//正向
+	{
+		KeyBoardData[KEY_W].value=RC_Ctl.key.v_l&0x01;
+		KeyBoardData[KEY_S].value=(RC_Ctl.key.v_l&0x02)>>1;
+		KeyBoardData[KEY_A].value=(RC_Ctl.key.v_l&0x04)>>2;
+		KeyBoardData[KEY_D].value=(RC_Ctl.key.v_l&0x08)>>3;
+	}
+	else
+	{
+		KeyBoardData[KEY_W].value=(RC_Ctl.key.v_l&0x02)>>1;
+		KeyBoardData[KEY_S].value=RC_Ctl.key.v_l&0x01;
+		KeyBoardData[KEY_A].value=(RC_Ctl.key.v_l&0x08)>>3;
+		KeyBoardData[KEY_D].value=(RC_Ctl.key.v_l&0x04)>>2;
+	}
+	
 	KeyBoardData[KEY_SHIFT].value=(RC_Ctl.key.v_l&0x10)>>4;
 	KeyBoardData[KEY_CTRL].value=(RC_Ctl.key.v_l&0x20)>>5;
 	KeyBoardData[KEY_Q].value=(RC_Ctl.key.v_l&0x40)>>6;

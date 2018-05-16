@@ -30,6 +30,7 @@ void ViceBoard_SendDataRefresh(void)//限制频率放在调用层
 	if(SendData.statu==0)
 	{
 		SendData.data[1]=ViceControlData.valve[0]<<7|ViceControlData.valve[1]<<6|ViceControlData.valve[2]<<5|ViceControlData.valve[3]<<4|ViceControlData.valve[4]<<3|ViceControlData.valve[5]<<2|ViceControlData.servo[0]<<1|ViceControlData.servo[1];
+		SendData.data[2]=ViceControlData.image_cut[0]<<7|ViceControlData.image_cut[1]<<6;
 		SendData.statu=1;
 	}
 }
@@ -80,6 +81,11 @@ void SensorData_Deal(u8 *pData)
 	for(int i=0;i<4;i++)
 	{
 		SensorData.Infrare[i]=*(pData+1)>>(3-i)&0x01;
+	}
+	
+	for(int i=0;i<2;i++)
+	{
+		SensorData.Infrare[i+4]=*(pData+2)>>(7-i)&0x01;		//[4]为上下岛加速保护，[5]为拖车检测
 	}
 }
 
