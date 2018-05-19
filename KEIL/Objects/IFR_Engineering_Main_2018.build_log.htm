@@ -26,11 +26,16 @@ Project File Date:  05/19/2018
 
 <h2>Output:</h2>
 Build target 'IFR_Engineering_Main_2018'
-compiling main.c...
+compiling control.c...
+..\ROBOT\APP\control.c(89): warning:  #550-D: variable "State_Record" was set but never used
+        static WorkState_e State_Record=CHECK_STATE;    
+..\ROBOT\APP\control.c(197): warning:  #550-D: variable "Switch_Right_Last" was set but never used
+        static u8 Switch_Right_Last=0;
+..\ROBOT\APP\control.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=30712 RO-data=496 RW-data=1644 ZI-data=2740  
+Program Size: Code=30800 RO-data=496 RW-data=1652 ZI-data=2740  
 FromELF: creating hex file...
-".\Objects\IFR_Engineering_Main_2018.axf" - 0 Error(s), 0 Warning(s).
+".\Objects\IFR_Engineering_Main_2018.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
   E:\2018-Robomaster\IFR-RM\2018热身赛前\IFR_Engineering_Main_YuXin\KEIL\RTE

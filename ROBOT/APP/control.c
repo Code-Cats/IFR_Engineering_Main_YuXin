@@ -317,6 +317,10 @@ void Work_State_Change_Gaming(void)	//战场版控制状态切换
 		}
 		case ERROR_STATE:	//错误模式
 		{
+			if(RC_Ctl.key.v_h!=0||RC_Ctl.key.v_l!=0||abs(RC_Ctl.mouse.x)>3)
+			{
+				SetWorkState(NORMAL_STATE);
+			}
 			break;
 		}
 		case LOST_STATE:	//错误模式
@@ -335,9 +339,17 @@ void Work_State_Change_Gaming(void)	//战场版控制状态切换
 		}
 		case PROTECT_STATE:	//自我保护模式
 		{
-			if(Error_Check.statu[LOST_DBUS]==0||abs(RC_Ctl.rc.ch0+RC_Ctl.rc.ch1+RC_Ctl.rc.ch2+RC_Ctl.rc.ch3-1024*4)>8)
+			static u32 time_count=0;
+			time_count++;
+			if(Error_Check.statu[LOST_DBUS]==0&&abs(RC_Ctl.rc.ch0+RC_Ctl.rc.ch1+RC_Ctl.rc.ch2+RC_Ctl.rc.ch3-1024*4)>8)
 			{
 				SetWorkState(NORMAL_STATE);
+				time_count=0;
+			}
+			
+			if(Error_Check.statu[LOST_DBUS]==0&&time_count>8000)	//有反馈认为无法恢复
+			{
+				NVIC_SystemReset();
 			}
 			break;
 		}
