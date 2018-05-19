@@ -24,17 +24,24 @@ extern ViceControlDataTypeDef ViceControlData;
 
 void Screen_Start(void)	//屏幕启动切换到AV信道
 {
-	if(time_1ms_count<IMAGE_START_DELAY)	//5s后开始
+	if(KeyBoardData[KEY_G].value!=1)
 	{
-		IMAGE_START=PWM_IO_ON;
-	}
-	else if(time_1ms_count>IMAGE_START_DELAY&&time_1ms_count<IMAGE_START_DELAY+1000)
-	{
-		IMAGE_START=PWM_IO_OFF;
+		if(time_1ms_count<IMAGE_START_DELAY)	//5s后开始
+		{
+			IMAGE_START=PWM_IO_ON;
+		}
+		else if(time_1ms_count>IMAGE_START_DELAY&&time_1ms_count<IMAGE_START_DELAY+1000)
+		{
+			IMAGE_START=PWM_IO_OFF;
+		}
+		else
+		{
+			IMAGE_START=PWM_IO_ON;
+		}
 	}
 	else
 	{
-		IMAGE_START=PWM_IO_ON;
+		IMAGE_START=PWM_IO_OFF;
 	}
 
 }
@@ -109,6 +116,10 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 		else if(Replenish_Bullet_Statu==1)
 		{
 			Image_Cut_Screen(IMAGE_CUTLIST_REPLENISHBULLET);
+		}
+		else if(GetWorkState()==TAKEBULLET_STATE)	//在取弹模式
+		{
+			Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);
 		}
 		else	//如果都不在
 		{

@@ -533,6 +533,11 @@
               <FileType>1</FileType>
               <FilePath>..\ROBOT\APP\replenish_bullet.c</FilePath>
             </File>
+            <File>
+              <FileName>uphill_auto_lift.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ROBOT\APP\uphill_auto_lift.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -128,13 +128,15 @@ void Motor_Send(void);
 void Lift_Cali_Output_Limit(float cm_out,float * cali_out);
 
 void Entirety_PID(const LIFT_DATA * pliftdata,float send[]);	//整体PID补偿		//2018.2.26DEBUG版
-void Chassis_Attitude_Angle_Convert(void);	//综合得出底盘姿态
+
 void Lift_Cali_GYRO_Compensate(float cali_send[]);	//基于陀螺仪的底盘标定输出补偿
 
 void Teleconltroller_Data_protect(void);	//遥控器数据自保护 
 
 void Lift_Time_Gauge(u8 *trigger);	//升降时间自测量
 
+void KeyboardRetset(void);	//如果战场发生意外，就进行复位处理
+void Data_Init(void);	//内核复位后数据重置
 
 /***********************--标定状态--**********************/
 typedef enum

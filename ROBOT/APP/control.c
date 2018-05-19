@@ -38,6 +38,8 @@ void Control_Task(void)	//2ms
 	
 	Check_Task();
 	
+	KeyboardRetset();
+	
 	if(time_1ms_count%50==0)
 	{
 //		Debug_Send_OSC();	//待完善发数逻辑
@@ -456,6 +458,8 @@ void Work_Execute_LastVersion(void)	//之前版本的执行
 	}
 }
 
+extern u8 Replenish_Bullet_Statu;	//补弹状态位
+
 u8 t_trailer_sensor_data_simu=0;	//传感器数据仿真
 extern u8 SetCheck_TakeBullet_TakeBack_statu;	//切出取弹保护执行标志位	//加在这里是让半自动下岛能有下降的前提条件	//这个statu为0都是在一次执行完成后才有
 void Work_Execute_Gaming(void)	//战场版switch工作执行
@@ -499,6 +503,11 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 			
 			Replenish_Bullet_Task(KeyBoardData[KEY_R].value);	//给补给站补弹
 			Trailer_Task(SensorData.Infrare[5]);	//拖车
+			
+			if(ViceControlData.valve[VALVE_ISLAND]==0&&Replenish_Bullet_Statu==0)
+			{
+				AutoChassisAttitude_Lift_V2(Chassis_GYRO[PITCH]);
+			}
 			
 			Remote_Task();	//执行移动
 			Lift_Task();	//开启升降
@@ -868,32 +877,6 @@ void Lift_Cali_Output_Limit(float cm_out,float * cali_out)
 }
 
 
-#define PITCH 0
-#define ROLL 1
-#define YAW 2
-float Chassis_GYRO[3]={0};	//pitch roll yaw
-/*************************************************
-功能：经数据融合给出底盘姿态供其他模块调用
-数据单位：度 Gyro_Data.angle
-云台陀螺仪数据正方向：pitch:下 roll:  左高右低 yaw：逆时针
-电机位置正方向：pitch：下  yaw:逆时针
-电机中值：YAW_INIT PITCH_INIT
-**************************************************/
-void Chassis_Attitude_Angle_Convert(void)	//综合得出底盘姿态
-{
-//	float deviation_pitch=PITCH_GYRO_INIT-yunMotorData.pitch_fdbP;	//对于底盘来说，云台中值即是底盘在云台坐标系上的位置
-//	float deviation_yaw=YAW_INIT-yunMotorData.yaw_fdbP;
-//	//对yaw轴进行限制，标准过零（-180——+180）
-//	Chassis_GYRO[PITCH]=-Gyro_Data.angle[PITCH]-deviation_pitch*360.0f/8192;	//因为云台电机位置反馈正方向与陀螺仪正方向相反pitch？-2
-//	Chassis_GYRO[ROLL]=Gyro_Data.angle[ROLL]+2;	//roll
-//	Chassis_GYRO[YAW]=Gyro_Data.angle[YAW]+deviation_yaw*360.0f/8192;	//因为云台电机位置反馈正方向与陀螺仪正方向相同
-// 
-//	//限制-180_+180
-//	Chassis_GYRO[YAW]=Chassis_GYRO[YAW]>180?Chassis_GYRO[YAW]-360:Chassis_GYRO[YAW];
-//	Chassis_GYRO[YAW]=Chassis_GYRO[YAW]<-180?Chassis_GYRO[YAW]+360:Chassis_GYRO[YAW];
-}
-
-
 
 s32 t_entirety_lf=0;
 s32 t_entirety_rf=0;
@@ -967,6 +950,26 @@ void Lift_Time_Gauge(u8 *trigger)	//升降时间自测量
 }
 
 
+void KeyboardRetset(void)	//如果战场发生意外，就进行复位处理
+{
+	if(KeyBoardData[KEY_CTRL].value==1&&KeyBoardData[KEY_SHIFT].value==1&&KeyBoardData[KEY_Z].value==0&&KeyBoardData[KEY_X].value==0&&KeyBoardData[KEY_C].value==1&&KeyBoardData[KEY_V].value==1)	//后面的是防止初始化时全部为0
+	{
+		time_1ms_count=0;
+//		RC_Ctl={1024,1024,1024,1024,3,3};
+		NVIC_SystemReset();
+	}
+}
+
+void Data_Init(void)	//内核复位后数据重置
+{
+	RC_Ctl.rc.ch0=1024;
+	RC_Ctl.rc.ch1=1024;
+	RC_Ctl.rc.ch2=1024;
+	RC_Ctl.rc.ch3=1024;
+	RC_Ctl.rc.switch_left=3;
+	RC_Ctl.rc.switch_right=3;
+	time_1ms_count=0;
+}
 
 void RC_Calibration(void)	//上电检测遥控器接收值并与默认参数比较，判断是否正常，否则软复位
 {													//注：必须放在遥控器接收初始化后

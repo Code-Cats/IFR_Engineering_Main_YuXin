@@ -24,7 +24,8 @@ void Replenish_Bullet_Task(u8 key_r_state)
 	{
 		SetCheck_GripBulletLift(0);
 		ViceControlData.valve[VALVE_BULLET_STORAGE]=1;	//½«²¹µ¯Æø¸×Éì³ö
-		if(RC_Ctl.rc.ch3-1024>80)
+//		if(RC_Ctl.rc.ch3-1024>80)
+		if(KeyBoardData[KEY_CTRL].value==1)
 		{
 			ViceControlData.servo[SERVO_BULLET_DOWN]=1;
 		}

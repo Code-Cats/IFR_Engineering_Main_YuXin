@@ -9,10 +9,14 @@
 4.防疯防抢防盗
 5.待续...
 */
+extern RC_Ctl_t RC_Ctl;
+
+
 #define LOST_THRESHOLD 5
 
 Error_check_t Error_Check={LOST_CYCLE,{0},{0}};
 
+u8 Error_check_workstate=1;
 
 void LostCountAdd(u16* lostcount)
 {
@@ -47,17 +51,21 @@ void Check_Task(void)
 //	{
 //		SetWorkState(ERROR_STATE);
 //	}
-	
-	for(int i=4;i<LOST_TYPE_NUM;i++)	//控在一切正常后检测
+	if(Error_check_workstate==1)	//工作状态
 	{
-		if(Error_Check.statu[i]==1)
+		for(int i=4;i<LOST_TYPE_NUM;i++)	//控在一切正常后检测
 		{
-			t_error_i_record=i;
-			SetWorkState(ERROR_STATE);
-		}	
+			if(Error_Check.statu[i]==1)
+			{
+				t_error_i_record=i;
+				SetWorkState(ERROR_STATE);
+			}	
+		}
+		
+
 	}
 	
-	if(Error_Check.statu[LOST_DBUS]==1)
+	if(Error_Check.statu[LOST_DBUS]==1)	//遥控器保护还是要的
 	{
 		if(GetWorkState()==CHECK_STATE)
 		{
@@ -69,6 +77,10 @@ void Check_Task(void)
 		}
 	}
 	
+	if(RC_Ctl.key.v_h!=0||RC_Ctl.key.v_l!=0||abs(RC_Ctl.mouse.x)>3)
+	{
+		Error_check_workstate=0;
+	}
 
 }
 

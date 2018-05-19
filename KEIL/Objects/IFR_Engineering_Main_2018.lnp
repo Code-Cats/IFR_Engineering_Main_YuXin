@@ -21,6 +21,7 @@
 ".\objects\trailer.o"
 ".\objects\image_control.o"
 ".\objects\replenish_bullet.o"
+".\objects\uphill_auto_lift.o"
 ".\objects\delay.o"
 ".\objects\filter.o"
 ".\objects\pid.o"

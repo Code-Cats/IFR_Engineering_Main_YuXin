@@ -68,38 +68,39 @@ void DMA1_Stream2_IRQHandler(void)
       DMA_ClearITPendingBit(DMA1_Stream2,DMA_IT_TCIF2);
 		    //DATA SHIFTING 
 		LostCountFeed(&Error_Check.count[LOST_IMU]);//////////////////////////////////////
-				if(buffer_UART4[0]==0x5A&&buffer_UART4[1]==0xA5)
-				{
-					int u;
-					for(u = 0;u < lenth_uart4;u++) Packet_Decode(buffer_UART4[u]);
-				}else
-				{
-					int i,j,k,bit,p;
-					if(buf2[lenth_uart4-1]==0x5A&&buffer_UART4[0]==0xA5)
-					{
-						bit = lenth_uart4-1;
-					}else 
-					{
-						for(i = 0;i <lenth_uart4;i++)
-						{
-							if(buf2[i]==0x5A && buf2[i+1]==0xA5) bit = i;
-						}
-					}
-					for(j = 0;j <lenth_uart4-bit;j++)
-					{
-						buf3[j]=buf2[j+bit];
-					}
-					for(k = 0;k < bit;k++)
-					{
-						buf3[k+lenth_uart4-bit]=buffer_UART4[k];
-					}
-					for(j = 0;j <lenth_uart4;j++)
-					{
-						buf2[j]=buffer_UART4[j];
-					}
-					for( p = 0 ; p < lenth_uart4 ; p++) Packet_Decode(buf3[p]);
-				}
+//				if(buffer_UART4[0]==0x5A&&buffer_UART4[1]==0xA5)
+//				{
+//					int u;
+//					for(u = 0;u < lenth_uart4;u++) Packet_Decode(buffer_UART4[u]);
+//				}else
+//				{
+//					int i,j,k,bit,p;
+//					if(buf2[lenth_uart4-1]==0x5A&&buffer_UART4[0]==0xA5)
+//					{
+//						bit = lenth_uart4-1;
+//					}else 
+//					{
+//						for(i = 0;i <lenth_uart4;i++)
+//						{
+//							if(buf2[i]==0x5A && buf2[i+1]==0xA5) bit = i;
+//						}
+//					}
+//					for(j = 0;j <lenth_uart4-bit;j++)
+//					{
+//						buf3[j]=buf2[j+bit];
+//					}
+//					for(k = 0;k < bit;k++)
+//					{
+//						buf3[k+lenth_uart4-bit]=buffer_UART4[k];
+//					}
+//					for(j = 0;j <lenth_uart4;j++)
+//					{
+//						buf2[j]=buffer_UART4[j];
+//					}
+//					for( p = 0 ; p < lenth_uart4 ; p++) Packet_Decode(buf3[p]);
+//				}
 				//GET GYROSCOPE DATA
+				for(int p = 0 ; p < lenth_uart4 ; p++) Packet_Decode(buffer_UART4[p]);
 				get_raw_acc(Gyro_Data.acc);
         get_raw_gyo(Gyro_Data.angvel);
         get_eular(Gyro_Data.angle);
