@@ -48,25 +48,42 @@ u16 steer_image=STEER_IMAGE_REVERSAL;
 void Image_Cut_Task(void)	//摄像头切换、舵机
 {
 	static u8 key_c_last=0;
+	static u8 key_b_last=0;
 	static u8 trailer_statu_last=0;
 	static u8 replenish_bullet_statu_last=0;
+	static WorkState_e State_Record=CHECK_STATE;	
 //	t_AV_CUT=av_cut*20000;
 	if(trailer_statu_last==0&&Trailer_statu==1)	//切换到拖车状态
 	{
 		Steer_Image_state=1;
 		Image_Cut_Screen(IMAGE_CUTLIST_TRAILER);
 	}
+	else if(trailer_statu_last==1&&Trailer_statu==0)	//退出拖车
+	{
+		Steer_Image_state=0;
+		Image_Cut_Screen(IMAGE_CUTLIST_TRAILER);
+	}
 	
-	if(replenish_bullet_statu_last==0&&Replenish_Bullet_Statu==1)
+	if(replenish_bullet_statu_last==0&&Replenish_Bullet_Statu==1)	//进入补弹
 	{
 		Steer_Image_state=1;
 		Image_Cut_Screen(IMAGE_CUTLIST_REPLENISHBULLET);
 	}
+	else if(replenish_bullet_statu_last==1&&Replenish_Bullet_Statu==0)	//退出补弹
+	{
+		Steer_Image_state=0;
+		Image_Cut_Screen(IMAGE_CUTLIST_REPLENISHBULLET);
+	}
 	
-	if(GetWorkState()==TAKEBULLET_STATE)	//取弹模式
+	if(State_Record!=TAKEBULLET_STATE&&GetWorkState()==TAKEBULLET_STATE)	//取弹模式
 	{
 		Steer_Image_state=1;
 		Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);
+	}
+	else if(State_Record==TAKEBULLET_STATE&&GetWorkState()!=TAKEBULLET_STATE)	//退出取弹模式
+	{
+		Steer_Image_state=0;
+		Image_Cut_Screen(IMAGE_CUTLIST_CHASSIS);	//因为退出取弹模式大概率是下岛，所以直接切换到底盘
 	}
 	
 	if(GetWorkState()==ASCEND_STATE||GetWorkState()==DESCEND_STATE||GetWorkState()==SEMI_ASCEND_STATE||GetWorkState()==SEMI_DESCEND_STATE)
@@ -75,10 +92,11 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 		Image_Cut_Screen(IMAGE_CUTLIST_CHASSIS);
 	}
 	
-	if(Trailer_statu==0&&Replenish_Bullet_Statu==0&&GetWorkState()==NORMAL_STATE)	//复位
+//	if(Trailer_statu==0&&Replenish_Bullet_Statu==0&&GetWorkState()==NORMAL_STATE)	//复位
+	if(State_Record!=NORMAL_STATE&&GetWorkState()==NORMAL_STATE)	//复位
 	{
 		Steer_Image_state=0;
-		Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);
+		Image_Cut_Screen(IMAGE_CUTLIST_CHASSIS);	//日常切换底盘
 	}
 	
 	if(key_c_last==0&&KeyBoardData[KEY_C].value==1)
@@ -92,13 +110,26 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 		{
 			Image_Cut_Screen(IMAGE_CUTLIST_REPLENISHBULLET);
 		}
+		else	//如果都不在
+		{
+			Image_Cut_Screen(IMAGE_CUTLIST_CHASSIS);	//图传切换时触发一下切换方向
+		}
 	}
+	
+	if(GetWorkState()==NORMAL_STATE&&key_b_last==0&&KeyBoardData[KEY_B].value==1)
+	{
+		ViceControlData.valve[VALVE_ISLAND]=!ViceControlData.valve[VALVE_ISLAND];
+	}
+	
 	
 	STEER_IMAGE=STEER_IMAGE_INIT-Steer_Image_state*(STEER_IMAGE_INIT-STEER_IMAGE_REVERSAL);
 	
 	key_c_last=KeyBoardData[KEY_C].value;
+	key_b_last=KeyBoardData[KEY_B].value;
 	trailer_statu_last=Trailer_statu;
 	replenish_bullet_statu_last=Replenish_Bullet_Statu;
+	
+	State_Record=GetWorkState();
 }
 
 

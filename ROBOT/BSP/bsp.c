@@ -22,11 +22,13 @@ void BSP_Init(void)
 	 uart4_init();              										  //UART4 INIT UART4->GYRO PORT
 	 imu_data_decode_init();
 	 dma_uart4_init();
-	 delay_ms(500);
+	 
 	 TIM6_Configuration();
 	 CAN1_Motors_Config();
 	 CAN2_Motors_Config();
   
+	delay_ms(1200);
+	
 	 TIM6_Start();			
 }
 

@@ -493,7 +493,7 @@ void Work_Execute_Gaming(void)	//Õ½³¡°æswitch¹¤×÷Ö´ĞĞ
 		}
 		case NORMAL_STATE:	//Õı³£²Ù×÷Ä£Ê½
 		{
-			ViceControlData.valve[VALVE_ISLAND]=0;
+//			ViceControlData.valve[VALVE_ISLAND]=0;//·ÅÔÚÌø±ä
 			Teleconltroller_Data_protect();	//Ò£¿ØÆ÷Êı¾İ±£»¤
 			TakeBullet_Control_Center();	//¼ÓÉÏÕâ¸öÊÇÒòÎª¹ØÓÚ¶æ»ú¡¢Æø¸×µÄ¼ÙÏë·´À¡¼ÆËãÔÚÕâÀïÃæ£¬ÇĞ³öÈ¡µ¯¹éÎ»±£»¤ĞèÒªËü£¬ÆäÄÚ²¿ÒÑ¾­×öÁË½öÔÚTAKEBULLETÏÂ×öÂß¼­´¦Àí
 			
@@ -603,6 +603,11 @@ void Work_State_Change_BackProtect(void)	//µ±´ÓÄ³Ò»×´Ì¬ÍË³öÊ±£¬È·±£¸Ã×´Ì¬µÄÒ»ÇĞÒ
 	{
 		descend_valve_prepare_state=0;
 		descend_valve_prepare_state_count=0;
+	}
+	
+	if(State_Record!=NORMAL_STATE&&GetWorkState()==NORMAL_STATE)
+	{
+		ViceControlData.valve[VALVE_ISLAND]=0;	//È¡µ¯ÊÕ»Øµ¼ÂÖ
 	}
 	
 	if(State_Record==TAKEBULLET_STATE&&GetWorkState()!=TAKEBULLET_STATE)	//ÍË³öÈ¡µ¯Ä£Ê½
