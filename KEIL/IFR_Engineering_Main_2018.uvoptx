@@ -289,6 +289,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>workState</ItemText>
         </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>Error_check_workstate</ItemText>
+        </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>

@@ -227,12 +227,12 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 		*chassis_vw=RC_Ctl.mouse.x*8;
 		if(KeyBoardData[KEY_Q].value!=0)
 		{
-			*chassis_vw=-160;
+			*chassis_vw=-320;
 		}
 		
 		if(KeyBoardData[KEY_E].value!=0)
 		{
-			*chassis_vw=160;
+			*chassis_vw=320;
 		}
 		
 	}
