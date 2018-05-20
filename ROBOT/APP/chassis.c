@@ -16,7 +16,7 @@ extern GYRO_DATA Gyro_Data;
 extern u32 time_1ms_count;
 
 
-#define K_SPEED 8
+#define K_SPEED 11
 s32 t_Vw_PID=0;
 
 u8 Chassis_Control_RCorPC=RC_CONTROL;
@@ -158,6 +158,8 @@ void RC_Control_Chassis(void)
 //	Chassis_Vy=RC_Ctl.rc.ch0-1024;
 }
 
+
+#define CHASSIS_V_PC	660
 extern KeyBoardTypeDef KeyBoardData[KEY_NUMS];
 void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//1000Hz	//和英雄不同的是Vw的控制
 {
@@ -169,7 +171,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 		{
 			if(KeyBoardData[KEY_W].value!=0)
 			{
-				if(chassis_vx_record<660&&chassis_vx_record>=0)
+				if(chassis_vx_record<CHASSIS_V_PC&&chassis_vx_record>=0)
 				{
 					chassis_vx_record+=2;
 				}
@@ -180,7 +182,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			}
 			else if(KeyBoardData[KEY_S].value!=0)
 			{
-				if(chassis_vx_record>-660&&chassis_vx_record<=0)
+				if(chassis_vx_record>-CHASSIS_V_PC&&chassis_vx_record<=0)
 				{
 					chassis_vx_record-=2;
 				}
@@ -196,7 +198,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			///////////////////////////////////////
 			if(KeyBoardData[KEY_D].value!=0)
 			{
-				if(chassis_vy_record<660&&chassis_vy_record>=0)
+				if(chassis_vy_record<CHASSIS_V_PC&&chassis_vy_record>=0)
 				{
 					chassis_vy_record+=2;
 				}
@@ -207,7 +209,7 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 			}
 			else if(KeyBoardData[KEY_A].value!=0)
 			{
-				if(chassis_vy_record>-660&&chassis_vy_record<=0)
+				if(chassis_vy_record>-CHASSIS_V_PC&&chassis_vy_record<=0)
 				{
 					chassis_vy_record-=2;
 				}
@@ -227,12 +229,12 @@ void PC_Control_Chassis(s16 * chassis_vx,s16 * chassis_vy,s16 * chassis_vw)	//10
 		*chassis_vw=RC_Ctl.mouse.x*8;
 		if(KeyBoardData[KEY_Q].value!=0)
 		{
-			*chassis_vw=-320;
+			*chassis_vw=-300;
 		}
 		
 		if(KeyBoardData[KEY_E].value!=0)
 		{
-			*chassis_vw=320;
+			*chassis_vw=300;
 		}
 		
 	}

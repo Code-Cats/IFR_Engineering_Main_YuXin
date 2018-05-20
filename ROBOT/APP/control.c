@@ -471,6 +471,7 @@ void Work_Execute_LastVersion(void)	//之前版本的执行
 }
 
 extern u8 Replenish_Bullet_Statu;	//补弹状态位
+extern u8 Trailer_statu;
 
 u8 t_trailer_sensor_data_simu=0;	//传感器数据仿真
 extern u8 SetCheck_TakeBullet_TakeBack_statu;	//切出取弹保护执行标志位	//加在这里是让半自动下岛能有下降的前提条件	//这个statu为0都是在一次执行完成后才有
@@ -516,7 +517,7 @@ void Work_Execute_Gaming(void)	//战场版switch工作执行
 			Replenish_Bullet_Task(KeyBoardData[KEY_R].value);	//给补给站补弹
 			Trailer_Task(SensorData.Infrare[5]);	//拖车
 			
-			if(ViceControlData.valve[VALVE_ISLAND]==0&&Replenish_Bullet_Statu==0)
+			if(ViceControlData.valve[VALVE_ISLAND]==0&&Replenish_Bullet_Statu==0&&Trailer_statu==0)
 			{
 				AutoChassisAttitude_Lift_V2(Chassis_GYRO[PITCH]);
 			}
