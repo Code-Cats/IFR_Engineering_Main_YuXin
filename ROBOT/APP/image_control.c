@@ -109,7 +109,7 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 	if(key_c_last==0&&KeyBoardData[KEY_C].value==1)
 	{
 		Steer_Image_state=!Steer_Image_state;
-		if(Trailer_statu==1)
+		if(GetWorkState()==TAKEBULLET_STATE)
 		{
 			Image_Cut_Screen(IMAGE_CUTLIST_TRAILER);	//图传切换时触发一下切换方向
 		}
@@ -117,7 +117,7 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 		{
 			Image_Cut_Screen(IMAGE_CUTLIST_REPLENISHBULLET);
 		}
-		else if(GetWorkState()==TAKEBULLET_STATE)	//在取弹模式
+		else if(Trailer_statu==1)	//在取弹模式
 		{
 			Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);
 		}

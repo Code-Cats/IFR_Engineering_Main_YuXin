@@ -1,12 +1,12 @@
 #include "uart4.h"
-
+#include "protect.h"
  /**
  * @brief  UART4 INIT
  * @note   UART4 INIT
  * @param  void
  * @retval void
  */
- 
+GYRO_DATA Gyro_Data={0};
 void uart4_init(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure; 
@@ -32,15 +32,30 @@ void uart4_init(void)
 	uart4.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	USART_Init(UART4,&uart4);
 
-	USART_Cmd(UART4,ENABLE);
-	USART_DMACmd(UART4, USART_DMAReq_Rx, ENABLE);
-
 	nvic_UART4.NVIC_IRQChannel = UART4_IRQn;
-  nvic_UART4.NVIC_IRQChannelPreemptionPriority = 2;
+  nvic_UART4.NVIC_IRQChannelPreemptionPriority = 0;
   nvic_UART4.NVIC_IRQChannelSubPriority = 0;
   nvic_UART4.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&nvic_UART4);
-}
+	USART_ITConfig(UART4, USART_IT_RXNE, ENABLE);        //usart rx idle interrupt  enabled
 
+	USART_Cmd(UART4,ENABLE);
+}
+void UART4_IRQHandler(void)
+{
+	int ch;
+	if(USART_GetITStatus(UART4, USART_IT_RXNE) != RESET)
+	{
+		
+		ch=USART_ReceiveData(UART4);
+		//Data_Receive(USART6_Res);
+		//clear the idle pending flag 
+		(void)UART4->SR;
+		(void)UART4->DR;
+		LostCountFeed(&Error_Check.count[LOST_IMU]);//////////////////////////////////////
+		Packet_Decode(ch);
+
+	}
+}
 
 

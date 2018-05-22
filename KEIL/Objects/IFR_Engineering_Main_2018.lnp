@@ -51,7 +51,6 @@
 ".\objects\usart6_wifi_debug_osc.o"
 ".\objects\remote_analysis.o"
 ".\objects\viceboard_analysis.o"
-".\objects\dma_uart4.o"
 ".\objects\imu_data_decode.o"
 ".\objects\packet.o"
 ".\objects\uart4.o"

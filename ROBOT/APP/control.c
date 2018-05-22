@@ -641,6 +641,9 @@ void Work_State_Change_BackProtect(void)	//µ±´ÓÄ³Ò»×´Ì¬ÍË³öÊ±£¬È·±£¸Ã×´Ì¬µÄÒ»ÇÐÒ
 	
 	if(State_Record!=TAKEBULLET_STATE&&GetWorkState()==TAKEBULLET_STATE)
 	{
+		Replenish_Bullet_Statu=0;	//±£»¤ÐÔ´ëÊ©	//Õý³£²Ù×÷Ò»¶¨Îª0
+		Trailer_statu=0;	//±£»¤ÐÔ´ëÊ©//Õý³£²Ù×÷Ò»¶¨Îª0
+		
 		SetCheck_GripBulletLift(1);
 		ViceControlData.valve[VALVE_ISLAND]=0;	//È¡µ¯ÊÕ»Øµ¼ÂÖ
 	}

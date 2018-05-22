@@ -17,6 +17,9 @@ int main(void)
 //		 STEER_IMAGE=tim5_t_send[0];
 //		 STEER_RFID=tim5_t_send[1];
 		 Screen_Start();
+		 get_raw_acc(Gyro_Data.acc);
+     get_raw_gyo(Gyro_Data.angvel);
+     get_eular(Gyro_Data.angle);
 	 }
 }
 
