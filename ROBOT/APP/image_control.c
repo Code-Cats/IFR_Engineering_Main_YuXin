@@ -111,7 +111,7 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 		Steer_Image_state=!Steer_Image_state;
 		if(GetWorkState()==TAKEBULLET_STATE)
 		{
-			Image_Cut_Screen(IMAGE_CUTLIST_TRAILER);	//图传切换时触发一下切换方向
+			Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);	//图传切换时触发一下切换方向
 		}
 		else if(Replenish_Bullet_Statu==1)
 		{
@@ -119,7 +119,7 @@ void Image_Cut_Task(void)	//摄像头切换、舵机
 		}
 		else if(Trailer_statu==1)	//在取弹模式
 		{
-			Image_Cut_Screen(IMAGE_CUTLIST_TAKEBULLET);
+			Image_Cut_Screen(IMAGE_CUTLIST_TRAILER);
 		}
 		else	//如果都不在
 		{
