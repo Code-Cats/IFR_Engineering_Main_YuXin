@@ -38,6 +38,8 @@ void Control_Task(void)	//2ms
 	
 	Check_Task();
 	
+	IMU_Check_Useless();
+	
 	KeyboardRetset();
 	
 	if(time_1ms_count%50==0)
@@ -56,11 +58,11 @@ void Control_Task(void)	//2ms
 //Take_Bullet_Task();
 ////////////	Vw_tem=Chassis_Attitude_Correct(Chassis_GYRO[2],Gyro_Data.angvel[2]+2);	//暂时还没加陀螺仪
 ////////////  Chassis_Vw+=Vw_tem;
-	Work_State_Change_Gaming();	//战场版
+	Work_State_Change_Gaming();	//战场版工作状态改变
 	//
 	Work_State_Change_BackProtect();
 	//
-	Work_Execute_Gaming();	//战场版
+	Work_Execute_Gaming();	//战场版执行
 	//
 	
 	LED_Indicate();

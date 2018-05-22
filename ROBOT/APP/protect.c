@@ -85,4 +85,22 @@ void Check_Task(void)
 }
 
 
-
+u8 IMU_Check_Useless_State=1;	//陀螺仪失效检测位	//临时设置成1
+void IMU_Check_Useless(void)	//陀螺仪检测失效
+{
+	static u16 IMU_check_useless_count=0;
+	if(abs(Gyro_Data.angle[0])<0.01f&&abs(Gyro_Data.angle[1])<0.01f&&abs(Gyro_Data.angle[2])<0.01f)
+	{
+		IMU_check_useless_count++;
+		if(IMU_check_useless_count>200)	//200ms数据异常，则认为陀螺仪疯
+		{
+			IMU_Check_Useless_State=1;
+		}
+		
+	}
+	else
+	{
+		IMU_Check_Useless_State=0;	//认为陀螺仪恢复
+		IMU_check_useless_count=0;
+	}
+}

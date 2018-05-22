@@ -37,16 +37,16 @@ extern Error_check_t Error_Check;
 	17,\
 	4,\
 	10,\
-	1,\
-	1,\
-	1,\
-	1,\
-	1,\
-	1,\
-	1,\
-	1,\
-	1,\
-	1,\
+	2,\
+	2,\
+	2,\
+	2,\
+	2,\
+	2,\
+	2,\
+	2,\
+	2,\
+	2,\
 }
 
 void LostCountAdd(u16* lostcount);
@@ -54,7 +54,9 @@ void LostCountFeed(u16* lostcoun);
 	u8 LostCountCheck(u16 lostcoun,u8* statu,const u16 cycle);
 
 void Check_Task(void);	//control.c
+void IMU_Check_Useless(void);	//Õ”¬›“«ºÏ≤‚ ß–ß
 
 extern Error_check_t Error_Check;
+extern u8 IMU_Check_Useless_State;
 
 #endif

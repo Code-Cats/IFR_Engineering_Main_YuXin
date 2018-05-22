@@ -56,7 +56,7 @@ void AutoChassisAttitude_Lift_V2(float chassis_pitch_raw)	//自动调整姿态	//pitch
 	
 	chassis_pitch=chassis_pitch*(1-ka)+chassis_pitch_raw*ka;
 	
-	if(GetWorkState()==NORMAL_STATE)	//加入CTRL控制   &&KeyBoardData[KEY_CTRL].value==1		//先不加入以便测试，后期必须加上
+	if(GetWorkState()==NORMAL_STATE&&IMU_Check_Useless_State==0)	//加入陀螺仪失效限制//加入CTRL控制   &&KeyBoardData[KEY_CTRL].value==1		//先不加入以便测试，后期必须加上
 	{
 		switch(Adjust_Statu)
 		{
