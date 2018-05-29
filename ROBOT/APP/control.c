@@ -615,6 +615,8 @@ void Work_Execute_Gaming(void)	//Õ½³¡°æswitch¹¤×÷Ö´ÐÐ
 }
 
 
+extern u8 full_fall_statu;
+extern u8 full_rise_statu;
 
 extern u8 descend_valve_prepare_state;	//×Ô¶¯ÏÂµºµç´Å·§µ½Î»±£»¤
 extern u32 descend_valve_prepare_state_count;
@@ -627,6 +629,14 @@ void Work_State_Change_BackProtect(void)	//µ±´ÓÄ³Ò»×´Ì¬ÍË³öÊ±£¬È·±£¸Ã×´Ì¬µÄÒ»ÇÐÒ
 	{
 		descend_valve_prepare_state=0;
 		descend_valve_prepare_state_count=0;
+		full_fall_statu=0;
+		full_rise_statu=0;
+	}
+	
+	if(State_Record!=ASCEND_STATE&&GetWorkState()==ASCEND_STATE)
+	{
+		full_fall_statu=0;
+		full_rise_statu=0;
 	}
 	
 	if(State_Record!=NORMAL_STATE&&GetWorkState()==NORMAL_STATE)

@@ -87,7 +87,7 @@ extern u32 time_1ms_count;
 #define VX_SPEED_UP -110//¼ÓËÙ
 #define VX_SPEED_NEAR -10//ºìÍâ¼ì²âµ½ºó
 #define VX_PRESS_V0 -40//ÉìËõÍÈÊ±ÏòµºÑ¹½ôÁ¦
-#define VX_SPEED_RUSH -250//200	//³åÌ¨½×
+#define VX_SPEED_RUSH -220//200	//³åÌ¨½×
 #define VX_SPEED_WAITUP -70	//Ã»ÓĞÍêÈ«ÉıÆğÀ´Ê±ËÙ¶È
 #define VX_SPEED_WAIT_FRONTFALL	-90	//ºóÍÈÒÑ¾­´îÉÏºó£¬Ç°½ø×²Ç°ÍÈµÄ¹ı³Ì
 
@@ -168,10 +168,10 @@ u8 Ascend_BackFall_GO(void)	//3£¬4ºÅÉı½µÌ§ÆğÇ°½øµÄ½ø³Ì
 	{
 		if(time_record==0)
 		{
-			time_record=time_1ms_count;
+			time_record=time_1ms_count; 
 		}
 		
-		if(time_1ms_count-time_record<500)	//ÕâÀïÊÇÏòÇ°³åÒÔ±ãÓÚºóÍÈ³åÉÏÌ¨½×
+		if(time_1ms_count-time_record<400)	//ÕâÀïÊÇÏòÇ°³åÒÔ±ãÓÚºóÍÈ³åÉÏÌ¨½×
 		{
 			Chassis_Vx=-VX_SPEED_RUSH;
 			Chassis_Vw=0;
@@ -229,13 +229,12 @@ u8 Ascend_BackFall_GO(void)	//3£¬4ºÅÉı½µÌ§ÆğÇ°½øµÄ½ø³Ì
 }
 
 
-
+u8 full_fall_statu=0;	//È«²¿ÉıÆğ±êÖ¾Î»£¬ÔÚÍâ²¿ÊÇÒòÎª½øÈë×Ô¶¯Ä£Ê½ĞèÒªÇåÁã
 u8 Ascend_FullFall_GO(void)	//¶¼Ì§Æğµ½¶¼Ì§Æğºó	//Í¨¹ı¹Û²ìÊÓÆµµÃÖªÔÚÅö×²Ò»Ë²¼äµ¯ºó£¬ÂÖ×ÓË²¼äÉıÆğ£¬Ã»ÓĞ»º³åĞ§¹û£¬¹ÊÑÓÊ±
 {	//¸Ã½×¶ÎÎÊÌâ£ºÈç¹û×óÓÒÆ«ÒÆÑÏÖØ£¬»áÓĞÓ°Ïì
 	static u32 time_record=0;	//ÕâÀï¿ÉÒÔÓÃÎ»ÖÃ»·À´´úÌæ
 	static u32 time_record_all=0;
-	
-	static u8 full_fall_statu=0;
+	 
 	
 	if(time_record_all==0)
 	{
@@ -257,16 +256,16 @@ u8 Ascend_FullFall_GO(void)	//¶¼Ì§Æğµ½¶¼Ì§Æğºó	//Í¨¹ı¹Û²ìÊÓÆµµÃÖªÔÚÅö×²Ò»Ë²¼äµ¯º
 				if(time_record==0)	//time_record=0ÒâË¼¼´ÎªµÚÒ»´ÎÖ´ĞĞ
 				{
 					time_record=time_1ms_count;
-					Chassis_Vx=-(VX_SPEED_RUSH-70);
+					Chassis_Vx=-(VX_SPEED_RUSH-60);
 					Chassis_Vw=0;
 				}
-				if(time_1ms_count-time_record>300&&time_record!=0)	//350	//Õâ¸ö0.3sÊÇ·ÀÖ¹»¹Î´³åÉÏÈ¥¾ÍÈ«²¿ÉıÆğ·­³µ
+				if(time_1ms_count-time_record>350&&time_record!=0&&SensorData.Infrare[4]==0)	//350	//Õâ¸ö0.3sÊÇ·ÀÖ¹»¹Î´³åÉÏÈ¥¾ÍÈ«²¿ÉıÆğ·­³µ
 				{
 					SetCheck_FrontLift(1);
 					SetCheck_BackLift(1);
 				}
 				
-				if(time_1ms_count-time_record>450&&time_record!=0)	//0.6s
+				if(time_1ms_count-time_record>450&&time_record!=0&&SensorData.Infrare[4]==0)	//0.6s
 				{
 					Chassis_Vx=-VX_PRESS_V0;
 					Chassis_Vw=0;
@@ -541,10 +540,11 @@ u8 Descend_FrontRise_Down(void)	//Íê³ÉÇ°ÂÖÏÂÈ¥ºó£¬×îÈİÒ×·­³µµÄÂ·¶ÎÒÑ¾­¹ıÈ¥£¬¿ÉÒÔ
 }
 
 
+u8 full_rise_statu=0;	//È«²¿ÉıÆğ±êÖ¾Î»£¬ÔÚÍâ²¿ÊÇÒòÎª½øÈë×Ô¶¯Ä£Ê½ĞèÒªÇåÁã
 u8 Descend_FullRise_Down1(void)	//5.10¸üĞÂ
 {
 	static u32 time_record=0;
-	static u8 full_fall_statu=0;
+	
 	
 	Set_Attitude_Correct_State(CORRECT_CHASSIS_STATE);	//ÉèÖÃÄ¬ÈÏµ×ÅÌ½ÃÕı¿ªÆô£¬ºóĞøIFÓï¾äÖ´ĞĞ½«»á¸²¸Ç
 	
@@ -552,12 +552,12 @@ u8 Descend_FullRise_Down1(void)	//5.10¸üĞÂ
 	Chassis_Vw=0;
 	
 	
-	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(1)==1&&full_fall_statu==0)	//Íê³ÉºóÂÖÉìÍÈºófull_fall_statu==1ºó²»Ö´ĞĞ
+	if(SetCheck_FrontLift(1)==1&&SetCheck_BackLift(1)==1&&full_rise_statu==0)	//Íê³ÉºóÂÖÉìÍÈºófull_fall_statu==1ºó²»Ö´ĞĞ
 	{
-		full_fall_statu=1;
+		full_rise_statu=1;
 	}
 	
-	if(full_fall_statu==1)	//Íê³ÉºóÂÖÉìÍÈºó
+	if(full_rise_statu==1)	//Íê³ÉºóÂÖÉìÍÈºó
 	{
 		if(time_record==0)	//time_record=0ÒâË¼¼´ÎªµÚÒ»´ÎÖ´ĞĞ
 		{
@@ -578,7 +578,7 @@ u8 Descend_FullRise_Down1(void)	//5.10¸üĞÂ
 			Chassis_Vx=VX_NEAR_DOWN;	//???¿ÉÄÜ»á·­³µ
 			Chassis_Vw=0;
 			time_record=0;
-			full_fall_statu=0;
+			full_rise_statu=0;
 			return 1;
 		}
 		
